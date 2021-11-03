@@ -1,4 +1,4 @@
-package com.example.covid_19info.ui.login
+package com.example.covid_19info
 
 import android.app.Activity
 import androidx.lifecycle.Observer
@@ -13,8 +13,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
 import com.example.covid_19info.databinding.ActivityLoginBinding
-
-import com.example.covid_19info.R
+import com.example.covid_19info.ui.login.*
 
 class LoginActivity : AppCompatActivity() {
 
