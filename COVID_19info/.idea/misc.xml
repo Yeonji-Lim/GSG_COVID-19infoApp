@@ -3,6 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3463541666666667" />
+        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3463541666666667" />
+        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/drawable/ic_menu_camera.xml" value="0.3463541666666667" />
+        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/drawable/side_nav_bar.xml" value="0.3463541666666667" />
+        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.4312925170068027" />
+        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout-w936dp/activity_login.xml" value="0.24765625" />
+        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/activity_login.xml" value="0.3302083333333333" />
+        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/activity_main.xml" value="0.3302083333333333" />
+        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/activity_userInfo.xml" value="0.3302083333333333" />
+        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/app_bar_main.xml" value="0.378125" />
+        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/fragment_home.xml" value="0.378125" />
+        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/menu/main.xml" value="0.3302083333333333" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.2570281124497992" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout-w936dp/activity_login.xml" value="0.3" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/activity_login.xml" value="0.4" />
@@ -16,7 +28,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
