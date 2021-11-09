@@ -44,7 +44,16 @@ INSTALLED_APPS = [
     # django-rest-auth 사용 위해 추가
     'rest_framework.authtoken',
     'rest_auth',
+
+    # django-rest-auth에서 회원가입 기능 사용을 위해 추가
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
 ]
+
+# django-rest-auth에서 회원가입 기능 사용을 위해 추가
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
