@@ -9,26 +9,24 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-import com.example.covid_19info.databinding.ActivityLoginBinding
-import com.example.covid_19info.ui.login.*
+import com.example.covid_19info.databinding.ActivityRegisterBinding
+import com.example.covid_19info.ui.register.*
 
 class registerActivity : AppCompatActivity() {
 
-    private lateinit var loginViewModel: LoginViewModel
-    private lateinit var binding: ActivityLoginBinding
+    private lateinit var registerViewModel: RegisterViewModel
+    private lateinit var binding: ActivityRegisterBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_register)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val username = binding.username
         val password = binding.password
-        //val login = binding.login
-        val loading = binding.loading
 
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
+        registerViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
 
         loginViewModel.loginFormState.observe(this@registerActivity, Observer {
