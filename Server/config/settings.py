@@ -40,6 +40,10 @@ INSTALLED_APPS = [
 
     # rest framework 사용 위해 추가
     'rest_framework',
+
+    # django-rest-auth 사용 위해 추가
+    'rest_framework.authtoken',
+    'rest_auth',
 ]
 
 MIDDLEWARE = [
