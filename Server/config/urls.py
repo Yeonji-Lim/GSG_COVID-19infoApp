@@ -22,6 +22,9 @@ urlpatterns = [
     # url path는 변경하여 사용 가능
     path('api-auth/', include('rest_framework.urls')),
     
-    # rest-auth 기능 사용을 위한 url 추가
+    # django-rest-auth 기능 사용을 위한 url 추가
     path('rest-auth/', include('rest_auth.urls')),
+
+    # django-rest-auth의 회원 가입 기능 사용을 위한 url 추가
+    path('rest-auth/registration/', include('rest_auth.registration.urls')),
 ]
