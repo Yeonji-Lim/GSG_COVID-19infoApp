@@ -21,5 +21,7 @@ urlpatterns = [
     # rest_framework
     # url path는 변경하여 사용 가능
     path('api-auth/', include('rest_framework.urls')),
-
+    
+    # rest-auth 기능 사용을 위한 url 추가
+    path('rest-auth/', include('rest_auth.urls')),
 ]
