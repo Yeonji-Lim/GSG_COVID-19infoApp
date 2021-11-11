@@ -6,8 +6,11 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.Toast
 import com.example.covid_19info.databinding.ActivityRegisterBinding
 import com.example.covid_19info.ui.register.*
@@ -23,13 +26,20 @@ class registerActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val userId = binding.userId
         val username = binding.username
         val password = binding.password
+        val passwordConfirm = binding.passwordConfirm
+        val certificationNum = binding.certificationNum
+        val register = binding.register
+        val loading = binding.loading
+        val verifyEmail = binding.verifyEmail
+        val duplicateCheck = binding.duplicateCheck
 
-        registerViewModel = ViewModelProvider(this, LoginViewModelFactory())
-            .get(LoginViewModel::class.java)
+        registerViewModel = ViewModelProvider(this, RegisterViewModelFactory())
+            .get(RegisterViewModel::class.java)
 
-        loginViewModel.loginFormState.observe(this@registerActivity, Observer {
+        registerViewModel.registerFormState.observe(this@registerActivity, Observer {
             val loginState = it ?: return@Observer
 
             // disable login button unless both username / password is valid
@@ -43,7 +53,7 @@ class registerActivity : AppCompatActivity() {
             }
         })
 
-        loginViewModel.loginResult.observe(this@registerActivity, Observer {
+        registerViewModel.registerResult.observe(this@registerActivity, Observer {
             val loginResult = it ?: return@Observer
 
             loading.visibility = View.GONE
@@ -60,7 +70,7 @@ class registerActivity : AppCompatActivity() {
         })
 
         username.afterTextChanged {
-            loginViewModel.loginDataChanged(
+            registerViewModel.registerDataChanged(
                 username.text.toString(),
                 password.text.toString()
             )
@@ -68,7 +78,7 @@ class registerActivity : AppCompatActivity() {
 
         password.apply {
             afterTextChanged {
-                loginViewModel.loginDataChanged(
+                registerViewModel.registerDataChanged(
                     username.text.toString(),
                     password.text.toString()
                 )
@@ -77,7 +87,7 @@ class registerActivity : AppCompatActivity() {
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
-                        loginViewModel.login(
+                        registerViewModel.register(
                             username.text.toString(),
                             password.text.toString()
                         )
@@ -92,7 +102,7 @@ class registerActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUiWithUser(model: LoggedInUserView) {
+    private fun updateUiWithUser(model: RegisterUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
         // TODO : initiate successful logged in experience
