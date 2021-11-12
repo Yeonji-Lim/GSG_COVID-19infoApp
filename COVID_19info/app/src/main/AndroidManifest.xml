@@ -25,6 +25,11 @@
             android:name="LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login" />
+        <activity
+            android:name=".MapsActivityCurrentPlace"
+            android:exported="true"
+            android:label="map_activity_main" />
+
     </application>
 
 </manifest>
