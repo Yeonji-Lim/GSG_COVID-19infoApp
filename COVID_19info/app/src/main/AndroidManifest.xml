@@ -24,11 +24,13 @@
         <activity
             android:name="LoginActivity"
             android:exported="true"
-            android:label="@string/title_activity_login" />
+            android:label="@string/title_activity_login"
+            android:theme="@style/Theme.COVID_19info.NoActionBar"/>
         <activity
             android:name=".MapsActivityCurrentPlace"
             android:exported="true"
-            android:label="map_activity_main" />
+            android:label="map_activity_main"
+            android:theme="@style/Theme.COVID_19info.NoActionBar"/>
 
     </application>
 
