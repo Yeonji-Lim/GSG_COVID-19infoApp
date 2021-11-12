@@ -5,10 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.covid_19info.R
-import com.example.covid_19info.data.Result
-import com.example.covid_19info.ui.login.LoggedInUserView
-import com.example.covid_19info.ui.login.LoginFormState
-import com.example.covid_19info.ui.login.LoginResult
 
 class RegisterViewModel : ViewModel() {
 
@@ -33,7 +29,7 @@ class RegisterViewModel : ViewModel() {
 
     fun registerDataChanged(username: String, password: String) {
         if (!isUserNameValid(username)) {
-            _registerForm.value = RegisterFormState(usernameError = R.string.invalid_username)
+            _registerForm.value = RegisterFormState(emailError =  "Not a vailid email")
         } else if (!isPasswordValid(password)) {
             _registerForm.value = RegisterFormState(passwordError = R.string.invalid_password)
         } else {

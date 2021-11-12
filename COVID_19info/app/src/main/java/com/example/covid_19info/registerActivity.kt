@@ -27,7 +27,7 @@ class registerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val userId = binding.userId
-        val username = binding.username
+        val email = binding.email
         val password = binding.password
         val passwordConfirm = binding.passwordConfirm
         val certificationNum = binding.certificationNum
@@ -45,8 +45,8 @@ class registerActivity : AppCompatActivity() {
             // disable login button unless both username / password is valid
             //login.isEnabled = loginState.isDataValid
 
-            if (loginState.usernameError != null) {
-                username.error = getString(loginState.usernameError)
+            if (loginState.emailError != "") {
+                email.error = loginState.emailError
             }
             if (loginState.passwordError != null) {
                 password.error = getString(loginState.passwordError)
@@ -69,9 +69,9 @@ class registerActivity : AppCompatActivity() {
             finish()
         })
 
-        username.afterTextChanged {
+        email.afterTextChanged {
             registerViewModel.registerDataChanged(
-                username.text.toString(),
+                email.text.toString(),
                 password.text.toString()
             )
         }
@@ -79,7 +79,7 @@ class registerActivity : AppCompatActivity() {
         password.apply {
             afterTextChanged {
                 registerViewModel.registerDataChanged(
-                    username.text.toString(),
+                    email.text.toString(),
                     password.text.toString()
                 )
             }
@@ -88,7 +88,7 @@ class registerActivity : AppCompatActivity() {
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
                         registerViewModel.register(
-                            username.text.toString(),
+                            email.text.toString(),
                             password.text.toString()
                         )
                 }
