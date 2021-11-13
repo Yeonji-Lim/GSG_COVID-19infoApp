@@ -31,7 +31,7 @@
         android:layout_height="42dp"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/spacing_40"
-        android:background="@drawable/nav_background_curved"
+        android:background="@drawable/curved_rectangle"
         app:itemIconTint="@android:color/black"
         app:itemTextColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
