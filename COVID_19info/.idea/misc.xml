@@ -3,26 +3,30 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/drawable/circle.xml" value="0.5161458333333333" />
-        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/drawable/curved_rectangle.xml" value="0.5161458333333333" />
-        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/activity_login.xml" value="0.483695652173913" />
-        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/activity_main.xml" value="0.32760416666666664" />
-        <entry key="..\:/GitHub/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/activity_maps.xml" value="0.33" />
+        <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/drawable/curved_rectangle.xml" value="0.4161458333333333" />
+        <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/drawable/ic_launcher_background.xml" value="0.4161458333333333" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/drawable/ic_menu_camera.xml" value="0.24166666666666667" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/drawable/ic_menu_gallery.xml" value="0.24166666666666667" />
+        <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.4161458333333333" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/drawable/nav_background_curved.xml" value="0.24166666666666667" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/drawable/side_nav_bar.xml" value="0.24166666666666667" />
+        <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/drawable/user_route.xml" value="0.4161458333333333" />
+        <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/drawable/user_route1.xml" value="0.4161458333333333" />
+        <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/drawable/user_route_.xml" value="0.4161458333333333" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.2570281124497992" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout-w936dp/activity_login.xml" value="0.3" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/activity_login.xml" value="0.4" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/activity_main.xml" value="0.4" />
-        <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/activity_maps.xml" value="0.22552083333333334" />
+        <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/activity_maps.xml" value="0.4" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/app_bar_main.xml" value="0.4" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/content_main.xml" value="0.264" />
+        <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/content_map.xml" value="0.1157548125633232" />
+        <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/custom_info_contents.xml" value="0.4" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/fragment_gallery.xml" value="0.4" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/fragment_home.xml" value="0.4" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/fragment_slideshow.xml" value="0.4" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/layout/nav_header_main.xml" value="0.4" />
+        <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/menu/activity_main_drawer.xml" value="0.4" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.22552083333333334" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/menu/current_place_menu.xml" value="0.22552083333333334" />
         <entry key="..\:/workspace/GSG_COVID-19infoApp/COVID_19info/app/src/main/res/menu/main.xml" value="0.22760416666666666" />
