@@ -7,15 +7,7 @@
     android:layout_height="match_parent"
 >
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MapsActivityCurrentPlace" />
-
-<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+    <!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
 <!--    android:id="@+id/bottomNavigationView"-->
 <!--    android:layout_width="match_parent"-->
 <!--    android:layout_height="wrap_content"-->
@@ -24,6 +16,15 @@
 <!--    app:menu="@menu/bottom_navigation_menu"-->
 <!--    app:itemBackground="@android:color/white"-->
 <!--        />-->
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MapsActivityCurrentPlace"
+        tools:layout_editor_absoluteX="82dp"
+        tools:layout_editor_absoluteY="29dp" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -125,12 +126,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="?attr/homeAsUpIndicator" />
 
+    <LinearLayout
+        android:layout_width="376dp"
+        android:layout_height="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="228dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+
+    </LinearLayout>
+
+
     <Button
         android:id="@+id/changeView"
         android:layout_width="78dp"
         android:layout_height="30dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="65dp"
         android:background="@drawable/user_route_button"
         android:minWidth="0dp"
         android:minHeight="0dp"
@@ -143,14 +157,63 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:layout_width="376dp"
-        android:layout_height="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="228dp"
+        android:layout_width="200dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginStart="120dp"
+        android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+
+        <ImageView
+            android:id="@+id/marker_info_color0"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_weight="0.005"
+            android:width="2dp"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/marker_red" />
+
+        <TextView
+            android:id="@+id/marker_info0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=" ~3일" />
+
+        <ImageView
+            android:id="@+id/marker_info_color1"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_weight="0.005"
+            android:width="2dp"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/marker_orange" />
+
+        <TextView
+            android:id="@+id/marker_info1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=" ~5일" />
+
+        <ImageView
+            android:id="@+id/marker_info_color2"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_weight="0.005"
+            android:width="2dp"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/marker_green" />
+
+        <TextView
+            android:id="@+id/marker_info3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=" ~1주일" />
 
     </LinearLayout>
 
