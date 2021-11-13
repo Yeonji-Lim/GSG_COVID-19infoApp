@@ -418,8 +418,8 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
         try {
             if (locationPermissionGranted) {
                 //현재위치 버튼 커스텀하기 위해
-                map?.isMyLocationEnabled = false
-                map?.uiSettings?.isMyLocationButtonEnabled = true
+                map?.isMyLocationEnabled = true
+                map?.uiSettings?.isMyLocationButtonEnabled = false
             } else {
                 map?.isMyLocationEnabled = false
                 map?.uiSettings?.isMyLocationButtonEnabled = false
