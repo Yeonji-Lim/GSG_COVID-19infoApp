@@ -61,7 +61,7 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
 
     // A default location (Sydney, Australia) and default zoom to use when location permission is
     // not granted.
-    private val defaultLocation = LatLng(-33.8523341, 151.2106085)
+    private val defaultLocation = LatLng(37.33, 126.59)
     private var locationPermissionGranted = false
 
     // The geographical location where the device is currently located. That is, the last-known
@@ -390,6 +390,7 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
         }
         try {
             if (locationPermissionGranted) {
+                //현재위치 버튼 커스텀하기 위해
                 map?.isMyLocationEnabled = true
                 map?.uiSettings?.isMyLocationButtonEnabled = true
             } else {
