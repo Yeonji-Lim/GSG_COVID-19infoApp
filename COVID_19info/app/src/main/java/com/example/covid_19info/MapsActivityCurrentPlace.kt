@@ -17,6 +17,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -30,6 +31,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.covid_19info.BuildConfig.MAPS_API_KEY
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -45,6 +47,8 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 
 /**
  * An activity that displays a map showing the place at the device's current location.
@@ -104,6 +108,29 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
         mapFragment?.getMapAsync(this)
         // [END maps_current_place_map_fragment]
         // [END_EXCLUDE]
+
+        // Initialize the AutocompleteSupportFragment.
+        val autocompleteFragment =
+            supportFragmentManager.findFragmentById(R.id.autocomplete_fragment)
+                    as AutocompleteSupportFragment
+
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: ${place.name}, ${place.id}")
+            }
+
+            override fun onError(status: Status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: $status")
+            }
+        })
+
+        autocompleteFragment.view?.setBackgroundColor(Color.WHITE)
     }
     // [END maps_current_place_on_create]
 
