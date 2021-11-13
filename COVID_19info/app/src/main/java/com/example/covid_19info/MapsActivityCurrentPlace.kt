@@ -129,7 +129,7 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
                 Log.i(TAG, "An error occurred: $status")
             }
         })
-
+        //검색창 색 변경
         autocompleteFragment.view?.setBackgroundColor(Color.WHITE)
     }
     // [END maps_current_place_on_create]
@@ -418,7 +418,7 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
         try {
             if (locationPermissionGranted) {
                 //현재위치 버튼 커스텀하기 위해
-                map?.isMyLocationEnabled = true
+                map?.isMyLocationEnabled = false
                 map?.uiSettings?.isMyLocationButtonEnabled = true
             } else {
                 map?.isMyLocationEnabled = false
