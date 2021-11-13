@@ -26,7 +26,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        tools:context=".MapsActivityCurrentPlace" />
+        tools:context=".MapsActivity" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -238,7 +238,7 @@
             android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:context=".MapsActivityCurrentPlace" />
+            tools:context=".MapsActivity" />
 
     </FrameLayout>
 

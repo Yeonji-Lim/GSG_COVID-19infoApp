@@ -21,7 +21,6 @@ import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
@@ -53,7 +52,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 /**
  * An activity that displays a map showing the place at the device's current location.
  */
-class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var map: GoogleMap? = null
     private var cameraPosition: CameraPosition? = null
 
@@ -433,7 +432,7 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
     // [END maps_current_place_update_location_ui]
 
     companion object {
-        private val TAG = MapsActivityCurrentPlace::class.java.simpleName
+        private val TAG = MapsActivity::class.java.simpleName
         private const val DEFAULT_ZOOM = 15
         private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
 
