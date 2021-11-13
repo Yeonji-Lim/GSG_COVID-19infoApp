@@ -41,4 +41,20 @@
         app:layout_constraintVertical_bias="1.0"
         app:menu="@menu/bottom_navigation_menu" />
 
+    <Button
+        android:id="@+id/changeView"
+        android:layout_width="93dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="68dp"
+        android:background="@drawable/user_route"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:text="사용자 동선"
+        android:textColor="@color/black"
+        android:textSize="11sp"
+        app:backgroundTint="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
