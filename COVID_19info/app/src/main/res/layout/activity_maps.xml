@@ -54,91 +54,91 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="?attr/homeAsUpIndicator" />
 
-    <Button
-        android:id="@+id/cons_term3"
-        android:layout_width="@dimen/term_button_width"
-        android:layout_height="@dimen/term_button_height"
-        android:layout_marginEnd="250dp"
-        android:layout_marginBottom="68dp"
-        android:background="@drawable/user_route_button"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:padding="0dp"
-        android:text="2주"
-        android:textColor="@drawable/user_route_button_text_color"
-        android:textSize="20sp"
-        app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/map"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="?attr/homeAsUpIndicator" />
-
-    <Button
-        android:id="@+id/cons_term2"
-        android:layout_width="@dimen/term_button_width"
-        android:layout_height="@dimen/term_button_height"
-        android:layout_marginEnd="172dp"
-        android:layout_marginBottom="68dp"
-        android:background="@drawable/user_route_button"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:padding="0dp"
-        android:text="1주"
-        android:textColor="@drawable/user_route_button_text_color"
-        android:textSize="20sp"
-        app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/map"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="?attr/homeAsUpIndicator" />
-
-    <Button
-        android:id="@+id/cons_term1"
-        android:layout_width="@dimen/term_button_width"
-        android:layout_height="@dimen/term_button_height"
-        android:layout_marginEnd="95dp"
-        android:layout_marginBottom="68dp"
-        android:background="@drawable/user_route_button"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:padding="0dp"
-        android:text="5일"
-        android:textColor="@drawable/user_route_button_text_color"
-        android:textSize="20sp"
-        app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/map"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="?attr/homeAsUpIndicator" />
-
-    <Button
-        android:id="@+id/cons_term0"
-        android:layout_width="@dimen/term_button_width"
-        android:layout_height="@dimen/term_button_height"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="68dp"
-        android:background="@drawable/user_route_button"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:padding="0dp"
-        android:text="3일"
-        android:textColor="@drawable/user_route_button_text_color"
-        android:textSize="20sp"
-        app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/map"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="?attr/homeAsUpIndicator" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="376dp"
-        android:layout_height="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="228dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="90dp"
+        android:layout_marginBottom="185dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/map">
+
+        <Button
+            android:id="@+id/cons_term0"
+            android:layout_width="@dimen/term_button_width"
+            android:layout_height="@dimen/term_button_height"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="68dp"
+            android:background="@drawable/user_route_button"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="3일"
+            android:textColor="@drawable/user_route_button_text_color"
+            android:textSize="20sp"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="@+id/map"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="?attr/homeAsUpIndicator" />
+
+        <Button
+            android:id="@+id/cons_term1"
+            android:layout_width="@dimen/term_button_width"
+            android:layout_height="@dimen/term_button_height"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/user_route_button"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="5일"
+            android:textColor="@drawable/user_route_button_text_color"
+            android:textSize="20sp"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="@+id/map"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="?attr/homeAsUpIndicator" />
+
+        <Button
+            android:id="@+id/cons_term2"
+            android:layout_width="@dimen/term_button_width"
+            android:layout_height="@dimen/term_button_height"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/user_route_button"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="1주"
+            android:textColor="@drawable/user_route_button_text_color"
+            android:textSize="20sp"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="@+id/map"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="?attr/homeAsUpIndicator" />
+
+        <Button
+            android:id="@+id/cons_term3"
+            android:layout_width="@dimen/term_button_width"
+            android:layout_height="@dimen/term_button_height"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/user_route_button"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="2주"
+            android:textColor="@drawable/user_route_button_text_color"
+            android:textSize="20sp"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="@+id/map"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="?attr/homeAsUpIndicator" />
 
 
     </LinearLayout>
-
 
     <Button
         android:id="@+id/changeView"
