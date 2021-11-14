@@ -51,6 +51,9 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'rest_auth.registration',
+
+    # member_tracing 앱 추가
+    'member_tracing',
 ]
 
 # django-rest-auth에서 회원가입 기능 사용을 위해 추가
