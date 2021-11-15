@@ -1,4 +1,4 @@
-package com.example.covid_19info.ui.maps
+package com.example.covid_19info.ui.routes
 
 import android.Manifest
 import android.annotation.SuppressLint
