@@ -87,7 +87,7 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
         // [END_EXCLUDE]
 
         // Retrieve the content view that renders the map.
-        setContentView(R.layout.activity_maps)
+        setContentView(R.layout.content_route)
 
         // [START_EXCLUDE silent]
         // Construct a PlacesClient
