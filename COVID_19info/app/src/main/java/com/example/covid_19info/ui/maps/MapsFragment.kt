@@ -1,38 +1,31 @@
-// Copyright 2020 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-package com.example.covid_19info
+package com.example.covid_19info.ui.maps
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
+import androidx.fragment.app.Fragment
+
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.covid_19info.BuildConfig.MAPS_API_KEY
+import com.example.covid_19info.BuildConfig
+import com.example.covid_19info.LoginActivity
+import com.example.covid_19info.MainActivity
+import com.example.covid_19info.R
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -52,10 +45,18 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 
-/**
- * An activity that displays a map showing the place at the device's current location.
- */
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+
+
+
+class MapsFragment : Fragment(), OnMapReadyCallback {
+    // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
+    lateinit var mainActivity: MainActivity
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // 2. Context를 액티비티로 형변환해서 할당
+        mainActivity = context as MainActivity
+    }
+
     private var map: GoogleMap? = null
     private var cameraPosition: CameraPosition? = null
 
@@ -78,9 +79,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var likelyPlaceAttributions: Array<List<*>?> = arrayOfNulls(0)
     private var likelyPlaceLatLngs: Array<LatLng?> = arrayOfNulls(0)
 
-    // [START maps_current_place_on_create]
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Retrieve the content view that renders the map.
+        return inflater.inflate(R.layout.content_map, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // [START_EXCLUDE silent]
         // Retrieve location and camera position from saved instance state.
@@ -92,28 +101,28 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         // [END maps_current_place_on_create_save_instance_state]
         // [END_EXCLUDE]
 
-        // Retrieve the content view that renders the map.
-        setContentView(R.layout.activity_maps)
-
         // [START_EXCLUDE silent]
         // Construct a PlacesClient
-        Places.initialize(applicationContext, MAPS_API_KEY)
-        placesClient = Places.createClient(this)
+        Places.initialize(mainActivity, BuildConfig.MAPS_API_KEY)
+        placesClient = Places.createClient(mainActivity)
 
         // Construct a FusedLocationProviderClient.
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mainActivity)
 
         // Build the map.
         // [START maps_current_place_map_fragment]
-        val mapFragment = supportFragmentManager
+        val mapFragment = childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
+
+
+
         // [END maps_current_place_map_fragment]
         // [END_EXCLUDE]
 
         // Initialize the AutocompleteSupportFragment.
         val autocompleteFragment =
-            supportFragmentManager.findFragmentById(R.id.autocomplete_fragment)
+            childFragmentManager.findFragmentById(R.id.autocomplete_fragment)
                     as AutocompleteSupportFragment
 
         // Specify the types of place data to return.
@@ -134,16 +143,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         //검색창 색 변경
         autocompleteFragment.view?.setBackgroundColor(Color.WHITE)
 
-        
-        //로그인 창 이동 구현
-        val profile_btn = findViewById<ImageButton>(R.id.user_profile_button)
-        profile_btn.setOnClickListener {
-            val intent = Intent(this@MapsActivity, LoginActivity::class.java)
-            startActivity(intent)
-        }
-
     }
-    // [END maps_current_place_on_create]
 
     /**
      * Saves the state of the map when the activity is paused.
@@ -151,36 +151,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     // [START maps_current_place_on_save_instance_state]
     override fun onSaveInstanceState(outState: Bundle) {
         map?.let { map ->
-            outState.putParcelable(KEY_CAMERA_POSITION, map.cameraPosition)
-            outState.putParcelable(KEY_LOCATION, lastKnownLocation)
+            outState.putParcelable(MapsFragment.KEY_CAMERA_POSITION, map.cameraPosition)
+            outState.putParcelable(MapsFragment.KEY_LOCATION, lastKnownLocation)
         }
         super.onSaveInstanceState(outState)
     }
     // [END maps_current_place_on_save_instance_state]
-
-    /**
-     * Sets up the options menu.
-     * @param menu The options menu.
-     * @return Boolean.
-     */
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        menuInflater.inflate(R.menu.current_place_menu, menu)
-//        return true
-//    }
-
-    /**
-     * Handles a click on the menu option to get a place.
-     * @param item The menu item to handle.
-     * @return Boolean.
-     */
-    // [START maps_current_place_on_options_item_selected]
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.option_get_place) {
-            showCurrentPlace()
-        }
-        return true
-    }
-    // [END maps_current_place_on_options_item_selected]
 
     /**
      * Manipulates the map when it's available.
@@ -202,8 +178,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             override fun getInfoContents(marker: Marker): View {
                 // Inflate the layouts for the info window, title and snippet.
-                val infoWindow = layoutInflater.inflate(R.layout.custom_info_contents,
-                    findViewById<FrameLayout>(R.id.map), false)
+                val infoWindow = layoutInflater.inflate(
+                    R.layout.custom_info_contents,
+                    view?.findViewById<FrameLayout>(R.id.map), false)
                 val title = infoWindow.findViewById<TextView>(R.id.title)
                 title.text = marker.title
                 val snippet = infoWindow.findViewById<TextView>(R.id.snippet)
@@ -226,6 +203,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     // [END maps_current_place_on_map_ready]
 
     /**
+     * Handles a click on the menu option to get a place.
+     * @param item The menu item to handle.
+     * @return Boolean.
+     */
+    // [START maps_current_place_on_options_item_selected]
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.option_get_place) {
+            showCurrentPlace()
+        }
+        return true
+    }
+    // [END maps_current_place_on_options_item_selected]
+
+    /**
      * Gets the current location of the device, and positions the map's camera.
      */
     // [START maps_current_place_get_device_location]
@@ -238,7 +229,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         try {
             if (locationPermissionGranted) {
                 val locationResult = fusedLocationProviderClient.lastLocation
-                locationResult.addOnCompleteListener(this) { task ->
+                locationResult.addOnCompleteListener(mainActivity) { task ->
                     if (task.isSuccessful) {
                         // Set the map's camera position to the current location of the device.
                         lastKnownLocation = task.result
@@ -255,6 +246,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         map?.uiSettings?.isMyLocationButtonEnabled = false
                     }
                 }
+
             }
         } catch (e: SecurityException) {
             Log.e("Exception: %s", e.message, e)
@@ -272,12 +264,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
          * device. The result of the permission request is handled by a callback,
          * onRequestPermissionsResult.
          */
-        if (ContextCompat.checkSelfPermission(this.applicationContext,
+        if (ContextCompat.checkSelfPermission(mainActivity.applicationContext,
                 Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
             locationPermissionGranted = true
         } else {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            ActivityCompat.requestPermissions(mainActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
             )
         }
@@ -410,7 +402,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         // Display the dialog.
-        AlertDialog.Builder(this)
+        AlertDialog.Builder(mainActivity)
             .setTitle("123")
             .setItems(likelyPlaceNames, listener)
             .show()
@@ -443,8 +435,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
     // [END maps_current_place_update_location_ui]
 
+
     companion object {
-        private val TAG = MapsActivity::class.java.simpleName
+        private val TAG = MainActivity::class.java.simpleName
         private const val DEFAULT_ZOOM = 15
         private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
 
