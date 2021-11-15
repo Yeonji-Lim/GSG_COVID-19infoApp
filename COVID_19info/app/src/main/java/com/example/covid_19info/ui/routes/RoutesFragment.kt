@@ -10,16 +10,17 @@ import android.location.Location
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.os.Debug
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.TextView
+import android.util.Log.d
+import android.view.*
+import android.view.animation.AnimationUtils
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.get
+import androidx.core.view.iterator
 import com.example.covid_19info.BuildConfig
 import com.example.covid_19info.MainActivity
 import com.example.covid_19info.R
@@ -140,6 +141,55 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         //검색창 색 변경
         autocompleteFragment.view?.setBackgroundColor(Color.WHITE)
 
+
+        //프래그먼트 내부 버튼 리스너 설정
+        val changeView = view.findViewById<Button>(R.id.changeView)
+        changeView.setOnClickListener {
+            changeView?.isSelected = changeView?.isSelected != true
+        }
+
+        //하단 버튼 리스너 설정
+        val buttons = view.findViewById<LinearLayout>(R.id.linearLayout)
+        for(item in buttons){
+            if(item.id==R.id.changeView){
+                //화살표 버튼 리스너
+                item.setOnClickListener{
+                    if(item.isSelected){
+                        item.isSelected = false
+                        buttons.startAnimation(AnimationUtils.loadAnimation(context, R.anim.term_button_move_left))
+                    }else{
+                        item.isSelected = true
+                        buttons.startAnimation(AnimationUtils.loadAnimation(context, R.anim.term_button_move_left))
+                    }
+                }
+                item.setOnDragListener { view, dragEvent ->
+                    when(dragEvent.action){
+                        //드래그 시작
+                        DragEvent.ACTION_DRAG_STARTED -> {
+                            true
+                        }
+                        //드래그 중
+                        DragEvent.ACTION_DRAG_ENTERED -> {
+                            Debug.d("123",dragEvent.x.toString())
+                            true
+                        }
+                        DragEvent.ACTION_DROP -> {
+                            true
+                        }
+                        DragEvent.ACTION_DRAG_ENDED -> {
+                            true
+                        }
+                        else -> {
+                            true
+                        }
+                    }
+                }
+            }else{
+                item.setOnClickListener {
+                    item?.isSelected = item?.isSelected != true
+                }
+            }
+        }
     }
 
     /**

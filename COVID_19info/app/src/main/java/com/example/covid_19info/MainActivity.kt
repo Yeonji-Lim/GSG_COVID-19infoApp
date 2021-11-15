@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity() {
 
         //bottom_navigation listener 설정
         var bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
         bottomNav.setOnItemSelectedListener { item ->
             changeFragment(
                 when(item.itemId) {

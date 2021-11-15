@@ -12,7 +12,8 @@ object routeAPI {
     var data = JSONObject()
 
     init{
-        var url = URL("https://coroname.me/getdata")
+        //var url = URL("https://coroname.me/getdata")
+        var url = URL("")
         var conn = url.openConnection() as HttpURLConnection
         conn.requestMethod = "GET"
         conn.setRequestProperty("Content-type", "application/json")
