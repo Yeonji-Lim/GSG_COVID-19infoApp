@@ -5,12 +5,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.graphics.Color
 import android.location.Location
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
-import android.os.Debug
 import android.util.Log
 import android.util.Log.d
 import android.view.*
@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.view.iterator
+import androidx.core.view.size
 import com.example.covid_19info.BuildConfig
 import com.example.covid_19info.MainActivity
 import com.example.covid_19info.R
@@ -42,8 +43,11 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
-
-
+import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
+import androidx.core.view.updateMargins
+import java.lang.Math.round
+import kotlin.math.roundToInt
 
 
 class RoutesFragment : Fragment(), OnMapReadyCallback {
@@ -77,6 +81,11 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
     private var likelyPlaceAttributions: Array<List<*>?> = arrayOfNulls(0)
     private var likelyPlaceLatLngs: Array<LatLng?> = arrayOfNulls(0)
 
+    // 시작 위치
+    private var clickStartpos = 0.0f
+    val Int.px: Int
+        get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -86,6 +95,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         return inflater.inflate(R.layout.content_route, container, false)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -143,6 +153,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 
 
         //프래그먼트 내부 버튼 리스너 설정
+        //changeView 리스너
         val changeView = view.findViewById<Button>(R.id.changeView)
         changeView.setOnClickListener {
             changeView?.isSelected = changeView?.isSelected != true
@@ -150,33 +161,42 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 
         //하단 버튼 리스너 설정
         val buttons = view.findViewById<LinearLayout>(R.id.linearLayout)
+
         for(item in buttons){
-            if(item.id==R.id.changeView){
+            var btn = item as Button
+
+            if(btn.id==R.id.moveButtons){
                 //화살표 버튼 리스너
-                item.setOnClickListener{
-                    if(item.isSelected){
-                        item.isSelected = false
-                        buttons.startAnimation(AnimationUtils.loadAnimation(context, R.anim.term_button_move_left))
+                btn.setOnClickListener{
+                    if(btn.isSelected){
+                        btn.isSelected = false
+                        btn.text = "<"
                     }else{
-                        item.isSelected = true
-                        buttons.startAnimation(AnimationUtils.loadAnimation(context, R.anim.term_button_move_left))
+                        btn.isSelected = true
+                        btn.text = ">"
                     }
                 }
-                item.setOnDragListener { view, dragEvent ->
-                    when(dragEvent.action){
-                        //드래그 시작
-                        DragEvent.ACTION_DRAG_STARTED -> {
+
+                btn.setOnTouchListener { view, motionEvent ->
+                    when(motionEvent.action){
+                        MotionEvent.ACTION_DOWN -> {
+                            this.clickStartpos = motionEvent.rawX
+                            Log.d("main", motionEvent.rawX.toString())
                             true
                         }
-                        //드래그 중
-                        DragEvent.ACTION_DRAG_ENTERED -> {
-                            Debug.d("123",dragEvent.x.toString())
-                            true
-                        }
-                        DragEvent.ACTION_DROP -> {
-                            true
-                        }
-                        DragEvent.ACTION_DRAG_ENDED -> {
+                        MotionEvent.ACTION_MOVE -> {
+                            //마진 데이터
+                            val params = (buttons.layoutParams as ViewGroup.MarginLayoutParams)
+                            val moved = params.rightMargin + this.clickStartpos - motionEvent.rawX
+                            //마진 설정
+                            Log.d("main", "$moved")
+                            params.updateMargins(right= moved.roundToInt())
+                            //레이아웃 업데이트
+                            buttons.requestLayout()
+                            Log.d("main", "${params.rightMargin}, ${motionEvent.rawX.toString()}, ${this.clickStartpos}")
+                            this.clickStartpos = motionEvent.rawX
+
+
                             true
                         }
                         else -> {
@@ -184,9 +204,10 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                         }
                     }
                 }
+
             }else{
-                item.setOnClickListener {
-                    item?.isSelected = item?.isSelected != true
+                btn.setOnClickListener {
+                    btn?.isSelected = btn?.isSelected != true
                 }
             }
         }

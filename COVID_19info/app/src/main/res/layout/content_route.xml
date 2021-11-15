@@ -24,6 +24,8 @@
         android:id="@+id/linearLayout"
         android:layout_width="376dp"
         android:layout_height="50dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
         android:layout_marginBottom="70dp"
         android:layout_marginRight="-300dp"
         android:gravity="center"
@@ -33,7 +35,7 @@
         app:layout_constraintHorizontal_bias="0.0">
 
         <Button
-            android:id="@+id/imageButton"
+            android:id="@+id/moveButtons"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="10dp"
