@@ -243,7 +243,7 @@
     </FrameLayout>
 
     <ImageButton
-        android:id="@+id/imageButton1"
+        android:id="@+id/user_profile_button"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="16dp"
