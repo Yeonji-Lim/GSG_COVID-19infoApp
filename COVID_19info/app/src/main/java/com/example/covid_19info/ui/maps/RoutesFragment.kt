@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
@@ -17,13 +16,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.covid_19info.BuildConfig
-import com.example.covid_19info.LoginActivity
 import com.example.covid_19info.MainActivity
 import com.example.covid_19info.R
 import com.google.android.gms.common.api.Status
@@ -48,7 +45,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 
 
 
-class MapsFragment : Fragment(), OnMapReadyCallback {
+class RoutesFragment : Fragment(), OnMapReadyCallback {
     // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
     lateinit var mainActivity: MainActivity
     override fun onAttach(context: Context) {
@@ -85,7 +82,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
         // Retrieve the content view that renders the map.
-        return inflater.inflate(R.layout.content_map, container, false)
+        return inflater.inflate(R.layout.content_route, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -151,8 +148,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     // [START maps_current_place_on_save_instance_state]
     override fun onSaveInstanceState(outState: Bundle) {
         map?.let { map ->
-            outState.putParcelable(MapsFragment.KEY_CAMERA_POSITION, map.cameraPosition)
-            outState.putParcelable(MapsFragment.KEY_LOCATION, lastKnownLocation)
+            outState.putParcelable(RoutesFragment.KEY_CAMERA_POSITION, map.cameraPosition)
+            outState.putParcelable(RoutesFragment.KEY_LOCATION, lastKnownLocation)
         }
         super.onSaveInstanceState(outState)
     }
