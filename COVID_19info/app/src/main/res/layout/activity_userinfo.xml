@@ -22,12 +22,16 @@
 
     <ImageButton
         android:id="@+id/backspace_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
         android:backgroundTint="#E0E0E0"
-        app:srcCompat="?attr/homeAsUpIndicator"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="?attr/homeAsUpIndicator" />
 
     <ImageView
         android:id="@+id/userinfo_img"
@@ -119,19 +123,17 @@
             app:layout_constraintStart_toStartOf="@+id/password_change_background"
             app:layout_constraintTop_toTopOf="@+id/password_change_background" />
 
-        <ImageButton
-            android:id="@+id/password_change_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#FFFFFF"
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="28dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="24dp"
+            android:scaleX="-1"
             app:layout_constraintBottom_toBottomOf="@+id/password_change_background"
             app:layout_constraintEnd_toEndOf="@+id/password_change_background"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/password_change_background"
             app:layout_constraintTop_toTopOf="@+id/password_change_background"
-            app:layout_constraintVertical_bias="0.513"
-            app:srcCompat="@android:drawable/ic_media_play"
-            app:tint="@color/black" />
+            app:layout_constraintVertical_bias="0.5"
+            app:srcCompat="@drawable/lt_arrow" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -162,24 +164,24 @@
             android:text="위치정보 제공 동의"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:onClick="printGpsAgreementDialog"
             app:layout_constraintBottom_toBottomOf="@+id/gpsinfo_agreement_background"
             app:layout_constraintStart_toStartOf="@+id/gpsinfo_agreement_background"
             app:layout_constraintTop_toTopOf="@+id/gpsinfo_agreement_background"
             app:layout_constraintVertical_bias="0.5" />
 
-        <ImageButton
-            android:id="@+id/gpsinfo_agreement_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#FFFFFF"
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="28dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="24dp"
+            android:scaleX="-1"
             app:layout_constraintBottom_toBottomOf="@+id/gpsinfo_agreement_background"
             app:layout_constraintEnd_toEndOf="@+id/gpsinfo_agreement_background"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/gpsinfo_agreement_background"
             app:layout_constraintTop_toTopOf="@+id/gpsinfo_agreement_background"
-            app:layout_constraintVertical_bias="0.513"
-            app:srcCompat="@android:drawable/ic_media_play"
-            app:tint="@color/black" />
+            app:layout_constraintVertical_bias="0.486"
+            app:srcCompat="@drawable/lt_arrow" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -214,19 +216,16 @@
             app:layout_constraintTop_toTopOf="@+id/logout_background"
             app:layout_constraintVertical_bias="0.5" />
 
-        <ImageButton
-            android:id="@+id/logout_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="28dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="24dp"
+            android:scaleX="-1"
+            app:layout_constraintBottom_toBottomOf="@+id/logout_background"
             app:layout_constraintEnd_toEndOf="@+id/logout_background"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/logout_background"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.513"
-            app:srcCompat="@android:drawable/ic_media_play"
-            app:tint="@color/black" />
+            app:layout_constraintTop_toTopOf="@+id/logout_background"
+            app:srcCompat="@drawable/lt_arrow" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

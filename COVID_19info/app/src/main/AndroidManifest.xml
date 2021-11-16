@@ -33,9 +33,14 @@
         </activity>
         <activity
             android:name=".registerActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/Theme.COVID_19info.NoActionBar"/>
         <activity
             android:name=".UserInfoActivity"
+            android:exported="true"
+            android:theme="@style/Theme.COVID_19info.NoActionBar"/>
+        <activity
+            android:name=".PasswordChangeActivity"
             android:exported="true"
             android:theme="@style/Theme.COVID_19info.NoActionBar"/>
     </application>

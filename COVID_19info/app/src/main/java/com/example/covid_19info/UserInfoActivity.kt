@@ -1,7 +1,9 @@
 package com.example.covid_19info
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.covid_19info.databinding.ActivityUserinfoBinding
@@ -14,15 +16,11 @@ class UserInfoActivity : AppCompatActivity() {
         binding = ActivityUserinfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.logoutButton.setOnClickListener{
-            val mDialogView = LayoutInflater.from(this).inflate(R.layout.logout_dialog,null)
-            val mBuilder = AlertDialog.Builder(this)
-                .setView(mDialogView)
-
-            mBuilder.show()
+        binding.passwordChangeBackground.setOnClickListener{
+            startActivity(Intent(this,PasswordChangeActivity::class.java))
         }
 
-        binding.gpsinfoAgreementButton.setOnClickListener{
+        binding.gpsinfoAgreementBackground.setOnClickListener{
             val mDialogView = LayoutInflater.from(this).inflate(R.layout.gps_agreement_dialog,null)
             val mBuilder = AlertDialog.Builder(this)
                 .setView(mDialogView)
@@ -30,7 +28,13 @@ class UserInfoActivity : AppCompatActivity() {
             mBuilder.show()
         }
 
+        binding.logoutBackground.setOnClickListener{
+            val mDialogView = LayoutInflater.from(this).inflate(R.layout.logout_dialog,null)
+            val mBuilder = AlertDialog.Builder(this)
+                .setView(mDialogView)
+
+            mBuilder.show()
+        }
+
     }
-
-
 }
