@@ -89,6 +89,10 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
     private var likelyPlaceAttributions: Array<List<*>?> = arrayOfNulls(0)
     private var likelyPlaceLatLngs: Array<LatLng?> = arrayOfNulls(0)
 
+    //확진자 동선 데이터
+    lateinit private var quarantinesData: Quarantines
+    private var markerList: List<Marker> = listOf()
+
     lateinit var buttons :LinearLayout
 
     override fun onCreateView(
@@ -128,7 +132,6 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 
-        setQuarantineRoute()
 
         // [END maps_current_place_map_fragment]
         // [END_EXCLUDE]
@@ -168,6 +171,22 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         buttons = view.findViewById<LinearLayout>(R.id.linearLayout)
         //버튼 움직임 설정
         setButtonsMove()
+
+        //네트워크 호출
+        val api = QuarantinesRouteAPI.create()
+        api.getData().enqueue(object: Callback<Quarantines> {
+
+            override fun onResponse(call: Call<Quarantines>,
+                                    response: Response<Quarantines>
+            ) {
+                response.body()?.let {quarantinesData = it}
+                response.body()?.let { showQuarantineRoute(it) }
+                Log.d("Main", "성공 : ${response.raw()}")
+            }
+            override fun onFailure(call: Call<Quarantines>, t: Throwable) {
+                Log.d("Main", "실패 : ${t}")
+            }
+        })
     }
 
     /**
@@ -460,27 +479,14 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
     }
     // [END maps_current_place_update_location_ui]
 
-    private fun setQuarantineRoute(){
-        val api = QuarantinesRouteAPI.create()
-        api.getData().enqueue(object: Callback<Quarantines> {
-
-            override fun onResponse(call: Call<Quarantines>,
-                                    response: Response<Quarantines>
-            ) {
-                Log.d("Main", "성공 : ${response.raw()}")
-            }
-            override fun onFailure(call: Call<Quarantines>, t: Throwable) {
-                Log.d("Main", "실패 : ${t.message}")
-            }
-        })
-        var routes = api.getData().execute().body()!!
-
+    private fun showQuarantineRoute(routes: Quarantines){
         for(route in routes.data){
             var pos = route.latlng.split(", ").toTypedArray()
-            map?.addMarker(MarkerOptions()
+            var mark = map?.addMarker(MarkerOptions()
                 .title(route.place)
-                .position(LatLng(pos[0].toDouble(), pos[2].toDouble()))
-                .snippet("132"))
+                .position(LatLng(pos[0].toDouble(), pos[1].toDouble()))
+                .snippet("${route.visitedDate}\n${route.address}"))
+
         }
 
 
