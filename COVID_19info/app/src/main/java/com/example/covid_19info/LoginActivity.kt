@@ -1,6 +1,7 @@
 package com.example.covid_19info
 
 import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -30,6 +31,15 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.password
         val login = binding.login
         val loading = binding.loading
+
+        binding.backspaceLoginButton?.setOnClickListener {
+            super.onBackPressed()
+        }
+
+        binding.registerBtn?.setOnClickListener {
+            val intent = Intent(this, registerActivity::class.java)
+            startActivity(intent)
+        }
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)

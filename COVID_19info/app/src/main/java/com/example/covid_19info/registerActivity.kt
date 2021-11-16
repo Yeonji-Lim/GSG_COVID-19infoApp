@@ -53,6 +53,10 @@ class registerActivity : AppCompatActivity() {
             }
         })
 
+        binding.backspaceRegisterButton.setOnClickListener {
+            super.onBackPressed()
+        }
+
         registerViewModel.registerResult.observe(this@registerActivity, Observer {
             val loginResult = it ?: return@Observer
 
@@ -117,18 +121,3 @@ class registerActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 }
-
-/**
- * Extension function to simplify setting an afterTextChanged action to EditText components.
- */
-/*fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
-    this.addTextChangedListener(object : TextWatcher {
-        override fun afterTextChanged(editable: Editable?) {
-            afterTextChanged.invoke(editable.toString())
-        }
-
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-    })
-}*/

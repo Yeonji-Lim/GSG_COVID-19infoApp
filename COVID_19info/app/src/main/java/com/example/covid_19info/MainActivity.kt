@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         //로그인 창 이동 구현
         val profile_btn = findViewById<ImageButton>(R.id.user_profile_button)
         profile_btn.setOnClickListener {
-            val intent = Intent(this@MainActivity, UserInfoActivity::class.java)
+            val intent = Intent(this@MainActivity, LoginActivity::class.java)
             startActivity(intent)
         }
 
