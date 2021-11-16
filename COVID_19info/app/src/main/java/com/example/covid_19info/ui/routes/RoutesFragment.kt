@@ -47,15 +47,21 @@ import android.view.animation.Animation
 import android.view.animation.Transformation
 import android.animation.ValueAnimator
 import android.animation.ValueAnimator.AnimatorUpdateListener
+import android.os.Build
 
 import android.widget.LinearLayout
 
 import android.view.View
+import androidx.annotation.RequiresApi
 import com.example.covid_19info.data.QuarantinesRouteAPI
 import com.example.covid_19info.data.model.Quarantines
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 
 class RoutesFragment : Fragment(), OnMapReadyCallback {
@@ -91,7 +97,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 
     //확진자 동선 데이터
     lateinit private var quarantinesData: Quarantines
-    private var markerList: List<Marker> = listOf()
+    private var quartineMarkerList: MutableList<Marker> = mutableListOf()
 
     lateinit var buttons :LinearLayout
 
@@ -104,6 +110,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         return inflater.inflate(R.layout.content_route, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -252,12 +259,12 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
      * @return Boolean.
      */
     // [START maps_current_place_on_options_item_selected]
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.option_get_place) {
-            showCurrentPlace()
-        }
-        return true
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        if (item.itemId == R.id.option_get_place) {
+//            showCurrentPlace()
+//        }
+//        return true
+//    }
     // [END maps_current_place_on_options_item_selected]
 
     /**
@@ -479,6 +486,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
     }
     // [END maps_current_place_update_location_ui]
 
+    //확진자 마커 등록
     private fun showQuarantineRoute(routes: Quarantines){
         for(route in routes.data){
             var pos = route.latlng.split(", ").toTypedArray()
@@ -486,12 +494,13 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                 .title(route.place)
                 .position(LatLng(pos[0].toDouble(), pos[1].toDouble()))
                 .snippet("${route.visitedDate}\n${route.address}"))
-
+            mark?.let { quartineMarkerList.add(it) }
         }
 
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
     fun setButtonsMove(): Boolean {
         //기본 위치
@@ -501,7 +510,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 
         for(item in buttons){
             var btn = item as Button
-
+            //버튼 움직임 리스너 등록
             if(btn.id==R.id.moveButtons){
                 btn.setOnTouchListener { view, motionEvent ->
                     Log.d("main", "${motionEvent.actionMasked}")
@@ -513,13 +522,55 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                     return@setOnTouchListener gestureDetector.onTouchEvent(motionEvent)
                 }
             }else{
+                //버튼 동작 등록
                 btn.setOnClickListener {
-                    btn?.isSelected = btn?.isSelected != true
+                    if(btn.isSelected){
+                        btn.isSelected = false
+                        markCheck(true)
+                    }
+                    else{
+                        for(i in 1..4){
+                            buttons[i].isSelected = false
+                        }
+                        btn.isSelected = true
+                        markCheck(false)
+                    }
+
+                    //btn?.isSelected = btn?.isSelected != true
                 }
             }
         }
 
         return true
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    //allvisible이 true이면 모두 표시
+    fun markCheck(allvisible: Boolean){
+        //모두 표시
+        if(allvisible){
+            for(mark in quartineMarkerList){
+                mark.isVisible = true
+            }
+            return
+        }
+        //날짜 차이 이하
+        var constraintl = arrayOf(3,5,7,14)
+        var constraint = 0
+        for(i in 1..4){
+            if(buttons[i].isSelected){
+                constraint = constraintl[i-1]
+                break
+            }
+        }
+        //날짜 계산후 이하만 출력
+        val today = LocalDate.now()
+        for(mark in quartineMarkerList){
+            val visitdate = LocalDate.parse(mark.snippet?.substring(0,10), DateTimeFormatter.ISO_DATE);
+            val diff = ChronoUnit.DAYS.between(visitdate, today)
+            //Log.d("Main", diff.toString())
+            mark.isVisible = diff <= constraint
+        }
     }
 
     companion object {
@@ -537,6 +588,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         private const val M_MAX_ENTRIES = 5
     }
 }
+
 class MyGesture(val layout: LinearLayout) : GestureDetector.OnGestureListener {
     var startButtonPos = 0
     var btn = (layout[0] as Button)
