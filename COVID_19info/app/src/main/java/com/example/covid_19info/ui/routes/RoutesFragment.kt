@@ -1,6 +1,7 @@
 package com.example.covid_19info.ui.routes
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
@@ -39,8 +40,19 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.core.view.*
 import kotlin.math.roundToInt
+import android.view.animation.Animation
+import android.view.animation.Transformation
+import android.animation.ValueAnimator
+import android.animation.ValueAnimator.AnimatorUpdateListener
+
+import android.widget.LinearLayout
+
+import android.view.View
+
+
 
 
 
@@ -554,21 +566,30 @@ class MyGesture(val layout: LinearLayout) : GestureDetector.OnGestureListener {
     }
     //flg true: 나오는 애니메이션, false: 들어가는 애니메이션
     fun moveButtons(flg: Boolean){
+        //val params = (layout.layoutParams as ViewGroup.MarginLayoutParams)
+
         val params = (layout.layoutParams as ViewGroup.MarginLayoutParams)
+        val animator0 = ValueAnimator.ofInt(params.rightMargin, 0)
+        animator0.addUpdateListener { valueAnimator ->
+            params.rightMargin = (valueAnimator.animatedValue as Int)!!
+            layout.requestLayout()
+        }
+        animator0.duration = 500
+
+        val animator1 = ValueAnimator.ofInt(params.rightMargin, (-300).px)
+        animator1.addUpdateListener { valueAnimator ->
+            params.rightMargin = (valueAnimator.animatedValue as Int)!!
+            layout.requestLayout()
+        }
+        animator1.duration = 500
+
         if(flg){
-            while(params.rightMargin < 0.0){
-                val moved = params.rightMargin + 5
-                params.updateMargins(right=moved)
-                layout.requestLayout()
-            }
+            animator0.start()
         }
         //들어가는 방향
         else{
-            while(params.rightMargin > -300.px){
-                val moved = params.rightMargin - 5
-                params.updateMargins(right=moved)
-                layout.requestLayout()
-            }
+            animator1.start()
         }
     }
 }
+
