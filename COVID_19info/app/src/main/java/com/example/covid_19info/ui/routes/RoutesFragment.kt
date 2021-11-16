@@ -51,9 +51,11 @@ import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.widget.LinearLayout
 
 import android.view.View
-
-
-
+import com.example.covid_19info.data.QuarantinesRouteAPI
+import com.example.covid_19info.data.model.Quarantines
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class RoutesFragment : Fragment(), OnMapReadyCallback {
@@ -76,7 +78,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 
     // A default location (Sydney, Australia) and default zoom to use when location permission is
     // not granted.
-    private val defaultLocation = LatLng(37.33, 126.59)
+    private val defaultLocation = LatLng(37.5642135, 127.0016985)
     private var locationPermissionGranted = false
 
     // The geographical location where the device is currently located. That is, the last-known
@@ -126,7 +128,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 
-
+        setQuarantineRoute()
 
         // [END maps_current_place_map_fragment]
         // [END_EXCLUDE]
@@ -457,6 +459,32 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         }
     }
     // [END maps_current_place_update_location_ui]
+
+    private fun setQuarantineRoute(){
+        val api = QuarantinesRouteAPI.create()
+        api.getData().enqueue(object: Callback<Quarantines> {
+
+            override fun onResponse(call: Call<Quarantines>,
+                                    response: Response<Quarantines>
+            ) {
+                Log.d("Main", "성공 : ${response.raw()}")
+            }
+            override fun onFailure(call: Call<Quarantines>, t: Throwable) {
+                Log.d("Main", "실패 : ${t.message}")
+            }
+        })
+        var routes = api.getData().execute().body()!!
+
+        for(route in routes.data){
+            var pos = route.latlng.split(", ").toTypedArray()
+            map?.addMarker(MarkerOptions()
+                .title(route.place)
+                .position(LatLng(pos[0].toDouble(), pos[2].toDouble()))
+                .snippet("132"))
+        }
+
+
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     fun setButtonsMove(): Boolean {

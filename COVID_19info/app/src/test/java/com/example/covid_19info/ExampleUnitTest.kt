@@ -1,10 +1,11 @@
 package com.example.covid_19info
 
+import android.util.Log
+import com.example.covid_19info.data.QuarantinesRouteAPI
 import org.junit.Test
 
 import org.junit.Assert.*
 
-import com.example.covid_19info.data.routeAPI
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -57,5 +58,11 @@ class ExampleUnitTest {
         print("$temp")
 
 
+    }
+    @Test
+    fun addition_isCorrect() {
+        //var q = QuarantinesRouteAPI
+        var data = QuarantinesRouteAPI.data
+        data.data[0]
     }
 }

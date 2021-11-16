@@ -37,6 +37,7 @@ interface QuarantinesRouteAPI{
                     Log.d("Main", "성공 : ${response.raw()}")
                 }
                 override fun onFailure(call: Call<Quarantines>, t: Throwable) {
+                    Log.d("Main", "실패 : ${t.message}")
                 }
             })
             return api.getData().execute().body()!!
