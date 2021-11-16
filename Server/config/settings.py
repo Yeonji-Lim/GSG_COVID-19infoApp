@@ -60,8 +60,8 @@ SITE_ID = 1
 REST_FRAMEWORK = {
     # 인증방식 설정
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # 기본 인증방식 토큰 인증으로 변경
+        'rest_framework.authentication.TokenAuthentication',
     ],
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
