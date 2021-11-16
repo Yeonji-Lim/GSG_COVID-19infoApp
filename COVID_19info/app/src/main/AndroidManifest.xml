@@ -34,7 +34,10 @@
         <activity
             android:name=".registerActivity"
             android:exported="true" />
-
+        <activity
+            android:name=".UserInfoActivity"
+            android:exported="true"
+            android:theme="@style/Theme.COVID_19info.NoActionBar"/>
     </application>
 
 </manifest>
