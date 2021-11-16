@@ -67,7 +67,8 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     # 유저 권한 설정
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        # 별다른 언급 없을 시 인증받은 사용자가 이용할 수 있도록 수정
+        'rest_framework.permissions.IsAuthenticated',  # view 부분에서 다른 허용사항을 설정 가능
     ]
 }
 
