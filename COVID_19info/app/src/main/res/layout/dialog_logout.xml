@@ -34,7 +34,7 @@
         app:layout_constraintVertical_bias="0.261" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/no_logout_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -48,7 +48,7 @@
         app:layout_constraintVertical_bias="0.855" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/yes_logout_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
