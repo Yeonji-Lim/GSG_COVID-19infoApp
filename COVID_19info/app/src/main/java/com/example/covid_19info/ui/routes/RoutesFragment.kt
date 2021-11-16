@@ -1,22 +1,20 @@
-package com.example.covid_19info.ui.maps
+package com.example.covid_19info.ui.routes
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.graphics.Color
 import android.location.Location
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.TextView
+import android.view.*
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -41,6 +39,19 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import androidx.core.view.*
+import kotlin.math.roundToInt
+import android.view.animation.Animation
+import android.view.animation.Transformation
+import android.animation.ValueAnimator
+import android.animation.ValueAnimator.AnimatorUpdateListener
+
+import android.widget.LinearLayout
+
+import android.view.View
+
 
 
 
@@ -76,6 +87,8 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
     private var likelyPlaceAttributions: Array<List<*>?> = arrayOfNulls(0)
     private var likelyPlaceLatLngs: Array<LatLng?> = arrayOfNulls(0)
 
+    lateinit var buttons :LinearLayout
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -85,6 +98,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         return inflater.inflate(R.layout.content_route, container, false)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -140,6 +154,18 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         //검색창 색 변경
         autocompleteFragment.view?.setBackgroundColor(Color.WHITE)
 
+
+        //프래그먼트 내부 버튼 리스너 설정
+        //changeView 리스너
+        val changeView = view.findViewById<Button>(R.id.changeView)
+        changeView.setOnClickListener {
+            changeView?.isSelected = changeView?.isSelected != true
+        }
+
+        //하단 버튼 리스너 설정을 위한 변수 설정
+        buttons = view.findViewById<LinearLayout>(R.id.linearLayout)
+        //버튼 움직임 설정
+        setButtonsMove()
     }
 
     /**
@@ -432,6 +458,35 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
     }
     // [END maps_current_place_update_location_ui]
 
+    @SuppressLint("ClickableViewAccessibility")
+    fun setButtonsMove(): Boolean {
+        //기본 위치
+        var gestureListener = MyGesture(buttons)
+        var gestureDetector = GestureDetector(context, gestureListener)
+
+
+        for(item in buttons){
+            var btn = item as Button
+
+            if(btn.id==R.id.moveButtons){
+                btn.setOnTouchListener { view, motionEvent ->
+                    Log.d("main", "${motionEvent.actionMasked}")
+                    when(motionEvent.actionMasked){
+                        MotionEvent.ACTION_UP->{
+                            true
+                        }
+                    }
+                    return@setOnTouchListener gestureDetector.onTouchEvent(motionEvent)
+                }
+            }else{
+                btn.setOnClickListener {
+                    btn?.isSelected = btn?.isSelected != true
+                }
+            }
+        }
+
+        return true
+    }
 
     companion object {
         private val TAG = MainActivity::class.java.simpleName
@@ -448,3 +503,93 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         private const val M_MAX_ENTRIES = 5
     }
 }
+class MyGesture(val layout: LinearLayout) : GestureDetector.OnGestureListener {
+    var startButtonPos = 0
+    var btn = (layout[0] as Button)
+    val Int.px: Int
+        get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+    val THRES_HOLD = 150.px
+    // 제스처 이벤트를 받아서 text를 변경
+    override fun onShowPress(e: MotionEvent?) {
+        Log.d("test1","onShowPress")
+        Log.d("test1",e.toString())
+    }
+    override fun onSingleTapUp(e: MotionEvent?): Boolean {
+
+        btn.isSelected = btn.isSelected != true
+        btn.text = if(btn.isSelected) ">" else "<"
+
+        moveButtons(btn.isSelected)
+        Log.d("test1","onSingleTapUp")
+        Log.d("test1",e.toString())
+        return true
+    }
+    override fun onDown(e: MotionEvent?): Boolean {
+        //현재 레이아웃 위치 받아오기
+        val params = (layout.layoutParams as ViewGroup.MarginLayoutParams)
+        startButtonPos = params.rightMargin
+
+        Log.d("test1","onDown")
+        Log.d("test1",e.toString())
+        return true
+    }
+    override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+        //나오는 방향
+        moveButtons(velocityX<0)
+        if(velocityX<-20){
+            btn.isSelected = true
+            btn.text = ">"
+        }else{
+            btn.isSelected = false
+            btn.text = "<"
+        }
+        Log.d("test1","onFling")
+        Log.d("test1",velocityX.toString())
+        return true
+    }
+    override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+        //마진 데이터
+        val params = (layout.layoutParams as ViewGroup.MarginLayoutParams)
+        val moved = startButtonPos - e2?.rawX!! + e1?.rawX!!
+        //마진 설정
+        Log.d("main", "$moved")
+        if(moved>-300.px && moved < 0){
+            params.updateMargins(right= moved.roundToInt())
+        }
+        //레이아웃 업데이트
+        layout.requestLayout()
+        return true
+    }
+    override fun onLongPress(e: MotionEvent?) {
+        Log.d("test1","onLongPress")
+        Log.d("test1",e.toString())
+    }
+    //flg true: 나오는 애니메이션, false: 들어가는 애니메이션
+    fun moveButtons(flg: Boolean){
+        //val params = (layout.layoutParams as ViewGroup.MarginLayoutParams)
+
+        val params = (layout.layoutParams as ViewGroup.MarginLayoutParams)
+        val animator0 = ValueAnimator.ofInt(params.rightMargin, 0)
+        animator0.addUpdateListener { valueAnimator ->
+            params.rightMargin = (valueAnimator.animatedValue as Int)!!
+            layout.requestLayout()
+        }
+        animator0.duration = 500
+
+        val animator1 = ValueAnimator.ofInt(params.rightMargin, (-300).px)
+        animator1.addUpdateListener { valueAnimator ->
+            params.rightMargin = (valueAnimator.animatedValue as Int)!!
+            layout.requestLayout()
+        }
+        animator1.duration = 500
+
+        if(flg){
+            animator0.start()
+        }
+        //들어가는 방향
+        else{
+            animator1.start()
+        }
+    }
+}
+

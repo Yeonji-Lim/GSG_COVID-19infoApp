@@ -17,6 +17,8 @@
     <style name="Theme.COVID_19info.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
     </style>
     <style name="Theme.COVID_19info.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="Theme.COVID_19info.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

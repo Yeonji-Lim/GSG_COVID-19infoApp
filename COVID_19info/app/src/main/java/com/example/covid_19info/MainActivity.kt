@@ -31,7 +31,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.example.covid_19info.BuildConfig.MAPS_API_KEY
+import com.example.covid_19info.ui.routes.RoutesFragment
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -50,6 +52,7 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**
  * An activity that displays a map showing the place at the device's current location.
@@ -64,15 +67,41 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //로그인 창 이동 구현
-        val profile_btn = findViewById<ImageButton>(R.id.user_profile_button)
-        profile_btn.setOnClickListener {
+        val profileBtn = findViewById<ImageButton>(R.id.user_profile_button)
+        profileBtn.setOnClickListener {
             val intent = Intent(this@MainActivity, LoginActivity::class.java)
             startActivity(intent)
         }
 
-    }
-    // [END maps_current_place_on_create]
+        //bottom_navigation listener 설정
+        var bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
+        bottomNav.setOnItemSelectedListener { item ->
+            changeFragment(
+                when(item.itemId) {
+                    R.id.page_routes -> {
+                        //버튼 상태 변경
+                        RoutesFragment()
+                    }
+                    else -> {
+                        RoutesFragment()
+                    }
+                }
+            )
+            return@setOnItemSelectedListener true
+        }
+
+        //처음 선택된 아이템 설정
+        bottomNav.selectedItemId = R.id.page_routes
+    }
+
+    //프래그먼트 변경 함수
+    private fun changeFragment(fragment: Fragment) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.main_background, fragment)
+            .commit()
+    }
 
     /**
      * Sets up the options menu.

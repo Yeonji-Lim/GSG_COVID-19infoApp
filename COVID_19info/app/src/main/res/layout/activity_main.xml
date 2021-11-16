@@ -6,8 +6,8 @@
     android:layout_height="match_parent">
 
     <fragment
-        android:id="@+id/route"
-        android:name="com.example.covid_19info.ui.maps.RoutesFragment"
+        android:id="@+id/main_background"
+        android:name="com.example.covid_19info.ui.routes.RoutesFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,8 +22,8 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/spacing_40"
         android:background="@drawable/curved_rectangle"
-        app:itemIconTint="@android:color/black"
-        app:itemTextColor="@android:color/black"
+        app:itemTextColor="@drawable/bottom_menu_color"
+        app:itemIconTint="@drawable/bottom_menu_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

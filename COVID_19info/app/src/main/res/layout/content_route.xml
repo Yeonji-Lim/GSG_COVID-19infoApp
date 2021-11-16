@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
     <fragment
         android:id="@+id/map"
@@ -18,99 +19,90 @@
         app:layout_constraintVertical_bias="0.0"
         tools:context=".MainActivity" />
 
+<!--    30~330 dp-->
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="376dp"
         android:layout_height="50dp"
-        android:layout_marginStart="30dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
         android:layout_marginBottom="70dp"
+        android:layout_marginRight="-300dp"
+        android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="0.0">
 
-        <ImageButton
-            android:id="@+id/imageButton"
+        <Button
+            android:id="@+id/moveButtons"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/circle"
             android:layout_weight="1"
-            app:srcCompat="?attr/homeAsUpIndicator" />
+            android:background="@drawable/show_term_button"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="&lt;"
+            android:textColor="@drawable/user_route_button_text_color"
+            android:textSize="40dp" />
 
         <Button
             android:id="@+id/cons_term0"
             android:layout_width="@dimen/term_button_width"
             android:layout_height="@dimen/term_button_height"
             android:layout_marginEnd="12dp"
-            android:layout_marginBottom="68dp"
+            android:layout_weight="1"
             android:background="@drawable/user_route_button"
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:padding="0dp"
             android:text="3일"
             android:textColor="@drawable/user_route_button_text_color"
-            android:textSize="20sp"
-            android:layout_weight="1"
-            app:backgroundTint="@null"
-            app:layout_constraintBottom_toBottomOf="@+id/map"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="?attr/homeAsUpIndicator" />
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/cons_term1"
             android:layout_width="@dimen/term_button_width"
             android:layout_height="@dimen/term_button_height"
             android:layout_marginEnd="12dp"
+            android:layout_weight="1"
             android:background="@drawable/user_route_button"
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:padding="0dp"
-            android:layout_weight="1"
             android:text="5일"
             android:textColor="@drawable/user_route_button_text_color"
-            android:textSize="20sp"
-            app:backgroundTint="@null"
-            app:layout_constraintBottom_toBottomOf="@+id/map"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="?attr/homeAsUpIndicator" />
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/cons_term2"
             android:layout_width="@dimen/term_button_width"
             android:layout_height="@dimen/term_button_height"
             android:layout_marginEnd="12dp"
+            android:layout_weight="1"
             android:background="@drawable/user_route_button"
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:padding="0dp"
             android:text="1주"
             android:textColor="@drawable/user_route_button_text_color"
-            android:textSize="20sp"
-            android:layout_weight="1"
-            app:backgroundTint="@null"
-            app:layout_constraintBottom_toBottomOf="@+id/map"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="?attr/homeAsUpIndicator" />
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/cons_term3"
             android:layout_width="@dimen/term_button_width"
             android:layout_height="@dimen/term_button_height"
             android:layout_marginEnd="12dp"
+            android:layout_weight="1"
             android:background="@drawable/user_route_button"
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:padding="0dp"
             android:text="2주"
             android:textColor="@drawable/user_route_button_text_color"
-            android:textSize="20sp"
-            android:layout_weight="1"
-            app:backgroundTint="@null"
-            app:layout_constraintBottom_toBottomOf="@+id/map"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="?attr/homeAsUpIndicator" />
+            android:textSize="20sp" />
 
 
     </LinearLayout>
