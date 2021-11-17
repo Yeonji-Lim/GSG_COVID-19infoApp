@@ -355,69 +355,69 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
      * current place on the map - provided the user has granted location permission.
      */
     // [START maps_current_place_show_current_place]
-    @SuppressLint("MissingPermission")
-    private fun showCurrentPlace() {
-        if (map == null) {
-            return
-        }
-        if (locationPermissionGranted) {
-            // Use fields to define the data types to return.
-            val placeFields = listOf(Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG)
+    // @SuppressLint("MissingPermission")
+    // private fun showCurrentPlace() {
+    //     if (map == null) {
+    //         return
+    //     }
+    //     if (locationPermissionGranted) {
+    //         // Use fields to define the data types to return.
+    //         val placeFields = listOf(Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG)
 
-            // Use the builder to create a FindCurrentPlaceRequest.
-            val request = FindCurrentPlaceRequest.newInstance(placeFields)
+    //         // Use the builder to create a FindCurrentPlaceRequest.
+    //         val request = FindCurrentPlaceRequest.newInstance(placeFields)
 
-            // Get the likely places - that is, the businesses and other points of interest that
-            // are the best match for the device's current location.
-            val placeResult = placesClient.findCurrentPlace(request)
-            placeResult.addOnCompleteListener { task ->
-                if (task.isSuccessful && task.result != null) {
-                    val likelyPlaces = task.result
+    //         // Get the likely places - that is, the businesses and other points of interest that
+    //         // are the best match for the device's current location.
+    //         val placeResult = placesClient.findCurrentPlace(request)
+    //         placeResult.addOnCompleteListener { task ->
+    //             if (task.isSuccessful && task.result != null) {
+    //                 val likelyPlaces = task.result
 
-                    // Set the count, handling cases where less than 5 entries are returned.
-                    val count = if (likelyPlaces != null && likelyPlaces.placeLikelihoods.size < M_MAX_ENTRIES) {
-                        likelyPlaces.placeLikelihoods.size
-                    } else {
-                        M_MAX_ENTRIES
-                    }
-                    var i = 0
-                    likelyPlaceNames = arrayOfNulls(count)
-                    likelyPlaceAddresses = arrayOfNulls(count)
-                    likelyPlaceAttributions = arrayOfNulls<List<*>?>(count)
-                    likelyPlaceLatLngs = arrayOfNulls(count)
-                    for (placeLikelihood in likelyPlaces?.placeLikelihoods ?: emptyList()) {
-                        // Build a list of likely places to show the user.
-                        likelyPlaceNames[i] = placeLikelihood.place.name
-                        likelyPlaceAddresses[i] = placeLikelihood.place.address
-                        likelyPlaceAttributions[i] = placeLikelihood.place.attributions
-                        likelyPlaceLatLngs[i] = placeLikelihood.place.latLng
-                        i++
-                        if (i > count - 1) {
-                            break
-                        }
-                    }
+    //                 // Set the count, handling cases where less than 5 entries are returned.
+    //                 val count = if (likelyPlaces != null && likelyPlaces.placeLikelihoods.size < M_MAX_ENTRIES) {
+    //                     likelyPlaces.placeLikelihoods.size
+    //                 } else {
+    //                     M_MAX_ENTRIES
+    //                 }
+    //                 var i = 0
+    //                 likelyPlaceNames = arrayOfNulls(count)
+    //                 likelyPlaceAddresses = arrayOfNulls(count)
+    //                 likelyPlaceAttributions = arrayOfNulls<List<*>?>(count)
+    //                 likelyPlaceLatLngs = arrayOfNulls(count)
+    //                 for (placeLikelihood in likelyPlaces?.placeLikelihoods ?: emptyList()) {
+    //                     // Build a list of likely places to show the user.
+    //                     likelyPlaceNames[i] = placeLikelihood.place.name
+    //                     likelyPlaceAddresses[i] = placeLikelihood.place.address
+    //                     likelyPlaceAttributions[i] = placeLikelihood.place.attributions
+    //                     likelyPlaceLatLngs[i] = placeLikelihood.place.latLng
+    //                     i++
+    //                     if (i > count - 1) {
+    //                         break
+    //                     }
+    //                 }
 
-                    // Show a dialog offering the user the list of likely places, and add a
-                    // marker at the selected place.
-                    openPlacesDialog()
-                } else {
-                    Log.e(TAG, "Exception: %s", task.exception)
-                }
-            }
-        } else {
-            // The user has not granted permission.
-            Log.i(TAG, "The user did not grant location permission.")
+    //                 // Show a dialog offering the user the list of likely places, and add a
+    //                 // marker at the selected place.
+    //                 openPlacesDialog()
+    //             } else {
+    //                 Log.e(TAG, "Exception: %s", task.exception)
+    //             }
+    //         }
+    //     } else {
+    //         // The user has not granted permission.
+    //         Log.i(TAG, "The user did not grant location permission.")
 
-            // Add a default marker, because the user hasn't selected a place.
-            map?.addMarker(MarkerOptions()
-                .title("123")
-                .position(defaultLocation)
-                .snippet("132"))
+    //         // Add a default marker, because the user hasn't selected a place.
+    //         map?.addMarker(MarkerOptions()
+    //             .title("123")
+    //             .position(defaultLocation)
+    //             .snippet("132"))
 
-            // Prompt the user for permission.
-            getLocationPermission()
-        }
-    }
+    //         // Prompt the user for permission.
+    //         getLocationPermission()
+    //     }
+    // }
     // [END maps_current_place_show_current_place]
 
     /**
