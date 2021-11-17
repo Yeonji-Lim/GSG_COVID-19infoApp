@@ -15,98 +15,28 @@ package com.example.covid_19info.data
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import android.content.Context
-import androidx.annotation.MainThread
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.example.covid_19info.data.model.MyLocationDatabase
-import com.example.covid_19info.data.model.MyLocationEntity
-import java.util.UUID
-import java.util.concurrent.ExecutorService
-
-private const val TAG = "LocationRepository"
+import com.example.covid_19info.data.LocationRepository
+import java.util.concurrent.Executors
 
 /**
- * Access point for database (MyLocation data) and location APIs (start/stop location updates and
- * checking location update status).
+ * Allows Fragment to observer {@link MyLocation} database, follow the state of location updates,
+ * and start/stop receiving location updates.
  */
-class LocationRepository private constructor(
-    private val myLocationDatabase: MyLocationDatabase,
-    private val myLocationManager: MyLocationManager,
-    private val executor: ExecutorService
-) {
+class LocationUpdateViewModel(application: Application) : AndroidViewModel(application) {
 
-    // Database related fields/methods:
-    private val locationDao = myLocationDatabase.locationDao()
+    private val locationRepository = LocationRepository.getInstance(
+        application.applicationContext,
+        Executors.newSingleThreadExecutor()
+    )
 
-    /**
-     * Returns all recorded locations from database.
-     */
-    fun getLocations(): LiveData<List<MyLocationEntity>> = locationDao.getLocations()
+    val receivingLocationUpdates: LiveData<Boolean> = locationRepository.receivingLocationUpdates
 
-    // Not being used now but could in future versions.
-    /**
-     * Returns specific location in database.
-     */
-    fun getLocation(id: UUID): LiveData<MyLocationEntity> = locationDao.getLocation(id)
+    val locationListLiveData = locationRepository.getLocations()
 
-    // Not being used now but could in future versions.
-    /**
-     * Updates location in database.
-     */
-    fun updateLocation(myLocationEntity: MyLocationEntity) {
-        executor.execute {
-            locationDao.updateLocation(myLocationEntity)
-        }
-    }
+    fun startLocationUpdates() = locationRepository.startLocationUpdates()
 
-    /**
-     * Adds location to the database.
-     */
-    fun addLocation(myLocationEntity: MyLocationEntity) {
-        executor.execute {
-            locationDao.addLocation(myLocationEntity)
-        }
-    }
-
-    /**
-     * Adds list of locations to the database.
-     */
-    fun addLocations(myLocationEntities: List<MyLocationEntity>) {
-        executor.execute {
-            locationDao.addLocations(myLocationEntities)
-        }
-    }
-
-    // Location related fields/methods:
-    /**
-     * Status of whether the app is actively subscribed to location changes.
-     */
-    val receivingLocationUpdates: LiveData<Boolean> = myLocationManager.receivingLocationUpdates
-
-    /**
-     * Subscribes to location updates.
-     */
-    @MainThread
-    fun startLocationUpdates() = myLocationManager.startLocationUpdates()
-
-    /**
-     * Un-subscribes from location updates.
-     */
-    @MainThread
-    fun stopLocationUpdates() = myLocationManager.stopLocationUpdates()
-
-    companion object {
-        @Volatile private var INSTANCE: LocationRepository? = null
-
-        fun getInstance(context: Context, executor: ExecutorService): LocationRepository {
-            return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: LocationRepository(
-                    MyLocationDatabase.getInstance(context),
-                    MyLocationManager.getInstance(context),
-                    executor)
-                    .also { INSTANCE = it }
-            }
-        }
-    }
+    fun stopLocationUpdates() = locationRepository.stopLocationUpdates()
 }
