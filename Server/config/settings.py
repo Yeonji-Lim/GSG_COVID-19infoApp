@@ -51,10 +51,19 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'rest_auth.registration',
+
+    # 이메일 인증 기능 위해 추가
+    'authemail',
+
+    # 계정 관리 어플리케이션 추가
+    'accounts',
 ]
 
 # django-rest-auth에서 회원가입 기능 사용을 위해 추가
 SITE_ID = 1
+
+# 기본 유저 모델 변경
+AUTH_USER_MODEL = 'accounts.MyUser'
 
 # Restframework에서 사용할 인증방식과 유저 권한 설정
 REST_FRAMEWORK = {
