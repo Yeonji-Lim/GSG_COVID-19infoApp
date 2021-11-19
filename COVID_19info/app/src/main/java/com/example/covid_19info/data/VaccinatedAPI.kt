@@ -82,5 +82,4 @@ interface VaccinatedAPI {
                 .create(VaccinatedAPI::class.java)
         }
     }
-
 }

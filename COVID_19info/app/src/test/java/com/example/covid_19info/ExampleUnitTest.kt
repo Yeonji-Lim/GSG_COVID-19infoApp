@@ -1,6 +1,7 @@
 package com.example.covid_19info
 
 import android.util.Log
+import com.example.covid_19info.data.QuarantinesAPI
 import com.example.covid_19info.data.QuarantinesRouteAPI
 import com.example.covid_19info.data.VaccinatedAPI
 import com.example.covid_19info.data.model.VaccinatedInfo
@@ -61,7 +62,8 @@ class ExampleUnitTest {
 //
 //        var temp = data.getString("region")
 //        print("$temp")
-        val api = VaccinatedAPI.create()
+        val api = QuarantinesAPI.create()
+
 //        api.getVaccinatedData(page = 1).enqueue(object: Callback<VaccinatedInfo>{
 //            override fun onResponse(
 //                call: Call<VaccinatedInfo>,
@@ -70,6 +72,7 @@ class ExampleUnitTest {
 //                response.body()
 //            }
 //        })
-        println(api.getVaccinatedData(page = 1).execute().body())
+        println(api.getQuarantineStat(page = 1).execute().body()?.body?.items?.item?.get(0))
+
     }
 }
