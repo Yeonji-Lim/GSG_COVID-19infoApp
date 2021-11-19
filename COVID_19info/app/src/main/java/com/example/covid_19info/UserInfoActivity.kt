@@ -118,6 +118,30 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
             }
         }
 
+        binding.withdrawalBackground.setOnClickListener{
+            val mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_withdrawal,null)
+            val mBuilder = AlertDialog.Builder(this)
+                .setView(mDialogView)
+
+            val mAlertDialog = mBuilder.show()
+
+            //취소버튼
+            val noBtn = mDialogView.findViewById<Button>(R.id.no_withdrawal_btn)
+            noBtn.setOnClickListener{
+                mAlertDialog.dismiss()
+            }
+
+            //확인버튼
+            val yesBtn = mDialogView.findViewById<Button>(R.id.yes_withdrawal_btn)
+            yesBtn.setOnClickListener{
+                //로그아웃 하는 함수 내용 구현 해야함
+                //loginViewModel.withdrawal()
+                Toast.makeText(this, "탈퇴 되었습니다.", Toast.LENGTH_SHORT).show()
+                super.onBackPressed()
+
+            }
+        }
+
         //옵저버 등록
         locationUpdateViewModel.receivingLocationUpdates.observe(
             this,
