@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity() {
 
     //뒤로가기 버튼 오버라이딩딩
    override fun onBackPressed() {
-        if(supportFragmentManager.backStackEntryCount == 0) {
+        if(supportFragmentManager.backStackEntryCount == 1) {
             val tempTime = System.currentTimeMillis()
             val intervalTime = tempTime - backPressedTime
             if (!(0 > intervalTime || Companion.FINISH_INTERVAL_TIME < intervalTime)) {
@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity() {
 //        return true
 //    }
     companion object {
-        const val FINISH_INTERVAL_TIME = 100
+        const val FINISH_INTERVAL_TIME = 2200
     }
 
 }
