@@ -2,6 +2,7 @@ package com.example.covid_19info.data
 
 
 import android.util.Log
+import com.example.covid_19info.data.model.LoginRequest
 import com.example.covid_19info.data.model.LoginToken
 import com.example.covid_19info.data.model.SignUpRst
 import retrofit2.*
@@ -22,7 +23,7 @@ interface LoginAPI {
 
     @POST("login/")
     fun login(
-
+        @Body LoginRequest: LoginRequest
     ): Call<LoginToken>
 
     companion object{

@@ -1,5 +1,7 @@
 package com.example.covid_19info.data
 
+import android.content.SharedPreferences
+import com.example.covid_19info.PreferenceUtil
 import com.example.covid_19info.data.model.LoggedInUser
 
 /**
@@ -8,6 +10,8 @@ import com.example.covid_19info.data.model.LoggedInUser
  */
 
 class LoginRepository(val dataSource: LoginDataSource) {
+    var prefs = PreferenceUtil()
+
 
     // in-memory cache of the loggedInUser object
     var user: LoggedInUser? = null
@@ -23,11 +27,13 @@ class LoginRepository(val dataSource: LoginDataSource) {
     }
 
     fun logout() {
-        user = null
+        prefs.delString("token")
+        prefs.delString("userID")
+//        user = null
         dataSource.logout()
     }
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
+    suspend fun login(username: String, password: String): Result<LoggedInUser> {
         // handle login
         val result = dataSource.login(username, password)
 
@@ -39,7 +45,9 @@ class LoginRepository(val dataSource: LoginDataSource) {
     }
 
     private fun setLoggedInUser(loggedInUser: LoggedInUser) {
-        this.user = loggedInUser
+        prefs.setString("userID", loggedInUser.userId)
+        loggedInUser.tok?.let { prefs.setString("token", it) }
+        //this.user = loggedInUser
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore
     }

@@ -5,5 +5,6 @@ package com.example.covid_19info.data.model
  */
 data class LoggedInUser(
     val userId: String,
-    val displayName: String
+    val displayName: String,
+    val tok: String?
 )

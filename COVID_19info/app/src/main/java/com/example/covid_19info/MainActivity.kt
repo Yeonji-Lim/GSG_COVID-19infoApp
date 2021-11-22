@@ -69,7 +69,16 @@ class MainActivity : AppCompatActivity() {
         //로그인 창 이동 구현
         val profileBtn = findViewById<ImageButton>(R.id.user_profile_button)
         profileBtn.setOnClickListener {
-            val intent = Intent(this@MainActivity, LoginActivity::class.java)
+            var logindata = getSharedPreferences("login", MODE_PRIVATE)
+
+            val intent:Intent
+            //로그인 여부에 따라 창 결정
+            if(logindata.getString("token", null)==null){
+                intent = Intent(this@MainActivity, LoginActivity::class.java)
+            }else{
+                intent = Intent(this@MainActivity, UserInfoActivity::class.java)
+            }
+
             startActivity(intent)
         }
 
