@@ -64,6 +64,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //preferenceutil초기화
+        PreferenceUtil.context = applicationContext
+
         setContentView(R.layout.activity_main)
 
         //로그인 창 이동 구현

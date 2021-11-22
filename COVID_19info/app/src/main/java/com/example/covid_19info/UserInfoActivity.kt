@@ -15,6 +15,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.example.covid_19info.data.LocationUpdateViewModel
+import com.example.covid_19info.data.LoginDataSource
+import com.example.covid_19info.data.LoginRepository
 import com.example.covid_19info.databinding.ActivityUserinfoBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -22,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar
 class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
     private lateinit var binding : ActivityUserinfoBinding
     private val prefsFileName = "prefs"
+    private val loginrepo = LoginRepository(LoginDataSource())
 
     //location view model 초기화
     private val locationUpdateViewModel by lazy {
@@ -184,6 +187,8 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
             yesBtn.setOnClickListener{
                 //로그아웃 하는 함수 내용 구현 해야함
                 //loginViewModel.logout()
+                loginrepo.logout()
+
                 Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
                 super.onBackPressed()
 
