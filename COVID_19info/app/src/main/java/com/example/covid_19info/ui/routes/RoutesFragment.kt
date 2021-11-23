@@ -56,6 +56,8 @@ import androidx.annotation.RequiresApi
 import com.example.covid_19info.data.QuarantinesRouteAPI
 import com.example.covid_19info.data.model.Quarantines
 import com.google.android.gms.maps.model.*
+import com.google.android.libraries.places.api.model.RectangularBounds
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -151,13 +153,16 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                     as AutocompleteSupportFragment
 
         // Specify the types of place data to return.
-        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG))
 
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-                // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: ${place.name}, ${place.id}")
+                //Log.i(TAG, "Place: ${place.name}, ${place.id}, ${place.latLng}")
+                
+                //검색 지역으로 이동
+                map?.moveCamera(CameraUpdateFactory
+                        .newLatLngZoom(place.latLng, 15f))
             }
 
             override fun onError(status: Status) {
@@ -167,6 +172,11 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         })
         //검색창 색 변경
         autocompleteFragment.view?.setBackgroundColor(Color.WHITE)
+
+        //검색 가능 지역 한국으로 고정
+        autocompleteFragment.setCountry("KR")
+
+
 
 
         //프래그먼트 내부 버튼 리스너 설정
