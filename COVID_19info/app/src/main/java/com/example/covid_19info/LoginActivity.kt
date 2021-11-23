@@ -13,10 +13,13 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import com.example.covid_19info.data.model.MyLocationDatabase
 import com.example.covid_19info.databinding.ActivityLoginBinding
 import com.example.covid_19info.ui.login.*
 
+
 class LoginActivity : AppCompatActivity() {
+
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
@@ -99,6 +102,8 @@ class LoginActivity : AppCompatActivity() {
                             username.text.toString(),
                             password.text.toString()
                         )
+
+
                 }
                 false
             }

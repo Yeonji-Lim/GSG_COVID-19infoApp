@@ -106,6 +106,8 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
     private var userMarkerList: MutableList<Marker> = mutableListOf()
     lateinit var buttons :LinearLayout
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
