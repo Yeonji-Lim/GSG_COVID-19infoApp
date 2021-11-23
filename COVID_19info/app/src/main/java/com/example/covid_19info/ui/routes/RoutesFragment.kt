@@ -489,17 +489,23 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
     // [END maps_current_place_update_location_ui]
 
     //확진자 마커 등록
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun showQuarantineRoute(routes: Quarantines){
+        val today = LocalDate.now()
         for(route in routes.data){
+            var visitdate = LocalDate.parse(route.visitedDate.substring(0,10), DateTimeFormatter.ISO_DATE)
+            val diff = ChronoUnit.DAYS.between(visitdate, today)
             var pos = route.latlng.split(", ").toTypedArray()
             var mark = map?.addMarker(MarkerOptions()
                 .title(route.place)
                 .position(LatLng(pos[0].toDouble(), pos[1].toDouble()))
                 .snippet("${route.visitedDate}\n${route.address}"))
+            if(diff in 4..5)
+                mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+            else if(diff>5)
+                mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             mark?.let { quartineMarkerList.add(it) }
         }
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
