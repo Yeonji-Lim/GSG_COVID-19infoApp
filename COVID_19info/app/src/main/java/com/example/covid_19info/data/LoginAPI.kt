@@ -32,7 +32,7 @@ interface LoginAPI {
     ): Call<LoginToken>
 
     companion object{
-        private const val BASE_URL_ROUTE="https://dcec53b3-9e80-4db3-954c-9605d320a60d.mock.pstmn.io/"
+        private const val BASE_URL_ROUTE="https://ab4fd298-6573-4ed6-a0f3-987108b4679a.mock.pstmn.io"
         fun create(): LoginAPI{
             return Retrofit.Builder()
                 .baseUrl(BASE_URL_ROUTE)

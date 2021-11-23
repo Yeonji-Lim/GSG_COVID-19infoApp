@@ -1,6 +1,7 @@
 package com.example.covid_19info.data
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.example.covid_19info.PreferenceUtil
 import com.example.covid_19info.data.model.LoggedInUser
 
@@ -27,9 +28,10 @@ class LoginRepository(val dataSource: LoginDataSource) {
     }
 
     suspend fun logout() {
-        dataSource.logout(prefs.getString("token",""))
-        prefs.delString("token")
-        prefs.delString("userID")
+        val result = dataSource.logout(prefs.getString("token",""))
+
+        Log.d("main", "logout end")
+        setLoggedOutUser()
 //        user = null
     }
 
@@ -42,6 +44,10 @@ class LoginRepository(val dataSource: LoginDataSource) {
         }
 
         return result
+    }
+    private fun setLoggedOutUser() {
+        prefs.delString("token")
+        prefs.delString("userID")
     }
 
     private fun setLoggedInUser(loggedInUser: LoggedInUser) {

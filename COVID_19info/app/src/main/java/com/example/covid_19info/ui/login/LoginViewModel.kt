@@ -10,6 +10,7 @@ import com.example.covid_19info.data.Result
 
 import com.example.covid_19info.R
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
