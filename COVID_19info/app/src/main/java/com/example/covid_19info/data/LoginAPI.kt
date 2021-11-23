@@ -26,6 +26,11 @@ interface LoginAPI {
         @Body LoginRequest: LoginRequest
     ): Call<LoginToken>
 
+    @POST("logout/")
+    fun logout(
+        @Body LoginToken: LoginToken
+    ): Call<LoginToken>
+
     companion object{
         private const val BASE_URL_ROUTE="https://dcec53b3-9e80-4db3-954c-9605d320a60d.mock.pstmn.io/"
         fun create(): LoginAPI{

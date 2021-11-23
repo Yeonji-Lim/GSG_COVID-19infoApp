@@ -3,6 +3,7 @@ package com.example.covid_19info.data
 import android.util.Log
 import com.example.covid_19info.data.model.LoggedInUser
 import com.example.covid_19info.data.model.LoginRequest
+import com.example.covid_19info.data.model.LoginToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -26,7 +27,17 @@ class LoginDataSource {
         }
     }
 
-    fun logout() {
-        // TODO: revoke authentication
+    suspend fun logout(tok: String) {
+        return withContext(Dispatchers.IO){
+            // TODO: revoke authentication
+            try{
+                loginapi.logout(LoginToken(tok)).execute()
+
+                return@withContext
+            }catch (e: Throwable){
+
+                return@withContext
+            }
+        }
     }
 }
