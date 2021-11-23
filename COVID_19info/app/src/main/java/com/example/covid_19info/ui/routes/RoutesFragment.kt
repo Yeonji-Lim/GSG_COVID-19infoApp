@@ -18,9 +18,6 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.covid_19info.BuildConfig
-import com.example.covid_19info.MainActivity
-import com.example.covid_19info.R
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -48,6 +45,7 @@ import android.view.animation.Transformation
 import android.animation.ValueAnimator
 import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.app.Application
+import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.os.Build
 
@@ -55,9 +53,15 @@ import android.widget.LinearLayout
 
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
+import com.example.covid_19info.*
+import com.example.covid_19info.data.LocationRepository
 import com.example.covid_19info.data.QuarantinesRouteAPI
 import com.example.covid_19info.data.model.MyLocationDatabase
 import com.example.covid_19info.data.model.Quarantines
+import com.example.covid_19info.databinding.ActivityLoginBinding
+import com.example.covid_19info.databinding.ActivityMainBinding
 import com.google.android.gms.maps.model.*
 import com.google.android.libraries.places.api.model.RectangularBounds
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
@@ -68,10 +72,12 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-
+import java.util.concurrent.Executors
 
 
 class RoutesFragment : Fragment(), OnMapReadyCallback {
+    private lateinit var binding: ActivityMainBinding
+
     // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
     lateinit var mainActivity: MainActivity
     override fun onAttach(context: Context) {
@@ -104,6 +110,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 
     //확진자 동선 데이터
     lateinit private var quarantinesData: Quarantines
+
     private var quartineMarkerList: MutableList<Marker> = mutableListOf()
     private var userMarkerList: MutableList<Marker> = mutableListOf()
     lateinit var buttons :LinearLayout
@@ -186,7 +193,66 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         //changeView 리스너
         val changeView = view.findViewById<Button>(R.id.changeView)
         changeView.setOnClickListener {
-            changeView?.isSelected = changeView?.isSelected != true
+
+            val pref = PreferenceUtil()
+            //로그인 안된경우
+            if(pref.getString("token", "")==""){
+                val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_yes_no,null)
+                val mBuilder = context?.let { it1 ->
+                    AlertDialog.Builder(it1)
+                        .setView(mDialogView)
+                }
+
+                val mAlertDialog = mBuilder?.show()
+                mDialogView.findViewById<TextView>(R.id.dialog_text).text="로그인이 필요한 메뉴입니다."
+
+                //취소버튼
+                val noBtn = mDialogView.findViewById<Button>(R.id.no_logout_btn)
+                noBtn.setOnClickListener{
+                    mAlertDialog?.dismiss()
+                }
+
+                //확인버튼
+                val yesBtn = mDialogView.findViewById<Button>(R.id.yes_logout_btn)
+                yesBtn.text="로그인"
+                yesBtn.setOnClickListener{
+                    //로그인 액티비티로 이동
+                    var intent = Intent(context, LoginActivity::class.java)
+                    startActivity(intent)
+
+                    mAlertDialog?.dismiss()
+                }
+            }
+            //로그인 된 경우
+            else{
+                changeView?.isSelected = changeView?.isSelected != true
+                //var db = context?.let { it1 -> LocationRepository.getInstance(it1) }
+
+                var locations = context?.let { it1 ->
+                    LocationRepository.getInstance(it1, Executors.newSingleThreadExecutor())
+                        .getLocations()
+                }
+                //장소 표시
+                if (locations != null) {
+                    locations.observe(viewLifecycleOwner, Observer {locations->
+
+                        //마크생성
+                        for(location in locations){
+                            var loc = location.latitude
+                            location.longitude
+                            location.date
+
+                            var mark = map?.addMarker(MarkerOptions()
+                                .position((LatLng(location.latitude,location.longitude)))
+                            )
+                            mark?.isVisible = true
+
+                            mark?.let { userMarkerList.add(it) }
+                        }
+                        Log.d("main", it.toString())
+                    })
+                }
+            }
         }
 
         //하단 버튼 리스너 설정을 위한 변수 설정
@@ -525,6 +591,8 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             mark?.let { quartineMarkerList.add(it) }
         }
     }
+
+    //사용자 동선 데이터베이스 테스트
     private fun showUserRoute(){
         var db = context?.let { MyLocationDatabase.getInstance(it)}
         var loc = db?.locationDao()?.getLocations()
@@ -535,8 +603,6 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         )
         mark?.let { userMarkerList.add(it) }
         userMarkerList[0].isVisible = true
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
