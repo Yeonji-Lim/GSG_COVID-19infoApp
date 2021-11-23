@@ -1,7 +1,6 @@
 package com.example.covid_19info.ui.routes
 
 import android.Manifest
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
@@ -18,9 +17,6 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.covid_19info.BuildConfig
-import com.example.covid_19info.MainActivity
-import com.example.covid_19info.R
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -35,41 +31,41 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.core.view.*
 import kotlin.math.roundToInt
-import android.view.animation.Animation
-import android.view.animation.Transformation
 import android.animation.ValueAnimator
-import android.animation.ValueAnimator.AnimatorUpdateListener
-import android.app.Application
-import android.content.pm.ApplicationInfo
+import android.content.Intent
 import android.os.Build
 
 import android.widget.LinearLayout
 
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.Observer
+import com.example.covid_19info.*
+import com.example.covid_19info.data.LocationRepository
 import com.example.covid_19info.data.QuarantinesRouteAPI
 import com.example.covid_19info.data.model.MyLocationDatabase
+import com.example.covid_19info.data.model.MyLocationEntity
 import com.example.covid_19info.data.model.Quarantines
+import com.example.covid_19info.databinding.ActivityMainBinding
 import com.google.android.gms.maps.model.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-
+import java.util.concurrent.Executors
 
 
 class RoutesFragment : Fragment(), OnMapReadyCallback {
+    private lateinit var binding: ActivityMainBinding
+
     // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
     lateinit var mainActivity: MainActivity
     override fun onAttach(context: Context) {
@@ -102,6 +98,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 
     //확진자 동선 데이터
     lateinit private var quarantinesData: Quarantines
+
     private var quartineMarkerList: MutableList<Marker> = mutableListOf()
     private var userMarkerList: MutableList<Marker> = mutableListOf()
     lateinit var buttons :LinearLayout
@@ -156,13 +153,16 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                     as AutocompleteSupportFragment
 
         // Specify the types of place data to return.
-        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG))
 
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-                // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: ${place.name}, ${place.id}")
+                //Log.i(TAG, "Place: ${place.name}, ${place.id}, ${place.latLng}")
+                
+                //검색 지역으로 이동
+                map?.moveCamera(CameraUpdateFactory
+                        .newLatLngZoom(place.latLng, 15f))
             }
 
             override fun onError(status: Status) {
@@ -173,12 +173,79 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         //검색창 색 변경
         autocompleteFragment.view?.setBackgroundColor(Color.WHITE)
 
+        //검색 가능 지역 한국으로 고정
+        autocompleteFragment.setCountry("KR")
+
+        //장소 가져오기
+        context?.let { it1 ->
+            LocationRepository.getInstance(it1, Executors.newSingleThreadExecutor())
+                .getLocations()
+        }?.observe(viewLifecycleOwner, { locations ->
+            for(mark in userMarkerList){
+                mark.remove()
+            }
+            userMarkerList.clear()
+
+            //마크생성
+            for (location in locations) {
+                var loc = location.latitude
+                location.longitude
+                location.date
+
+                var mark = map?.addMarker(
+                    MarkerOptions()
+                        .title(location.date.toString())
+                        .position((LatLng(location.latitude, location.longitude)))
+                )
+                Log.d("main", "${location.latitude}, ${location.longitude}")
+                mark?.let { userMarkerList.add(it) }
+            }
+        })
+
 
         //프래그먼트 내부 버튼 리스너 설정
         //changeView 리스너
         val changeView = view.findViewById<Button>(R.id.changeView)
         changeView.setOnClickListener {
-            changeView?.isSelected = changeView?.isSelected != true
+
+            val pref = PreferenceUtil()
+            //로그인 안된경우
+            if(pref.getString("token", "")==""){
+                val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_yes_no,null)
+                val mBuilder = context?.let { it1 ->
+                    AlertDialog.Builder(it1)
+                        .setView(mDialogView)
+                }
+
+                val mAlertDialog = mBuilder?.show()
+                mDialogView.findViewById<TextView>(R.id.dialog_text).text="로그인이 필요한 메뉴입니다."
+
+                //취소버튼
+                val noBtn = mDialogView.findViewById<Button>(R.id.no_logout_btn)
+                noBtn.setOnClickListener{
+                    mAlertDialog?.dismiss()
+                }
+
+                //확인버튼
+                val yesBtn = mDialogView.findViewById<Button>(R.id.yes_logout_btn)
+                yesBtn.text="로그인"
+                yesBtn.setOnClickListener{
+                    //로그인 액티비티로 이동
+                    var intent = Intent(context, LoginActivity::class.java)
+                    startActivity(intent)
+
+                    mAlertDialog?.dismiss()
+                }
+            }
+            //로그인 된 경우
+            else {
+                changeView?.isSelected = changeView?.isSelected != true
+                //var db = context?.let { it1 -> LocationRepository.getInstance(it1) }
+
+
+
+
+            }
         }
 
         //하단 버튼 리스너 설정을 위한 변수 설정
@@ -497,8 +564,12 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
     // [END maps_current_place_update_location_ui]
 
     //확진자 마커 등록
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun showQuarantineRoute(routes: Quarantines){
+        val today = LocalDate.now()
         for(route in routes.data){
+            var visitdate = LocalDate.parse(route.visitedDate.substring(0,10), DateTimeFormatter.ISO_DATE)
+            val diff = ChronoUnit.DAYS.between(visitdate, today)
             var pos = route.latlng.split(", ").toTypedArray()
             var markerColor = BitmapDescriptorFactory.HUE_AZURE
             var mark = map?.addMarker(MarkerOptions()
@@ -506,11 +577,15 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                 .title(route.place)
                 .position(LatLng(pos[0].toDouble(), pos[1].toDouble()))
                 .snippet("${route.visitedDate}\n${route.address}"))
+            if(diff in 4..5)
+                mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+            else if(diff>5)
+                mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             mark?.let { quartineMarkerList.add(it) }
         }
-
-
     }
+
+    //사용자 동선 데이터베이스 테스트
     private fun showUserRoute(){
         var db = context?.let { MyLocationDatabase.getInstance(it)}
         var loc = db?.locationDao()?.getLocations()
@@ -521,8 +596,6 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         )
         mark?.let { userMarkerList.add(it) }
         userMarkerList[0].isVisible = true
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

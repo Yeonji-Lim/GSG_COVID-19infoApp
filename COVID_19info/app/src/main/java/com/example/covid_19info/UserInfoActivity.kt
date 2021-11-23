@@ -5,23 +5,23 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.example.covid_19info.data.LocationUpdateViewModel
-import com.example.covid_19info.data.LoginDataSource
-import com.example.covid_19info.data.LoginRepository
 import com.example.covid_19info.databinding.ActivityUserinfoBinding
 import com.example.covid_19info.ui.login.LoginViewModel
 import com.example.covid_19info.ui.login.LoginViewModelFactory
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
+import org.w3c.dom.Text
 
 @RequiresApi(Build.VERSION_CODES.M)
 class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
@@ -101,7 +101,8 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
                 .setView(mDialogView)
 
             val mAlertDialog = mBuilder.show()
-
+            val agreement_contens = mDialogView.findViewById<TextView>(R.id.agreement_contents)
+            agreement_contens.movementMethod = ScrollingMovementMethod.getInstance()
             mDialogView.findViewById<CheckBox>(R.id.gps_agree_chk).isChecked = sharedPreference.getBoolean("gpsAgreement",false)
 
             //취소버튼
@@ -129,24 +130,28 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
         }
 
         binding.withdrawalBackground.setOnClickListener{
-            val mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_withdrawal,null)
+            val mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_yes_no,null)
             val mBuilder = AlertDialog.Builder(this)
                 .setView(mDialogView)
 
             val mAlertDialog = mBuilder.show()
-
+            mDialogView.findViewById<TextView>(R.id.dialog_text).text="정말 탈퇴 하시겠습니까?"
             //취소버튼
-            val noBtn = mDialogView.findViewById<Button>(R.id.no_withdrawal_btn)
+            val noBtn = mDialogView.findViewById<Button>(R.id.no_logout_btn)
             noBtn.setOnClickListener{
                 mAlertDialog.dismiss()
             }
 
             //확인버튼
-            val yesBtn = mDialogView.findViewById<Button>(R.id.yes_withdrawal_btn)
+            val yesBtn = mDialogView.findViewById<Button>(R.id.yes_logout_btn)
+            yesBtn.text="탈퇴"
             yesBtn.setOnClickListener{
-                //로그아웃 하는 함수 내용 구현 해야함
-                //loginViewModel.withdrawal()
-                Toast.makeText(this, "탈퇴 되었습니다.", Toast.LENGTH_SHORT).show()
+                //로그아웃 하는 함수 내용
+                loginViewModel.logout()
+
+                mAlertDialog.dismiss()
+
+                Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
                 super.onBackPressed()
 
             }
@@ -177,12 +182,13 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
 
         //로그아웃 터치 시
         binding.logoutBackground.setOnClickListener{
-            val mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_logout,null)
+            val mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_yes_no,null)
             val mBuilder = AlertDialog.Builder(this)
                 .setView(mDialogView)
 
             val mAlertDialog = mBuilder.show()
-
+            mDialogView.findViewById<TextView>(R.id.dialog_text).text="정말 로그아웃 하시겠습니까?"
+            
             //취소버튼
             val noBtn = mDialogView.findViewById<Button>(R.id.no_logout_btn)
             noBtn.setOnClickListener{
@@ -191,6 +197,7 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
 
             //확인버튼
             val yesBtn = mDialogView.findViewById<Button>(R.id.yes_logout_btn)
+            yesBtn.text="로그아웃"
             yesBtn.setOnClickListener{
                 //로그아웃 하는 함수 내용
                 loginViewModel.logout()
