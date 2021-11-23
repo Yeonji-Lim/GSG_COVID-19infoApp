@@ -24,6 +24,9 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //preferenceutil초기화
+        PreferenceUtil.context = applicationContext
+
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
