@@ -15,13 +15,19 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.example.covid_19info.data.LocationUpdateViewModel
+import com.example.covid_19info.data.LoginDataSource
+import com.example.covid_19info.data.LoginRepository
 import com.example.covid_19info.databinding.ActivityUserinfoBinding
+import com.example.covid_19info.ui.login.LoginViewModel
+import com.example.covid_19info.ui.login.LoginViewModelFactory
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.M)
 class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
     private lateinit var binding : ActivityUserinfoBinding
     private val prefsFileName = "prefs"
+    private lateinit var loginViewModel: LoginViewModel
 
     //location view model 초기화
     private val locationUpdateViewModel by lazy {
@@ -62,6 +68,10 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
+            .get(LoginViewModel::class.java)
+
         binding = ActivityUserinfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -182,8 +192,11 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
             //확인버튼
             val yesBtn = mDialogView.findViewById<Button>(R.id.yes_logout_btn)
             yesBtn.setOnClickListener{
-                //로그아웃 하는 함수 내용 구현 해야함
-                //loginViewModel.logout()
+                //로그아웃 하는 함수 내용
+                loginViewModel.logout()
+
+                mAlertDialog.dismiss()
+
                 Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
                 super.onBackPressed()
 

@@ -1,24 +1,43 @@
 package com.example.covid_19info.data
 
+import android.util.Log
 import com.example.covid_19info.data.model.LoggedInUser
+import com.example.covid_19info.data.model.LoginRequest
+import com.example.covid_19info.data.model.LoginToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.IOException
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 class LoginDataSource {
-
-    fun login(username: String, password: String): Result<LoggedInUser> {
-        try {
-            // TODO: handle loggedInUser authentication
-            val fakeUser = LoggedInUser(java.util.UUID.randomUUID().toString(), "Jane Doe")
-            return Result.Success(fakeUser)
-        } catch (e: Throwable) {
-            return Result.Error(IOException("Error logging in", e))
+    var loginapi = LoginAPI.create()
+    suspend fun login(username: String, password: String): Result<LoggedInUser> {
+        return withContext(Dispatchers.IO){
+            Log.d("main", "실행전")
+            try {
+                var loginRst = loginapi.login(LoginRequest(username, password)).execute().body()
+                //로그인 성공
+                Log.d("main", loginRst?.token!!)
+                return@withContext Result.Success(LoggedInUser(username, username, loginRst?.token))
+            } catch (e: Throwable) {
+                return@withContext Result.Error(IOException("Error logging in", e))
+            }
         }
     }
 
-    fun logout() {
-        // TODO: revoke authentication
+    suspend fun logout(tok: String) {
+        return withContext(Dispatchers.IO){
+            // TODO: revoke authentication
+            try{
+                loginapi.logout(LoginToken(tok)).execute()
+
+                return@withContext
+            }catch (e: Throwable){
+
+                return@withContext
+            }
+        }
     }
 }
