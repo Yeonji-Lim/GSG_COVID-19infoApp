@@ -1,7 +1,6 @@
 package com.example.covid_19info.ui.routes
 
 import android.Manifest
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
@@ -32,21 +31,14 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.core.view.*
 import kotlin.math.roundToInt
-import android.view.animation.Animation
-import android.view.animation.Transformation
 import android.animation.ValueAnimator
-import android.animation.ValueAnimator.AnimatorUpdateListener
-import android.app.Application
 import android.content.Intent
-import android.content.pm.ApplicationInfo
 import android.os.Build
 
 import android.widget.LinearLayout
@@ -54,21 +46,17 @@ import android.widget.LinearLayout
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import com.example.covid_19info.*
 import com.example.covid_19info.data.LocationRepository
 import com.example.covid_19info.data.QuarantinesRouteAPI
 import com.example.covid_19info.data.model.MyLocationDatabase
+import com.example.covid_19info.data.model.MyLocationEntity
 import com.example.covid_19info.data.model.Quarantines
-import com.example.covid_19info.databinding.ActivityLoginBinding
 import com.example.covid_19info.databinding.ActivityMainBinding
 import com.google.android.gms.maps.model.*
-import com.google.android.libraries.places.api.model.RectangularBounds
-import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -186,7 +174,31 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         //검색 가능 지역 한국으로 고정
         autocompleteFragment.setCountry("KR")
 
+        //장소 가져오기
+        context?.let { it1 ->
+            LocationRepository.getInstance(it1, Executors.newSingleThreadExecutor())
+                .getLocations()
+        }?.observe(viewLifecycleOwner, { locations ->
+            for(mark in userMarkerList){
+                mark.remove()
+            }
+            userMarkerList.clear()
 
+            //마크생성
+            for (location in locations) {
+                var loc = location.latitude
+                location.longitude
+                location.date
+
+                var mark = map?.addMarker(
+                    MarkerOptions()
+                        .title(location.date.toString())
+                        .position((LatLng(location.latitude, location.longitude)))
+                )
+                Log.d("main", "${location.latitude}, ${location.longitude}")
+                mark?.let { userMarkerList.add(it) }
+            }
+        })
 
 
         //프래그먼트 내부 버튼 리스너 설정
@@ -224,34 +236,13 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                 }
             }
             //로그인 된 경우
-            else{
+            else {
                 changeView?.isSelected = changeView?.isSelected != true
                 //var db = context?.let { it1 -> LocationRepository.getInstance(it1) }
 
-                var locations = context?.let { it1 ->
-                    LocationRepository.getInstance(it1, Executors.newSingleThreadExecutor())
-                        .getLocations()
-                }
-                //장소 표시
-                if (locations != null) {
-                    locations.observe(viewLifecycleOwner, Observer {locations->
 
-                        //마크생성
-                        for(location in locations){
-                            var loc = location.latitude
-                            location.longitude
-                            location.date
 
-                            var mark = map?.addMarker(MarkerOptions()
-                                .position((LatLng(location.latitude,location.longitude)))
-                            )
-                            mark?.isVisible = true
 
-                            mark?.let { userMarkerList.add(it) }
-                        }
-                        Log.d("main", it.toString())
-                    })
-                }
             }
         }
 
