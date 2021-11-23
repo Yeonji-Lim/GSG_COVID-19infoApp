@@ -1,7 +1,6 @@
 package com.example.covid_19info
 
-import android.util.Log
-import com.example.covid_19info.data.QuarantinesRouteAPI
+import com.example.covid_19info.data.model.MyLocationDatabase
 import org.junit.Test
 
 import org.junit.Assert.*

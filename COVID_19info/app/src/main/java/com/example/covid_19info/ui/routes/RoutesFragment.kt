@@ -47,6 +47,8 @@ import android.view.animation.Animation
 import android.view.animation.Transformation
 import android.animation.ValueAnimator
 import android.animation.ValueAnimator.AnimatorUpdateListener
+import android.app.Application
+import android.content.pm.ApplicationInfo
 import android.os.Build
 
 import android.widget.LinearLayout
@@ -54,6 +56,7 @@ import android.widget.LinearLayout
 import android.view.View
 import androidx.annotation.RequiresApi
 import com.example.covid_19info.data.QuarantinesRouteAPI
+import com.example.covid_19info.data.model.MyLocationDatabase
 import com.example.covid_19info.data.model.Quarantines
 import com.google.android.gms.maps.model.*
 import com.google.android.libraries.places.api.model.RectangularBounds
@@ -102,7 +105,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
     //확진자 동선 데이터
     lateinit private var quarantinesData: Quarantines
     private var quartineMarkerList: MutableList<Marker> = mutableListOf()
-
+    private var userMarkerList: MutableList<Marker> = mutableListOf()
     lateinit var buttons :LinearLayout
 
     override fun onCreateView(
@@ -206,6 +209,9 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                 Log.d("Main", "실패 : ${t}")
             }
         })
+
+        //showUserRoute()
+
     }
 
     /**
@@ -506,7 +512,9 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             var visitdate = LocalDate.parse(route.visitedDate.substring(0,10), DateTimeFormatter.ISO_DATE)
             val diff = ChronoUnit.DAYS.between(visitdate, today)
             var pos = route.latlng.split(", ").toTypedArray()
+            var markerColor = BitmapDescriptorFactory.HUE_AZURE
             var mark = map?.addMarker(MarkerOptions()
+                .icon(BitmapDescriptorFactory.defaultMarker(markerColor))
                 .title(route.place)
                 .position(LatLng(pos[0].toDouble(), pos[1].toDouble()))
                 .snippet("${route.visitedDate}\n${route.address}"))
@@ -516,6 +524,19 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                 mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             mark?.let { quartineMarkerList.add(it) }
         }
+    }
+    private fun showUserRoute(){
+        var db = context?.let { MyLocationDatabase.getInstance(it)}
+        var loc = db?.locationDao()?.getLocations()
+
+        Log.d("tagtag",loc?.value?.get(0).toString())
+        var mark = map?.addMarker(MarkerOptions()
+            .position((LatLng(loc?.value?.get(0)?.latitude!!,loc?.value?.get(0)?.longitude!!)))
+        )
+        mark?.let { userMarkerList.add(it) }
+        userMarkerList[0].isVisible = true
+
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -590,6 +611,8 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             mark.isVisible = diff <= constraint
         }
     }
+
+
 
     companion object {
         private val TAG = MainActivity::class.java.simpleName

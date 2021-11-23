@@ -33,6 +33,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.covid_19info.BuildConfig.MAPS_API_KEY
+import com.example.covid_19info.data.model.MyLocationDatabase
 import com.example.covid_19info.ui.routes.RoutesFragment
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
