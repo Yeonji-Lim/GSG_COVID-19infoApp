@@ -42,7 +42,7 @@ class registerActivity : AppCompatActivity() {
             val loginState = it ?: return@Observer
 
             // disable login button unless both username / password is valid
-            //login.isEnabled = loginState.isDataValid
+            register.isEnabled = loginState.isDataValid
 
             if (loginState.emailError != "") {
                 email.error = loginState.emailError
@@ -79,6 +79,10 @@ class registerActivity : AppCompatActivity() {
             )
         }
 
+        verifyEmail.setOnClickListener {
+            registerViewModel.verfiyEmail(email.text.toString())
+        }
+
         password.apply {
             afterTextChanged {
                 registerViewModel.registerDataChanged(
@@ -90,7 +94,7 @@ class registerActivity : AppCompatActivity() {
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
-                        registerViewModel.register(
+                        registerViewModel.signup(
                             email.text.toString(),
                             password.text.toString()
                         )
@@ -98,11 +102,20 @@ class registerActivity : AppCompatActivity() {
                 false
             }
 
+
                 /*login.setOnClickListener {
                 loading.visibility = View.VISIBLE
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }*/
+            register.setOnClickListener{
+                if(password.text.toString()!=passwordConfirm.text.toString()){
+                    Toast.makeText(this@registerActivity, "새 비밀번호를 다시 확인해 주세요", Toast.LENGTH_SHORT).show()
+                }
+                else
+                    registerViewModel.signup(email.text.toString(), password.text.toString())
+            }
         }
+
     }
 
     private fun updateUiWithUser(model: RegisterUserView) {

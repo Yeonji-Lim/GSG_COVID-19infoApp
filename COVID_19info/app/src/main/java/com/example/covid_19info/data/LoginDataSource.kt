@@ -1,9 +1,7 @@
 package com.example.covid_19info.data
 
 import android.util.Log
-import com.example.covid_19info.data.model.LoggedInUser
-import com.example.covid_19info.data.model.LoginRequest
-import com.example.covid_19info.data.model.LoginToken
+import com.example.covid_19info.data.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -37,6 +35,33 @@ class LoginDataSource {
             }catch (e: Throwable){
 
                 return@withContext LoginToken("")
+            }
+        }
+    }
+
+    suspend fun signup(email: String, password: String){
+        return withContext(Dispatchers.IO){
+            Log.d("main", "실행전")
+            try {
+                var signUpRst = loginapi.signup(SignUpRst(email, password)).execute().body()
+                //회원가입 성공
+                //Log.d("main", signUpRst?.email!!)
+                return@withContext
+            } catch (e: Throwable) {
+                return@withContext
+            }
+        }
+    }
+
+    suspend fun verifyEmail(email: String){
+        return withContext(Dispatchers.IO){
+            try {
+                var signupEmail = loginapi.verifyEmail(SignupEmail(email)).execute().body()
+                //이메일 성공
+               // Log.d("main", signupEmail?.code!!)
+                return@withContext
+            } catch (e: Throwable) {
+                return@withContext
             }
         }
     }

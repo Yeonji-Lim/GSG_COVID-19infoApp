@@ -45,9 +45,18 @@ class LoginRepository(val dataSource: LoginDataSource) {
 
         return result
     }
+
     private fun setLoggedOutUser() {
         prefs.delString("token")
         prefs.delString("userID")
+    }
+
+    suspend fun signup(email: String, password: String){
+        val result = dataSource.signup(email, password)
+    }
+
+    suspend fun verifyEmail(email: String){
+        val result = dataSource.verifyEmail(email)
     }
 
     private fun setLoggedInUser(loggedInUser: LoggedInUser) {
