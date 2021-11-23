@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.example.covid_19info.data.LocationUpdateViewModel
+import com.example.covid_19info.data.model.MyLocationDatabase
 import com.example.covid_19info.databinding.ActivityUserinfoBinding
 import com.google.android.material.snackbar.Snackbar
 

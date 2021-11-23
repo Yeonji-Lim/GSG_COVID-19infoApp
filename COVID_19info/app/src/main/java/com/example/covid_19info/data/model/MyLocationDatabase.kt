@@ -48,5 +48,8 @@ abstract class MyLocationDatabase : RoomDatabase() {
                     DATABASE_NAME
                 ).build()
         }
+
+
+
     }
 }
