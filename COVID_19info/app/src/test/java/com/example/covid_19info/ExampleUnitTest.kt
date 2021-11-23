@@ -59,10 +59,5 @@ class ExampleUnitTest {
 
 
     }
-    @Test
-    fun addition_isCorrect() {
-        //var q = QuarantinesRouteAPI
-        var data = QuarantinesRouteAPI.data
-        data.data[0]
-    }
+
 }

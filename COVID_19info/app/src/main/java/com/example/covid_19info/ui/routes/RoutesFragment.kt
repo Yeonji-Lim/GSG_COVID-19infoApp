@@ -55,6 +55,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import com.example.covid_19info.data.QuarantinesRouteAPI
 import com.example.covid_19info.data.model.Quarantines
+import com.google.android.gms.maps.model.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -62,6 +63,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+
 
 
 class RoutesFragment : Fragment(), OnMapReadyCallback {
