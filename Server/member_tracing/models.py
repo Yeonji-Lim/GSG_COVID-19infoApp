@@ -9,14 +9,19 @@ https://www.django-rest-framework.org/api-guide/fields/#datetimefield
 from django.db import models
 
 class MemberTracing(models.Model):
-    created = models.DateTimeField(auto_now_add=True)                   # 기록된 일시
-    name = models.CharField(max_length=100, blank=True, default='')     # 장소 이름
-    address = models.CharField(max_length=100)                          # 장소 주소
+    """
+    업데이트 된 사용자 정보
+    {
+        "key":""
+        "latitude":""
+        "longitude":""
+        "date":""
+    }
+    """
 
-    # 추가 예상
-    # LatLng -> Class.. latitude, longitude
-    #           참조 : https://developers.google.com/android/reference/com/google/android/gms/maps/model/LatLng.html?hl=ko
-    # Attributions -> List<String>
+    latitude = models.FloatField(null=True, default='0')
+    longitude = models.FloatField(null=True, default='0')
+    date = models.DateTimeField(auto_now_add=False)
 
     class Meta: # 일시순 정렬
-        ordering = ['created']
+        ordering = ['date']
