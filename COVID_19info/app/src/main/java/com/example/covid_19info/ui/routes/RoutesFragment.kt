@@ -1,35 +1,27 @@
-// Copyright 2020 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-package com.example.covid_19info
+package com.example.covid_19info.ui.routes
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.content.res.Resources
+import android.graphics.Color
 import android.location.Location
+import androidx.fragment.app.Fragment
+
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.FrameLayout
-import android.widget.TextView
+import android.view.*
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.covid_19info.BuildConfig.MAPS_API_KEY
+import com.example.covid_19info.BuildConfig
+import com.example.covid_19info.MainActivity
+import com.example.covid_19info.R
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -45,11 +37,34 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import androidx.core.view.*
+import kotlin.math.roundToInt
+import android.view.animation.Animation
+import android.view.animation.Transformation
+import android.animation.ValueAnimator
+import android.animation.ValueAnimator.AnimatorUpdateListener
 
-/**
- * An activity that displays a map showing the place at the device's current location.
- */
-class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
+import android.widget.LinearLayout
+
+import android.view.View
+
+
+
+
+
+class RoutesFragment : Fragment(), OnMapReadyCallback {
+    // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
+    lateinit var mainActivity: MainActivity
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // 2. Context를 액티비티로 형변환해서 할당
+        mainActivity = context as MainActivity
+    }
+
     private var map: GoogleMap? = null
     private var cameraPosition: CameraPosition? = null
 
@@ -61,7 +76,7 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
 
     // A default location (Sydney, Australia) and default zoom to use when location permission is
     // not granted.
-    private val defaultLocation = LatLng(-33.8523341, 151.2106085)
+    private val defaultLocation = LatLng(37.33, 126.59)
     private var locationPermissionGranted = false
 
     // The geographical location where the device is currently located. That is, the last-known
@@ -72,9 +87,20 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
     private var likelyPlaceAttributions: Array<List<*>?> = arrayOfNulls(0)
     private var likelyPlaceLatLngs: Array<LatLng?> = arrayOfNulls(0)
 
-    // [START maps_current_place_on_create]
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    lateinit var buttons :LinearLayout
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Retrieve the content view that renders the map.
+        return inflater.inflate(R.layout.content_route, container, false)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // [START_EXCLUDE silent]
         // Retrieve location and camera position from saved instance state.
@@ -86,26 +112,61 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
         // [END maps_current_place_on_create_save_instance_state]
         // [END_EXCLUDE]
 
-        // Retrieve the content view that renders the map.
-        setContentView(R.layout.activity_maps)
-
         // [START_EXCLUDE silent]
         // Construct a PlacesClient
-        Places.initialize(applicationContext, MAPS_API_KEY)
-        placesClient = Places.createClient(this)
+        Places.initialize(mainActivity, BuildConfig.MAPS_API_KEY)
+        placesClient = Places.createClient(mainActivity)
 
         // Construct a FusedLocationProviderClient.
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mainActivity)
 
         // Build the map.
         // [START maps_current_place_map_fragment]
-        val mapFragment = supportFragmentManager
+        val mapFragment = childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
+
+
+
         // [END maps_current_place_map_fragment]
         // [END_EXCLUDE]
+
+        // Initialize the AutocompleteSupportFragment.
+        val autocompleteFragment =
+            childFragmentManager.findFragmentById(R.id.autocomplete_fragment)
+                    as AutocompleteSupportFragment
+
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: ${place.name}, ${place.id}")
+            }
+
+            override fun onError(status: Status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: $status")
+            }
+        })
+        //검색창 색 변경
+        autocompleteFragment.view?.setBackgroundColor(Color.WHITE)
+
+
+        //프래그먼트 내부 버튼 리스너 설정
+        //changeView 리스너
+        val changeView = view.findViewById<Button>(R.id.changeView)
+        changeView.setOnClickListener {
+            changeView?.isSelected = changeView?.isSelected != true
+        }
+
+        //하단 버튼 리스너 설정을 위한 변수 설정
+        buttons = view.findViewById<LinearLayout>(R.id.linearLayout)
+        //버튼 움직임 설정
+        setButtonsMove()
     }
-    // [END maps_current_place_on_create]
 
     /**
      * Saves the state of the map when the activity is paused.
@@ -113,36 +174,12 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
     // [START maps_current_place_on_save_instance_state]
     override fun onSaveInstanceState(outState: Bundle) {
         map?.let { map ->
-            outState.putParcelable(KEY_CAMERA_POSITION, map.cameraPosition)
-            outState.putParcelable(KEY_LOCATION, lastKnownLocation)
+            outState.putParcelable(RoutesFragment.KEY_CAMERA_POSITION, map.cameraPosition)
+            outState.putParcelable(RoutesFragment.KEY_LOCATION, lastKnownLocation)
         }
         super.onSaveInstanceState(outState)
     }
     // [END maps_current_place_on_save_instance_state]
-
-    /**
-     * Sets up the options menu.
-     * @param menu The options menu.
-     * @return Boolean.
-     */
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        menuInflater.inflate(R.menu.current_place_menu, menu)
-//        return true
-//    }
-
-    /**
-     * Handles a click on the menu option to get a place.
-     * @param item The menu item to handle.
-     * @return Boolean.
-     */
-    // [START maps_current_place_on_options_item_selected]
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.option_get_place) {
-            showCurrentPlace()
-        }
-        return true
-    }
-    // [END maps_current_place_on_options_item_selected]
 
     /**
      * Manipulates the map when it's available.
@@ -164,8 +201,9 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
 
             override fun getInfoContents(marker: Marker): View {
                 // Inflate the layouts for the info window, title and snippet.
-                val infoWindow = layoutInflater.inflate(R.layout.custom_info_contents,
-                    findViewById<FrameLayout>(R.id.map), false)
+                val infoWindow = layoutInflater.inflate(
+                    R.layout.custom_info_contents,
+                    view?.findViewById<FrameLayout>(R.id.map), false)
                 val title = infoWindow.findViewById<TextView>(R.id.title)
                 title.text = marker.title
                 val snippet = infoWindow.findViewById<TextView>(R.id.snippet)
@@ -188,6 +226,20 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
     // [END maps_current_place_on_map_ready]
 
     /**
+     * Handles a click on the menu option to get a place.
+     * @param item The menu item to handle.
+     * @return Boolean.
+     */
+    // [START maps_current_place_on_options_item_selected]
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.option_get_place) {
+            showCurrentPlace()
+        }
+        return true
+    }
+    // [END maps_current_place_on_options_item_selected]
+
+    /**
      * Gets the current location of the device, and positions the map's camera.
      */
     // [START maps_current_place_get_device_location]
@@ -200,7 +252,7 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
         try {
             if (locationPermissionGranted) {
                 val locationResult = fusedLocationProviderClient.lastLocation
-                locationResult.addOnCompleteListener(this) { task ->
+                locationResult.addOnCompleteListener(mainActivity) { task ->
                     if (task.isSuccessful) {
                         // Set the map's camera position to the current location of the device.
                         lastKnownLocation = task.result
@@ -217,6 +269,7 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
                         map?.uiSettings?.isMyLocationButtonEnabled = false
                     }
                 }
+
             }
         } catch (e: SecurityException) {
             Log.e("Exception: %s", e.message, e)
@@ -234,12 +287,12 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
          * device. The result of the permission request is handled by a callback,
          * onRequestPermissionsResult.
          */
-        if (ContextCompat.checkSelfPermission(this.applicationContext,
+        if (ContextCompat.checkSelfPermission(mainActivity.applicationContext,
                 Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
             locationPermissionGranted = true
         } else {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            ActivityCompat.requestPermissions(mainActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
             )
         }
@@ -372,7 +425,7 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
         }
 
         // Display the dialog.
-        AlertDialog.Builder(this)
+        AlertDialog.Builder(mainActivity)
             .setTitle("123")
             .setItems(likelyPlaceNames, listener)
             .show()
@@ -390,8 +443,9 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
         }
         try {
             if (locationPermissionGranted) {
+                //현재위치 버튼 커스텀하기 위해
                 map?.isMyLocationEnabled = true
-                map?.uiSettings?.isMyLocationButtonEnabled = true
+                map?.uiSettings?.isMyLocationButtonEnabled = false
             } else {
                 map?.isMyLocationEnabled = false
                 map?.uiSettings?.isMyLocationButtonEnabled = false
@@ -404,8 +458,38 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
     }
     // [END maps_current_place_update_location_ui]
 
+    @SuppressLint("ClickableViewAccessibility")
+    fun setButtonsMove(): Boolean {
+        //기본 위치
+        var gestureListener = MyGesture(buttons)
+        var gestureDetector = GestureDetector(context, gestureListener)
+
+
+        for(item in buttons){
+            var btn = item as Button
+
+            if(btn.id==R.id.moveButtons){
+                btn.setOnTouchListener { view, motionEvent ->
+                    Log.d("main", "${motionEvent.actionMasked}")
+                    when(motionEvent.actionMasked){
+                        MotionEvent.ACTION_UP->{
+                            true
+                        }
+                    }
+                    return@setOnTouchListener gestureDetector.onTouchEvent(motionEvent)
+                }
+            }else{
+                btn.setOnClickListener {
+                    btn?.isSelected = btn?.isSelected != true
+                }
+            }
+        }
+
+        return true
+    }
+
     companion object {
-        private val TAG = MapsActivityCurrentPlace::class.java.simpleName
+        private val TAG = MainActivity::class.java.simpleName
         private const val DEFAULT_ZOOM = 15
         private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
 
@@ -419,3 +503,93 @@ class MapsActivityCurrentPlace : AppCompatActivity(), OnMapReadyCallback {
         private const val M_MAX_ENTRIES = 5
     }
 }
+class MyGesture(val layout: LinearLayout) : GestureDetector.OnGestureListener {
+    var startButtonPos = 0
+    var btn = (layout[0] as Button)
+    val Int.px: Int
+        get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+    val THRES_HOLD = 150.px
+    // 제스처 이벤트를 받아서 text를 변경
+    override fun onShowPress(e: MotionEvent?) {
+        Log.d("test1","onShowPress")
+        Log.d("test1",e.toString())
+    }
+    override fun onSingleTapUp(e: MotionEvent?): Boolean {
+
+        btn.isSelected = btn.isSelected != true
+        btn.text = if(btn.isSelected) ">" else "<"
+
+        moveButtons(btn.isSelected)
+        Log.d("test1","onSingleTapUp")
+        Log.d("test1",e.toString())
+        return true
+    }
+    override fun onDown(e: MotionEvent?): Boolean {
+        //현재 레이아웃 위치 받아오기
+        val params = (layout.layoutParams as ViewGroup.MarginLayoutParams)
+        startButtonPos = params.rightMargin
+
+        Log.d("test1","onDown")
+        Log.d("test1",e.toString())
+        return true
+    }
+    override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+        //나오는 방향
+        moveButtons(velocityX<0)
+        if(velocityX<-20){
+            btn.isSelected = true
+            btn.text = ">"
+        }else{
+            btn.isSelected = false
+            btn.text = "<"
+        }
+        Log.d("test1","onFling")
+        Log.d("test1",velocityX.toString())
+        return true
+    }
+    override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+        //마진 데이터
+        val params = (layout.layoutParams as ViewGroup.MarginLayoutParams)
+        val moved = startButtonPos - e2?.rawX!! + e1?.rawX!!
+        //마진 설정
+        Log.d("main", "$moved")
+        if(moved>-300.px && moved < 0){
+            params.updateMargins(right= moved.roundToInt())
+        }
+        //레이아웃 업데이트
+        layout.requestLayout()
+        return true
+    }
+    override fun onLongPress(e: MotionEvent?) {
+        Log.d("test1","onLongPress")
+        Log.d("test1",e.toString())
+    }
+    //flg true: 나오는 애니메이션, false: 들어가는 애니메이션
+    fun moveButtons(flg: Boolean){
+        //val params = (layout.layoutParams as ViewGroup.MarginLayoutParams)
+
+        val params = (layout.layoutParams as ViewGroup.MarginLayoutParams)
+        val animator0 = ValueAnimator.ofInt(params.rightMargin, 0)
+        animator0.addUpdateListener { valueAnimator ->
+            params.rightMargin = (valueAnimator.animatedValue as Int)!!
+            layout.requestLayout()
+        }
+        animator0.duration = 500
+
+        val animator1 = ValueAnimator.ofInt(params.rightMargin, (-300).px)
+        animator1.addUpdateListener { valueAnimator ->
+            params.rightMargin = (valueAnimator.animatedValue as Int)!!
+            layout.requestLayout()
+        }
+        animator1.duration = 500
+
+        if(flg){
+            animator0.start()
+        }
+        //들어가는 방향
+        else{
+            animator1.start()
+        }
+    }
+}
+
