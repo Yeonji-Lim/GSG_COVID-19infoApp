@@ -42,7 +42,8 @@
     <string name="vaccinated_box3_text">추가 접종</string>
     <string name="vaccinated_chart1_name">일일 확진자 현황</string>
     <string name="vaccinated_chart2_name">누적 감염 현황</string>
-
+    <string name="nation_data">%1$,d 명</string>
+    <string name="nation_data_f">%1$.2f %%</string>
 
     <string name="quarantine_title_text">전국 감염 현황</string>
     <string name="quarantine_box1_text">확진자</string>

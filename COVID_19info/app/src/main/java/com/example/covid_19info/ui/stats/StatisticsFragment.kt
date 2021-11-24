@@ -59,8 +59,7 @@ class StatisticsFragment : Fragment() {
         updateNationVaccinated()
 
 
-        val infectbtn = binding.infectedBtn
-        infectbtn.setOnClickListener {
+        binding.vaccinatedBtn.setOnClickListener {
             if(!isvaccinated){
                 isvaccinated = true
                 //이름 변경
@@ -72,7 +71,7 @@ class StatisticsFragment : Fragment() {
                 updateNationVaccinated()
             }
         }
-        binding.vaccinatedBtn.setOnClickListener {
+        binding.infectedBtn.setOnClickListener {
             if(isvaccinated){
                 isvaccinated = false
                 //이름 변경
@@ -93,15 +92,23 @@ class StatisticsFragment : Fragment() {
                 call: Call<VaccinatedNation>,
                 response: Response<VaccinatedNation>
             ){
+                //총 시민수
+                var total = 51667688f
                 //전체 접종 현황
-                binding.statPrimaryFigure.text = response.body()?.body?.items?.item?.get(2)?.firstCnt.toString()
-                binding.statSecondaryFigure.text = response.body()?.body?.items?.item?.get(2)?.secondCnt.toString()
-                binding.statThirdFigure.text = response.body()?.body?.items?.item?.get(2)?.thirdCnt.toString()
+                binding.statPrimaryFigure.text = getString(R.string.nation_data_f,
+                    response.body()?.body?.items?.item?.get(2)?.firstCnt?.div(total)?.times(100)
+                )
+                binding.statSecondaryFigure.text = getString(R.string.nation_data_f,
+                    response.body()?.body?.items?.item?.get(2)?.secondCnt?.div(total)?.times(100)
+                )
+                binding.statThirdFigure.text = getString(R.string.nation_data_f,
+                    response.body()?.body?.items?.item?.get(2)?.thirdCnt?.div(total)?.times(100)
+                )
 
                 //전일대비 증가
-                binding.statPrimaryInc.text = response.body()?.body?.items?.item?.get(0)?.firstCnt.toString()
-                binding.statSecondaryInc.text = response.body()?.body?.items?.item?.get(0)?.secondCnt.toString()
-                binding.statThirdInc.text = response.body()?.body?.items?.item?.get(0)?.thirdCnt.toString()
+                binding.statPrimaryInc.text = getString(R.string.nation_data, response.body()?.body?.items?.item?.get(0)?.firstCnt)
+                binding.statSecondaryInc.text = getString(R.string.nation_data, response.body()?.body?.items?.item?.get(0)?.secondCnt)
+                binding.statThirdInc.text = getString(R.string.nation_data, response.body()?.body?.items?.item?.get(0)?.thirdCnt)
             }override fun onFailure(call: Call<VaccinatedNation>, t: Throwable) {
                 TODO("Not yet implemented")
             }
