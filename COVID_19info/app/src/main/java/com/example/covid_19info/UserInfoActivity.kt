@@ -69,6 +69,9 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        PreferenceUtil.context = applicationContext
+        var pref = PreferenceUtil()
+
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
 
@@ -87,7 +90,7 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
         }
 
         //이메일주소
-        binding.emailContent.text =sharedPreference.getString("userEmail","covidinfoapp@gmail.com")
+        binding.emailContent.text = pref.getString("userID", "")
 
         //비밀번호 변경 터치 시
         binding.passwordChangeBackground.setOnClickListener{
