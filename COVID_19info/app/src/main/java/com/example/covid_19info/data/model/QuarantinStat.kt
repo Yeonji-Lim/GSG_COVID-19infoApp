@@ -33,13 +33,13 @@ import java.util.*
 @Xml(name = "response")
 data class QuarantinStat(
     @Element
-    val header: Header,
+    val header: HeaderQ,
     @Element
-    val body: Body
+    val body: BodyQ
 )
 
 @Xml(name = "header")
-data class Header(
+data class HeaderQ(
     @PropertyElement
     val resultCode: Int,
     @PropertyElement
@@ -47,21 +47,21 @@ data class Header(
 )
 
 @Xml(name = "body")
-data class  Body(
-    @Element
-    val items: Items,
+data class  BodyQ(
+    @Element(name = "items")
+    val items: ItemsQ,
     @PropertyElement var numOfRows: Int,
     @PropertyElement var pageNo: Int,
     @PropertyElement var totalCount: Int
 )
-@Xml
-data class Items(
+@Xml(name = "items")
+data class ItemsQ(
     @Element(name = "item")
-    val item: List<Item>
+    val item: List<ItemQ>
 )
 
-@Xml
-data class Item(
+@Xml(name = "item")
+data class ItemQ(
     @PropertyElement(name = "accDefRate") var accDefRate: String,
     @PropertyElement(name = "accExamCnt") var accExamCnt: Int,
     @PropertyElement(name = "accExamCompCnt") var accExamCompCnt: Int,

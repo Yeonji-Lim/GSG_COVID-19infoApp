@@ -32,3 +32,28 @@ data class VaccinatedData (
     @SerializedName("totalSecondCnt") val totalSecondCnt:Int,
     @SerializedName("totalThirdCnt") val totalThirdCnt:Int
 )
+//{
+//    baseDate	string
+//    통계 기준일자
+//    sido	string
+//    지역명칭
+//    firstCnt	integer
+//    당일 통계(1차 접종)
+//    secondCnt	integer
+//    당일 통계(2차 접종)
+//    totalFirstCnt	integer
+//    전체 누적 통계(1차 접종)
+//    totalSecondCnt	integer
+//    전체 누적 통계(2차 접종)
+//    accumulatedFirstCnt	integer
+//    전일까지의 누적 통계 (1차 접종)
+//    accumulatedSecondCnt	integer
+//    전일까지의 누적 통계 (2차 접종)
+//    id	integer
+//    thirdCnt	integer
+//    당일 통계(3차 접종)
+//    totalThirdCnt	integer
+//    전체 누적 통계(3차 접종)
+//    accumulatedThirdCnt	integer
+//    전일까지의 누적 통계 (3차 접종)
+//}

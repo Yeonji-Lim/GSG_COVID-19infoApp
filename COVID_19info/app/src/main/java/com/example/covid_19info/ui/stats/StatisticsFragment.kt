@@ -7,7 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.covid_19info.R
+import com.example.covid_19info.data.VaccinatedAPI
+import com.example.covid_19info.data.model.VaccinatedNation
 import com.example.covid_19info.databinding.StatisticsFragmentBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -50,6 +55,9 @@ class StatisticsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //초기 데이터 로드
+        updateNationVaccinated()
+
 
         val infectbtn = binding.infectedBtn
         infectbtn.setOnClickListener {
@@ -60,6 +68,8 @@ class StatisticsFragment : Fragment() {
                 binding.statPrimaryTitle.text = getString(R.string.vaccinated_box1_text)
                 binding.statSecondaryTitle.text = getString(R.string.vaccinated_box2_text)
                 binding.statThirdTitle.text = getString(R.string.vaccinated_box3_text)
+
+                updateNationVaccinated()
             }
         }
         binding.vaccinatedBtn.setOnClickListener {
@@ -72,6 +82,30 @@ class StatisticsFragment : Fragment() {
                 binding.statThirdTitle.text = getString(R.string.quarantine_box3_text)
             }
         }
+    }
+
+    fun updateNationVaccinated(){
+        //전국 백신 데이터 업데이트
+        val vacapi = VaccinatedAPI.createNation()
+
+        vacapi.getNationData().enqueue(object: Callback<VaccinatedNation> {
+            override fun onResponse(
+                call: Call<VaccinatedNation>,
+                response: Response<VaccinatedNation>
+            ){
+                //전체 접종 현황
+                binding.statPrimaryFigure.text = response.body()?.body?.items?.item?.get(2)?.firstCnt.toString()
+                binding.statSecondaryFigure.text = response.body()?.body?.items?.item?.get(2)?.secondCnt.toString()
+                binding.statThirdFigure.text = response.body()?.body?.items?.item?.get(2)?.thirdCnt.toString()
+
+                //전일대비 증가
+                binding.statPrimaryInc.text = response.body()?.body?.items?.item?.get(0)?.firstCnt.toString()
+                binding.statSecondaryInc.text = response.body()?.body?.items?.item?.get(0)?.secondCnt.toString()
+                binding.statThirdInc.text = response.body()?.body?.items?.item?.get(0)?.thirdCnt.toString()
+            }override fun onFailure(call: Call<VaccinatedNation>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
     fun getVaccinatedData(){

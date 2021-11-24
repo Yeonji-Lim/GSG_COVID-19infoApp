@@ -1,18 +1,9 @@
 package com.example.covid_19info
 
-<<<<<<< HEAD
+
 import android.util.Log
-import com.example.covid_19info.data.QuarantinesAPI
-import com.example.covid_19info.data.QuarantinesRouteAPI
-import com.example.covid_19info.data.VaccinatedAPI
-import com.example.covid_19info.data.model.VaccinatedInfo
-=======
-import com.example.covid_19info.data.model.MyLocationDatabase
->>>>>>> RouteData
 import org.junit.Test
-
 import org.junit.Assert.*
-
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,12 +14,11 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
 import com.example.covid_19info.data.LoginAPI
+import com.example.covid_19info.data.VaccinatedAPI
 import com.example.covid_19info.data.model.LoginToken
 import com.example.covid_19info.data.model.Quarantines
 import com.example.covid_19info.data.model.SignUpRst
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -72,7 +62,7 @@ class ExampleUnitTest {
 //
 //        var temp = data.getString("region")
 //        print("$temp")
-        val api = QuarantinesAPI.create()
+        val api = VaccinatedAPI.createNation()
 
 //        api.getVaccinatedData(page = 1).enqueue(object: Callback<VaccinatedInfo>{
 //            override fun onResponse(
@@ -82,7 +72,7 @@ class ExampleUnitTest {
 //                response.body()
 //            }
 //        })
-        println(api.getQuarantineStat(page = 1).execute().body()?.body?.items?.item?.get(0))
-
+        //println(api.getQuarantineStat(page = 1).execute().body()?.body?.items?.item?.get(0))
+        println(api.getNationData().execute().body()?.body?.items.toString())
     }
 }
