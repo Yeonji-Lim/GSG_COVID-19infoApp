@@ -18,15 +18,18 @@ def member_tracing_list(request):
     # 새로운 동선 저장
     elif request.method == 'POST':
         data = JSONParser().parse(request)
-        date_string = data['date']
-        datetime_format = '%b %d, %Y %I:%M:%S %p'
-        data['date'] = datetime.datetime.strptime(date_string, datetime_format)
-        data['date'] = data['date'].strftime("%Y-%m-%d %H:%M:%S")
-        serializer = MemberTracingSerializer(data=data)
+        if isinstance(data, dict):
+            data = [data]
+        for item in data:
+            dateString = item['date']
+            datetimeFormat = '%b %d, %Y %I:%M:%S %p'
+            item['date'] = datetime.datetime.strptime(dateString, datetimeFormat)
+            item['date'] = item['date'].strftime("%Y-%m-%d %H:%M:%S")
+        serializer = MemberTracingSerializer(data=data, many=True)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+            return JsonResponse(serializer.data, status=201, safe=False)
+        return JsonResponse(serializer.errors, status=400, safe=False)
 
 # 사용자 동선을 검색, 업데이트, 삭제
 @csrf_exempt
@@ -46,6 +49,10 @@ def member_tracing_detail(request, pk):
     # 업데이트
     elif request.method == 'PUT':
         data = JSONParser().parse(request)
+        dateString = data['date']
+        datetimeFormat = '%b %d, %Y %I:%M:%S %p'
+        data['date'] = datetime.datetime.strptime(dateString, datetimeFormat)
+        data['date'] = data['date'].strftime("%Y-%m-%d %H:%M:%S")
         serializer = MemberTracingSerializer(memberTracing, data=data)
         if serializer.is_valid():
             serializer.save()
