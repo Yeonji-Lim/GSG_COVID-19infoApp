@@ -7,4 +7,4 @@ class MemberTracingSerializer(serializers.ModelSerializer):
         model = MemberTracing
 
         # 필드 설정
-        fields = ('id', 'latitude', 'longitude', 'date')
+        fields = ('date', 'id', 'latitude', 'longitude')
