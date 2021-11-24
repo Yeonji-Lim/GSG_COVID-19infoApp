@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.viewpager2.widget.ViewPager2
 import com.example.covid_19info.R
 import com.example.covid_19info.databinding.StatisticsFragmentBinding
 
@@ -50,6 +52,10 @@ class StatisticsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //뷰페이저 구현부
+        binding.pager.adapter=ViewPagerAdapter(getStaticList())
+        binding.pager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
 
         val infectbtn = binding.infectedBtn
         infectbtn.setOnClickListener {
@@ -72,6 +78,11 @@ class StatisticsFragment : Fragment() {
                 binding.statThirdTitle.text = getString(R.string.quarantine_box3_text)
             }
         }
+    }
+
+    //뷰페이저 내용 들어가는 부분
+    private fun getStaticList():ArrayList<Int>{
+        return arrayListOf<Int>(R.drawable.ic_menu_camera,R.drawable.ic_menu_gallery )
     }
 
     fun getVaccinatedData(){
