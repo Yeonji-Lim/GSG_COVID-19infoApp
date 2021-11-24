@@ -196,8 +196,10 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                     MarkerOptions()
                         .title(location.date.toString())
                         .position((LatLng(location.latitude, location.longitude)))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 )
                 Log.d("main", "${location.latitude}, ${location.longitude}")
+                mark?.isVisible = false
                 mark?.let { userMarkerList.add(it) }
             }
         })
@@ -207,10 +209,14 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         //changeView 리스너
         val changeView = view.findViewById<Button>(R.id.changeView)
         changeView.setOnClickListener {
+            Log.d("loginButton","Click")
+            Log.d("loginButton",changeView.isSelected.toString())
+            changeView?.isSelected = changeView?.isSelected != true
 
             val pref = PreferenceUtil()
             //로그인 안된경우
             if(pref.getString("token", "")==""){
+                Log.d("loginButton","OFF")
                 val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_yes_no,null)
                 val mBuilder = context?.let { it1 ->
                     AlertDialog.Builder(it1)
@@ -239,13 +245,23 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             }
             //로그인 된 경우
             else {
-                changeView?.isSelected = changeView?.isSelected != true
-                //var db = context?.let { it1 -> LocationRepository.getInstance(it1) }
+                Log.d("loginButton","ON")
 
 
-
-
+                Log.d("loginButton",userMarkerList[0].isVisible.toString())
             }
+            //사용자 동선 선택 x
+            if(changeView.isSelected)
+            {
+                Log.d("loginButton","USERTRUE")
+                userMarker(true)
+            }
+            else
+            {
+                Log.d("loginButton","USERFALSE")
+                userMarker(false)
+            }
+
         }
 
         //하단 버튼 리스너 설정을 위한 변수 설정
@@ -571,9 +587,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             var visitdate = LocalDate.parse(route.visitedDate.substring(0,10), DateTimeFormatter.ISO_DATE)
             val diff = ChronoUnit.DAYS.between(visitdate, today)
             var pos = route.latlng.split(", ").toTypedArray()
-            var markerColor = BitmapDescriptorFactory.HUE_AZURE
             var mark = map?.addMarker(MarkerOptions()
-                .icon(BitmapDescriptorFactory.defaultMarker(markerColor))
                 .title(route.place)
                 .position(LatLng(pos[0].toDouble(), pos[1].toDouble()))
                 .snippet("${route.visitedDate}\n${route.address}"))
@@ -596,6 +610,24 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         )
         mark?.let { userMarkerList.add(it) }
         userMarkerList[0].isVisible = true
+    }
+
+    fun userMarker(visible : Boolean){
+        if(visible)
+        {
+            for(mark in userMarkerList) {
+                mark.isVisible = true
+            }
+        }
+        else
+        {
+            for(mark in userMarkerList) {
+                mark.isVisible = false
+            }
+        }
+
+
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
