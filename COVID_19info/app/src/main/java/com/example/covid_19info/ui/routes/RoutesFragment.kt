@@ -45,10 +45,13 @@ import android.widget.LinearLayout
 
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.findFragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.example.covid_19info.*
 import com.example.covid_19info.data.LocationRepository
 import com.example.covid_19info.data.QuarantinesRouteAPI
+import com.example.covid_19info.data.model.MyLocationDao
 import com.example.covid_19info.data.model.MyLocationDatabase
 import com.example.covid_19info.data.model.MyLocationEntity
 import com.example.covid_19info.data.model.Quarantines
@@ -177,10 +180,32 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         autocompleteFragment.setCountry("KR")
 
         //장소 가져오기
-        context?.let { it1 ->
-            LocationRepository.getInstance(it1, Executors.newSingleThreadExecutor())
-                .getLocations()
-        }?.observe(viewLifecycleOwner, { locations ->
+//        context?.let { it1 ->
+//            LocationRepository.getInstance(it1, Executors.newSingleThreadExecutor())
+//                .getLocations()
+//        }?.observe(this, { locations ->
+//            for(mark in userMarkerList){
+//                mark.remove()
+//            }
+//            userMarkerList.clear()
+//
+//            //마크생성
+//            for (location in locations) {
+//                var mark = map?.addMarker(
+//                    MarkerOptions()
+//                        .title(location.date.toString())
+//                        .position((LatLng(location.latitude, location.longitude)))
+//                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+//                )
+//                mark?.isVisible = false
+//                mark?.let { userMarkerList.add(it) }
+//
+//            }
+//            Log.d("main", "in observe $userMarkerList")
+//            return@observe
+//        })
+        var db = context?.let { MyLocationDatabase.getInstance(it) }!!.locationDao()
+        db.getLocations().observe(viewLifecycleOwner, { locations ->
             for(mark in userMarkerList){
                 mark.remove()
             } 
@@ -188,20 +213,18 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 
             //마크생성
             for (location in locations) {
-                var loc = location.latitude
-                location.longitude
-                location.date
-
                 var mark = map?.addMarker(
                     MarkerOptions()
                         .title(location.date.toString())
                         .position((LatLng(location.latitude, location.longitude)))
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 )
-                Log.d("main", "${location.latitude}, ${location.longitude}")
-                //mark?.isVisible = false
+                mark?.isVisible = true
                 mark?.let { userMarkerList.add(it) }
+
             }
+            Log.d("main", "in observe $userMarkerList")
+            return@observe
         })
 
 
@@ -245,22 +268,26 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             }
             //로그인 된 경우
             else {
-                Log.d("loginButton","ON")
+                for(usermark in userMarkerList){
+                    usermark.isVisible = true
+                }
+                Log.d("main", "in button listner $userMarkerList")
+                mapFragment?.view?.requestLayout()
 
+                Log.d("loginButton","user markers : $userMarkerList")
 
-                Log.d("loginButton",userMarkerList[0].isVisible.toString())
             }
             //사용자 동선 선택 x
-            if(changeView.isSelected)
-            {
-                Log.d("loginButton","USERTRUE")
-                userMarker(true)
-            }
-            else
-            {
-                Log.d("loginButton","USERFALSE")
-                userMarker(false)
-            }
+//            if(changeView.isSelected)
+//            {
+//                Log.d("loginButton","USERTRUE")
+//                userMarker(true)
+//            }
+//            else
+//            {
+//                Log.d("loginButton","USERFALSE")
+//                userMarker(false)
+//            }
 
         }
 
@@ -612,7 +639,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         userMarkerList[0].isVisible = true
     }
 
-    fun userMarker(visible : Boolean){
+    fun userMarkervisible(visible : Boolean){
         if(visible)
         {
             for(mark in userMarkerList) {
@@ -625,9 +652,6 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                 mark.isVisible = false
             }
         }
-
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
