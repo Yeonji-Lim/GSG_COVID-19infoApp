@@ -38,7 +38,7 @@
 
     <string name="vaccinated_title_text">전국 백신 누적 접종 현황</string>
     <string name="vaccinated_box1_text">1차 접종</string>
-    <string name="vaccinated_boc2_text">2차 접종</string>
+    <string name="vaccinated_box2_text">2차 접종</string>
     <string name="vaccinated_box3_text">추가 접종</string>
     <string name="vaccinated_chart1_name">일일 확진자 현황</string>
     <string name="vaccinated_chart2_name">누적 감염 현황</string>
