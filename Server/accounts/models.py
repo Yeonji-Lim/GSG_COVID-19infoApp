@@ -1,3 +1,6 @@
 from django.db import models
+from authemail.models import EmailUserManager, EmailAbstractUser
 
-# Create your models here.
+class MyUser(EmailAbstractUser):
+    # Required
+    objects = EmailUserManager()
