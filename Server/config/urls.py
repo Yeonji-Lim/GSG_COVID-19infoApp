@@ -18,16 +18,11 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # rest_framework
-    # url path는 변경하여 사용 가능
-    path('api-auth/', include('rest_framework.urls')),
-    
-    # django-rest-auth 기능 사용을 위한 url 추가
-    path('rest-auth/', include('rest_auth.urls')),
-
-    # django-rest-auth의 회원 가입 기능 사용을 위한 url 추가
-    path('rest-auth/registration/', include('rest_auth.registration.urls')),
 
     # member_tracing 기능 사용을 위한 url 추가
     path('member_tracing/', include('member_tracing.urls')),
+
+    # authemail 사용을 위한 url 작성
+    path('', include('authemail.urls')),
+
 ]

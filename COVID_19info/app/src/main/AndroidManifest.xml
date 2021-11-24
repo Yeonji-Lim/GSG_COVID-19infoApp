@@ -31,7 +31,18 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".registerActivity"
+            android:exported="true"
+            android:theme="@style/Theme.COVID_19info.NoActionBar"/>
+        <activity
+            android:name=".UserInfoActivity"
+            android:exported="true"
+            android:theme="@style/Theme.COVID_19info.NoActionBar"/>
+        <activity
+            android:name=".PasswordChangeActivity"
+            android:exported="true"
+            android:theme="@style/Theme.COVID_19info.NoActionBar"/>
     </application>
 
 </manifest>
