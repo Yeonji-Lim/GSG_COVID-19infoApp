@@ -1,10 +1,14 @@
 package com.example.covid_19info
 
+<<<<<<< HEAD
 import android.util.Log
 import com.example.covid_19info.data.QuarantinesAPI
 import com.example.covid_19info.data.QuarantinesRouteAPI
 import com.example.covid_19info.data.VaccinatedAPI
 import com.example.covid_19info.data.model.VaccinatedInfo
+=======
+import com.example.covid_19info.data.model.MyLocationDatabase
+>>>>>>> RouteData
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -18,7 +22,13 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
-
+import com.example.covid_19info.data.LoginAPI
+import com.example.covid_19info.data.model.LoginToken
+import com.example.covid_19info.data.model.Quarantines
+import com.example.covid_19info.data.model.SignUpRst
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -30,11 +40,11 @@ class ExampleUnitTest {
     fun addition_isCorrect() {
         //var i = routeAPI.data.keys();
 
-       // while(i.hasNext())
-        {
-           // var a = i.next().toString();
-            //print(a);
-        }
+//        // while(i.hasNext())
+//         {
+//            // var a = i.next().toString();
+//             //print(a);
+//         }
 
 //        var url = URL("https://coroname.me/getdata")
 //        //var url = URL("")

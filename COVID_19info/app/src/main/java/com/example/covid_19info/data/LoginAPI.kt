@@ -2,39 +2,44 @@ package com.example.covid_19info.data
 
 
 import android.util.Log
-import com.example.covid_19info.data.model.LoggedInUser
-import com.example.covid_19info.data.model.Quarantine
-import com.example.covid_19info.data.model.Quarantines
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
+import com.example.covid_19info.data.model.LoginRequest
+import com.example.covid_19info.data.model.LoginToken
+import com.example.covid_19info.data.model.SignUpRst
+import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.POST
 
-//로그인 api
+
 interface LoginAPI {
 
-    @POST("/rest-auth")
+    @Headers("Content-Type: application/json")
+    @POST("signup/")
+    fun signup(
+    @Body signUpRst: SignUpRst
+    ): Call<SignUpRst>
+
+    @POST("login/")
     fun login(
+        @Body LoginRequest: LoginRequest
+    ): Call<LoginToken>
 
-    ): Call<LoggedInUser>
+    @POST("logout/")
+    fun logout(
+        @Body LoginToken: LoginToken
+    ): Call<LoginToken>
 
-    @POST("/registration")
-    fun registration(
-
-    ): Call<LoggedInUser>
-
-
-    companion object {
-        private const val BASE_URL_ROUTE = "서버 주소"
-        fun create(): QuarantinesRouteAPI {
+    companion object{
+        private const val BASE_URL_ROUTE="https://ab4fd298-6573-4ed6-a0f3-987108b4679a.mock.pstmn.io"
+        fun create(): LoginAPI{
             return Retrofit.Builder()
                 .baseUrl(BASE_URL_ROUTE)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(QuarantinesRouteAPI::class.java)
+                .create(LoginAPI::class.java)
         }
+
     }
 }

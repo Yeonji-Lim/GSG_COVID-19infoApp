@@ -3,10 +3,12 @@
     <item
         android:id="@+id/page_routes"
         android:enabled="true"
+        android:icon="@drawable/icon_covid_map"
         android:title="확진자"/>
 
     <item
         android:id="@+id/page_statistics"
         android:enabled="true"
+        android:icon="@drawable/icon_statistics"
         android:title="통계"/>
 </menu>

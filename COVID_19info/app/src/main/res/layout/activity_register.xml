@@ -37,40 +37,25 @@
         app:srcCompat="?attr/homeAsUpIndicator" />
 
     <EditText
-        android:id="@+id/userId"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#50BEC9"
-        android:hint="아이디를 입력해 주세요"
-        android:inputType="text"
-        android:selectAllOnFocus="true"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.231" />
-
-    <EditText
         android:id="@+id/email"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="120dp"
         android:backgroundTint="#50BEC9"
         android:ems="10"
         android:hint="이메일을 입력해주세요"
         android:inputType="textEmailAddress"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordConfirm" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/password"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="50dp"
         android:backgroundTint="#50BEC9"
         android:hint="비밀번호를 입력해주세요"
         android:imeActionLabel="@string/action_sign_in_short"
@@ -81,13 +66,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userId" />
+        app:layout_constraintTop_toBottomOf="@+id/email" />
 
     <EditText
         android:id="@+id/passwordConfirm"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="50dp"
         android:backgroundTint="#50BEC9"
         android:hint="비밀번호를 다시 입력해주세요"
         android:imeActionLabel="@string/action_sign_in_short"
@@ -103,7 +88,7 @@
         android:id="@+id/certificationNum"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="50dp"
         android:backgroundTint="#50BEC9"
         android:hint="인증 번호를 입력하세요"
         android:inputType="numberSigned"
@@ -112,7 +97,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordConfirm" />
 
     <Button
         android:id="@+id/register"
@@ -157,32 +142,6 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/email"
         app:layout_constraintEnd_toEndOf="@+id/email" />
-
-    <Button
-        android:id="@+id/duplicateCheck"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:backgroundTint="#50BEC9"
-        android:text="중복 확인"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/userId"
-        app:layout_constraintEnd_toEndOf="@+id/userId" />
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ID"
-        android:textColor="#50BEC9"
-        android:textSize="10sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/userId"
-        app:layout_constraintEnd_toEndOf="@+id/userId"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/userId" />
 
     <TextView
         android:id="@+id/textView10"

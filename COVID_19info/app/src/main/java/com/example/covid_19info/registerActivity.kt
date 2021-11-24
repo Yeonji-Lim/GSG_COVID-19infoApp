@@ -26,7 +26,7 @@ class registerActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val userId = binding.userId
+
         val email = binding.email
         val password = binding.password
         val passwordConfirm = binding.passwordConfirm
@@ -34,7 +34,6 @@ class registerActivity : AppCompatActivity() {
         val register = binding.register
         val loading = binding.loading
         val verifyEmail = binding.verifyEmail
-        val duplicateCheck = binding.duplicateCheck
 
         registerViewModel = ViewModelProvider(this, RegisterViewModelFactory())
             .get(RegisterViewModel::class.java)

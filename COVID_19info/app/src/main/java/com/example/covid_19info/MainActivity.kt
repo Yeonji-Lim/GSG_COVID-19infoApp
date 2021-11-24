@@ -37,6 +37,7 @@ import androidx.fragment.app.FragmentManager
 import com.example.covid_19info.BuildConfig.MAPS_API_KEY
 import com.example.covid_19info.databinding.ActivityLoginBinding
 import com.example.covid_19info.databinding.ActivityMainBinding
+import com.example.covid_19info.data.model.MyLocationDatabase
 import com.example.covid_19info.ui.routes.RoutesFragment
 import com.example.covid_19info.ui.stats.StatisticsFragment
 import com.google.android.gms.common.api.Status
@@ -75,11 +76,22 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)//R.layout.activity_main)
+        //preferenceutil초기화
+        PreferenceUtil.context = applicationContext
 
         //로그인 창 이동 구현
         val profileBtn = binding.userProfileButton//findViewById<ImageButton>(R.id.user_profile_button)
         profileBtn.setOnClickListener {
-            val intent = Intent(this@MainActivity, LoginActivity::class.java)
+            var logindata = getSharedPreferences("login", MODE_PRIVATE)
+
+            val intent:Intent
+            //로그인 여부에 따라 창 결정
+            if(logindata.getString("token", null)==null){
+                intent = Intent(this@MainActivity, LoginActivity::class.java)
+            }else{
+                intent = Intent(this@MainActivity, UserInfoActivity::class.java)
+            }
+
             startActivity(intent)
         }
 
