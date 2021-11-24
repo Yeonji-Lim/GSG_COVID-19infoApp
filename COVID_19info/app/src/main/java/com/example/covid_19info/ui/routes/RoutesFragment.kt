@@ -183,7 +183,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         }?.observe(viewLifecycleOwner, { locations ->
             for(mark in userMarkerList){
                 mark.remove()
-            }
+            } 
             userMarkerList.clear()
 
             //마크생성
@@ -199,7 +199,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 )
                 Log.d("main", "${location.latitude}, ${location.longitude}")
-                mark?.isVisible = false
+                //mark?.isVisible = false
                 mark?.let { userMarkerList.add(it) }
             }
         })
