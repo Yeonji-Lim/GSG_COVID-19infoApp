@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StatisticShowActivity"
+    >
+
+    <TextView
+        android:id="@+id/infected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="확진자 현황"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@drawable/user_route_button_text_color"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="187dp"
+        tools:layout_editor_absoluteY="47dp" />
+
+    <TextView
+        android:id="@+id/vaccinated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="백신 접종 현황"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@drawable/user_route_button_text_color"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="40dp"
+        tools:layout_editor_absoluteY="47dp" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:layout_width="330dp"
+        android:layout_height="270dp"
+        android:layout_gravity="center"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="40dp"
+        tools:layout_editor_absoluteY="375dp" />
+
+
+    <TextView
+        android:id="@+id/countInfected"
+        android:layout_width="105dp"
+        android:layout_height="80dp"
+        android:background="@drawable/curved_rectangle"
+        android:backgroundTint="#50BEC9"
+        android:gravity="center"
+        android:text="확진환자\n"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="39dp"
+        tools:layout_editor_absoluteY="184dp" />
+
+    <TextView
+        android:id="@+id/countDeath"
+        android:layout_width="105dp"
+        android:layout_height="80dp"
+        android:background="@drawable/curved_rectangle"
+        android:backgroundTint="#50BEC9"
+        android:gravity="center"
+        android:text="사망자\n"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="154dp"
+        tools:layout_editor_absoluteY="184dp" />
+
+
+    <TextView
+        android:id="@+id/countRelease"
+        android:layout_width="105dp"
+        android:layout_height="80dp"
+        android:background="@drawable/curved_rectangle"
+        android:backgroundTint="#50BEC9"
+        android:gravity="center"
+        android:text="격리해제\n"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="273dp"
+        tools:layout_editor_absoluteY="184dp" />
+
+    <TextView
+        android:id="@+id/allInfected"
+        android:layout_width="191dp"
+        android:layout_height="45dp"
+        android:text="전국 감염 현황"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="40dp"
+        tools:layout_editor_absoluteY="125dp" />
+
+    <TextView
+        android:id="@+id/dayInfected"
+        android:layout_width="220dp"
+        android:layout_height="46dp"
+        android:text="일일 확진자 현황"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="39dp"
+        tools:layout_editor_absoluteY="318dp" />
+
+    <ImageButton
+        android:id="@+id/profile"
+        android:layout_width="53dp"
+        android:layout_height="58dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/user_profile_icon"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="342dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="345dp"
+        android:layout_height="42dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/spacing_40"
+        android:background="@drawable/curved_rectangle"
+        app:itemTextColor="@drawable/bottom_menu_color"
+        app:itemIconTint="@drawable/bottom_menu_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:menu="@menu/bottom_navigation_menu" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
