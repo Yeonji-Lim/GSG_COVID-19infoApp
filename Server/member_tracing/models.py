@@ -1,11 +1,3 @@
-"""
-참고 링크 목록
-https://developers.google.cn/maps/documentation/places/android-sdk/reference/com/google/android/libraries/places/api/Places?hl=ko
-https://developers.google.com/maps/documentation/android-sdk/current-place-tutorial?hl=ko
-https://www.django-rest-framework.org/api-guide/fields/#datetimefield
-"""
-
-
 from django.db import models
 
 class MemberTracing(models.Model):
@@ -19,11 +11,10 @@ class MemberTracing(models.Model):
     }
     """
 
-    date = models.DateTimeField(auto_now_add=False )
+    date = models.DateTimeField(auto_now_add=False)
     id = models.CharField(max_length=100, primary_key=True, unique=True)
     latitude = models.FloatField(null=True, default='0')
     longitude = models.FloatField(null=True, default='0')
-
 
     class Meta: # 일시순 정렬
         ordering = ['date']

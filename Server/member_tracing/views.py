@@ -3,6 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from member_tracing.models import MemberTracing
 from member_tracing.serializers import MemberTracingSerializer
+import datetime
 
 # 모든 사용자 동선 조회 or 새로운 동선 저장
 @csrf_exempt
@@ -17,6 +18,10 @@ def member_tracing_list(request):
     # 새로운 동선 저장
     elif request.method == 'POST':
         data = JSONParser().parse(request)
+        date_string = data['date']
+        datetime_format = '%b %d, %Y %I:%M:%S %p'
+        data['date'] = datetime.datetime.strptime(date_string, datetime_format)
+        data['date'] = data['date'].strftime("%Y-%m-%d %H:%M:%S")
         serializer = MemberTracingSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
