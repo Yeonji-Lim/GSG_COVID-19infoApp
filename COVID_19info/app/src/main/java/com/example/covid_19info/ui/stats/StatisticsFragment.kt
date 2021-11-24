@@ -51,8 +51,6 @@ class StatisticsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-
-
         val infectbtn = binding.infectedBtn
         infectbtn.setOnClickListener {
             if(!isvaccinated){
@@ -62,7 +60,6 @@ class StatisticsFragment : Fragment() {
                 binding.statPrimaryTitle.text = getString(R.string.vaccinated_box1_text)
                 binding.statSecondaryTitle.text = getString(R.string.vaccinated_box2_text)
                 binding.statThirdTitle.text = getString(R.string.vaccinated_box3_text)
-                Log.d("stat", "2")
             }
         }
         binding.vaccinatedBtn.setOnClickListener {
@@ -73,9 +70,11 @@ class StatisticsFragment : Fragment() {
                 binding.statPrimaryTitle.text = getString(R.string.quarantine_box1_text)
                 binding.statSecondaryTitle.text = getString(R.string.quarantine_box2_text)
                 binding.statThirdTitle.text = getString(R.string.quarantine_box3_text)
-                Log.d("stat", "1")
             }
         }
+    }
+
+    fun getVaccinatedData(){
 
     }
 
