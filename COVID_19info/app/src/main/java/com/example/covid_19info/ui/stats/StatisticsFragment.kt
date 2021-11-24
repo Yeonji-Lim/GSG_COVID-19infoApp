@@ -29,7 +29,7 @@ class StatisticsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //바인딩 연결
+
 
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
@@ -41,23 +41,27 @@ class StatisticsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //바인딩 연결
+        binding = StatisticsFragmentBinding.inflate(layoutInflater)
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.statistics_fragment, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = StatisticsFragmentBinding.inflate(layoutInflater)
 
 
-        binding.infectedBtn.setOnClickListener {
+
+
+        val infectbtn = binding.infectedBtn
+        infectbtn.setOnClickListener {
             if(!isvaccinated){
                 isvaccinated = true
                 //이름 변경
-                binding.statMainTitle.text = R.string.vaccinated_title_text.toString()
-                binding.statPrimaryTitle.text = R.string.vaccinated_box1_text.toString()
-                binding.statSecondaryTitle.text = R.string.vaccinated_boc2_text.toString()
-                binding.statThirdTitle.text = R.string.vaccinated_box3_text.toString()
+                binding.statMainTitle.text = getString(R.string.vaccinated_title_text)
+                binding.statPrimaryTitle.text = getString(R.string.vaccinated_box1_text)
+                binding.statSecondaryTitle.text = getString(R.string.vaccinated_box2_text)
+                binding.statThirdTitle.text = getString(R.string.vaccinated_box3_text)
                 Log.d("stat", "2")
             }
         }
@@ -65,10 +69,10 @@ class StatisticsFragment : Fragment() {
             if(isvaccinated){
                 isvaccinated = false
                 //이름 변경
-                binding.statMainTitle.text = R.string.quarantine_title_text.toString()
-                binding.statPrimaryTitle.text = R.string.quarantine_box1_text.toString()
-                binding.statSecondaryTitle.text = R.string.quarantine_box2_text.toString()
-                binding.statThirdTitle.text = R.string.quarantine_box3_text.toString()
+                binding.statMainTitle.text = getString(R.string.quarantine_title_text)
+                binding.statPrimaryTitle.text = getString(R.string.quarantine_box1_text)
+                binding.statSecondaryTitle.text = getString(R.string.quarantine_box2_text)
+                binding.statThirdTitle.text = getString(R.string.quarantine_box3_text)
                 Log.d("stat", "1")
             }
         }
