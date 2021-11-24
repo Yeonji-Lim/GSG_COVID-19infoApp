@@ -60,19 +60,6 @@
         app:layout_constraintTop_toBottomOf="@+id/vaccinated_btn"
         tools:ignore="MissingConstraints" />
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/lineChart"
-        android:layout_width="330dp"
-        android:layout_height="270dp"
-        android:layout_gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stat_sub_title"
-        app:layout_constraintVertical_bias="0.207"
-        tools:ignore="MissingConstraints" />
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pager"
         android:layout_width="379dp"

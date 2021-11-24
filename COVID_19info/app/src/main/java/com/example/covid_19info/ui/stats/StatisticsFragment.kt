@@ -1,17 +1,16 @@
 package com.example.covid_19info.ui.stats
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.viewpager2.widget.ViewPager2
 import com.example.covid_19info.R
 import com.example.covid_19info.data.VaccinatedAPI
 import com.example.covid_19info.data.model.VaccinatedNation
 import com.example.covid_19info.databinding.StatisticsFragmentBinding
+import com.github.mikephil.charting.charts.LineChart
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -60,7 +59,9 @@ class StatisticsFragment : Fragment() {
         //초기 데이터 로드
         updateNationVaccinated()
         //뷰페이저 구현부
-        binding.pager.adapter=ViewPagerAdapter(getStaticList())
+        val pageadapter = PagerFragmentStateAdapter(requireActivity())
+        //pageadapter.addFragment(LineChart())
+        binding.pager.adapter = pageadapter
         binding.pager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
 
