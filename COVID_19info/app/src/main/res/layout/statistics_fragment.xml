@@ -7,100 +7,126 @@
     tools:context=".ui.stats.StatisticsFragment"
     >
 
-    <TextView
-        android:id="@+id/infected"
-        android:layout_width="135dp"
-        android:layout_height="35dp"
+    <Button
+        android:id="@+id/infected_btn"
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="24dp"
         android:background="@drawable/curved_rectangle"
-        android:textColor="@drawable/user_route_button_text_color"
-        android:text="확진자 현황"
-        android:textSize="20sp"
-        android:textStyle="bold"
         android:gravity="center"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="187dp"
-        tools:layout_editor_absoluteY="47dp" />
+        android:text="확진자 현황"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/vaccinated_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/vaccinated_btn"
+        app:layout_constraintTop_toTopOf="@+id/vaccinated_btn"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:id="@+id/vaccinated"
-        android:layout_width="133dp"
-        android:layout_height="35dp"
+
+    <Button
+        android:id="@+id/vaccinated_btn"
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/curved_rectangle"
         android:gravity="center"
         android:text="백신 접종 현황"
-        android:textColor="@drawable/user_route_button_text_color"
-        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
         android:textStyle="bold"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="47dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.135"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <com.github.mikephil.charting.charts.LineChart
         android:layout_width="330dp"
         android:layout_height="270dp"
         android:layout_gravity="center"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="375dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stat_sub_title"
+        app:layout_constraintVertical_bias="0.091"
+        tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/firstShot"
+        android:id="@+id/stat_primary_txt"
         android:layout_width="105dp"
         android:layout_height="80dp"
+        android:layout_marginEnd="12dp"
         android:background="@drawable/curved_rectangle"
         android:backgroundTint="#50BEC9"
         android:gravity="center"
         android:text="1차 접종\n"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="184dp" />
-
+        app:layout_constraintBottom_toBottomOf="@+id/stat_secondary_txt"
+        app:layout_constraintEnd_toStartOf="@+id/stat_secondary_txt"
+        app:layout_constraintTop_toTopOf="@+id/stat_secondary_txt"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/secondShot"
+        android:id="@+id/stat_secondary_txt"
         android:layout_width="105dp"
         android:layout_height="80dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/curved_rectangle"
         android:backgroundTint="#50BEC9"
         android:gravity="center"
         android:text="2차 접종\n"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="154dp"
-        tools:layout_editor_absoluteY="184dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stat_main_title"
+        tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/boosterShot"
+        android:id="@+id/stat_third_txt"
         android:layout_width="105dp"
         android:layout_height="80dp"
+        android:layout_marginStart="12dp"
         android:background="@drawable/curved_rectangle"
         android:backgroundTint="#50BEC9"
         android:gravity="center"
         android:text="부스터샷\n"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="272dp"
-        tools:layout_editor_absoluteY="184dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/stat_secondary_txt"
+        app:layout_constraintStart_toEndOf="@+id/stat_secondary_txt"
+        app:layout_constraintTop_toTopOf="@+id/stat_secondary_txt"
+        tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/allVaccinated"
+        android:id="@+id/stat_main_title"
         android:layout_width="277dp"
         android:layout_height="43dp"
+        android:layout_marginTop="28dp"
         android:text="전국 백신 누적 접종 현황"
         android:textSize="25sp"
         android:textStyle="bold"
-        tools:ignore="MissingConstraints"
-        android:layout_marginTop="60dp"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="125dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/vaccinated_btn"
+        app:layout_constraintTop_toBottomOf="@+id/vaccinated_btn"
+        tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/stackVaccinated"
+        android:id="@+id/stat_sub_title"
         android:layout_width="220dp"
         android:layout_height="46dp"
+        android:layout_marginTop="32dp"
         android:text="누적 접종자 현황"
         android:textSize="30sp"
         android:textStyle="bold"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="318dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/stat_main_title"
+        app:layout_constraintTop_toBottomOf="@+id/stat_secondary_txt"
+        tools:ignore="MissingConstraints" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
