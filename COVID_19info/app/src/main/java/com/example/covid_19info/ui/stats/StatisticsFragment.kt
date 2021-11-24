@@ -1,6 +1,7 @@
 package com.example.covid_19info.ui.stats
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,11 +25,11 @@ class StatisticsFragment : Fragment() {
     private lateinit var binding: StatisticsFragmentBinding
     private var param1: String? = null
     private var param2: String? = null
+    var isvaccinated = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //바인딩 연결
-        binding = StatisticsFragmentBinding.inflate(layoutInflater)
 
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
@@ -42,6 +43,36 @@ class StatisticsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.statistics_fragment, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = StatisticsFragmentBinding.inflate(layoutInflater)
+
+
+        binding.infectedBtn.setOnClickListener {
+            if(!isvaccinated){
+                isvaccinated = true
+                //이름 변경
+                binding.statMainTitle.text = R.string.vaccinated_title_text.toString()
+                binding.statPrimaryTitle.text = R.string.vaccinated_box1_text.toString()
+                binding.statSecondaryTitle.text = R.string.vaccinated_boc2_text.toString()
+                binding.statThirdTitle.text = R.string.vaccinated_box3_text.toString()
+                Log.d("stat", "2")
+            }
+        }
+        binding.vaccinatedBtn.setOnClickListener {
+            if(isvaccinated){
+                isvaccinated = false
+                //이름 변경
+                binding.statMainTitle.text = R.string.quarantine_title_text.toString()
+                binding.statPrimaryTitle.text = R.string.quarantine_box1_text.toString()
+                binding.statSecondaryTitle.text = R.string.quarantine_box2_text.toString()
+                binding.statThirdTitle.text = R.string.quarantine_box3_text.toString()
+                Log.d("stat", "1")
+            }
+        }
+
     }
 
     companion object {
