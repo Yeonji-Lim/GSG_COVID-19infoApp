@@ -273,3 +273,5 @@ pip-selfcheck.json
 # For Security
 my_settings.py
 secrets.json
+
+.idea/misc.xml
