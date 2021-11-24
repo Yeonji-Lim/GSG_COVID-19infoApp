@@ -78,6 +78,7 @@ dependencies {
     implementation 'com.tickaroo.tikxml:retrofit-converter:0.8.13'
     kapt 'com.tickaroo.tikxml:processor:0.8.13'
 
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
 
     testImplementation 'junit:junit:4.+'
