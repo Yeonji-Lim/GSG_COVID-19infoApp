@@ -1,5 +1,7 @@
 package com.example.covid_19info.ui.stats
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -73,7 +75,11 @@ class StatisticsFragment : Fragment() {
                 binding.statPrimaryTitle.text = getString(R.string.vaccinated_box1_text)
                 binding.statSecondaryTitle.text = getString(R.string.vaccinated_box2_text)
                 binding.statThirdTitle.text = getString(R.string.vaccinated_box3_text)
-
+                binding.vaccinatedBtn.setBackgroundResource(R.drawable.curved_rectangle_gray)
+                //binding.vaccinatedBtn.setBackgroundColor(Color.rgb(94,94,94))
+                binding.vaccinatedBtn.setTextColor(Color.WHITE)
+                binding.infectedBtn.setBackgroundResource(R.drawable.curved_rectangle)
+                binding.infectedBtn.setTextColor(Color.BLACK)
                 updateNationVaccinated()
             }
         }
@@ -85,6 +91,10 @@ class StatisticsFragment : Fragment() {
                 binding.statPrimaryTitle.text = getString(R.string.quarantine_box1_text)
                 binding.statSecondaryTitle.text = getString(R.string.quarantine_box2_text)
                 binding.statThirdTitle.text = getString(R.string.quarantine_box3_text)
+                binding.infectedBtn.setBackgroundResource(R.drawable.curved_rectangle_gray)
+                binding.infectedBtn.setTextColor(Color.WHITE)
+                binding.vaccinatedBtn.setBackgroundResource(R.drawable.curved_rectangle)
+                binding.vaccinatedBtn.setTextColor(Color.BLACK)
             }
         }
     }
