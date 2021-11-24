@@ -25,7 +25,8 @@
         app:layout_constraintStart_toEndOf="@+id/vaccinated_btn"
         app:layout_constraintTop_toTopOf="@+id/vaccinated_btn"
         app:layout_constraintVertical_bias="0.0"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        android:elevation="10dp"/>
 
     <Button
         android:id="@+id/vaccinated_btn"
@@ -33,17 +34,18 @@
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:background="@drawable/curved_rectangle"
+        android:background="@drawable/curved_rectangle_gray"
         android:gravity="center"
         android:text="백신 접종 현황"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        android:elevation="10dp"/>
 
     <TextView
         android:id="@+id/stat_main_title"
