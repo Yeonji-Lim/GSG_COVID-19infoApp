@@ -21,7 +21,6 @@ import com.example.covid_19info.databinding.ActivityUserinfoBinding
 import com.example.covid_19info.ui.login.LoginViewModel
 import com.example.covid_19info.ui.login.LoginViewModelFactory
 import com.google.android.material.snackbar.Snackbar
-import org.w3c.dom.Text
 
 @RequiresApi(Build.VERSION_CODES.M)
 class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
@@ -140,13 +139,13 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
             val mAlertDialog = mBuilder.show()
             mDialogView.findViewById<TextView>(R.id.dialog_text).text="정말 탈퇴 하시겠습니까?"
             //취소버튼
-            val noBtn = mDialogView.findViewById<Button>(R.id.no_logout_btn)
+            val noBtn = mDialogView.findViewById<Button>(R.id.no_btn)
             noBtn.setOnClickListener{
                 mAlertDialog.dismiss()
             }
 
             //확인버튼
-            val yesBtn = mDialogView.findViewById<Button>(R.id.yes_logout_btn)
+            val yesBtn = mDialogView.findViewById<Button>(R.id.yes_btn)
             yesBtn.text="탈퇴"
             yesBtn.setOnClickListener{
                 //로그아웃 하는 함수 내용
@@ -193,13 +192,13 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
             mDialogView.findViewById<TextView>(R.id.dialog_text).text="정말 로그아웃 하시겠습니까?"
             
             //취소버튼
-            val noBtn = mDialogView.findViewById<Button>(R.id.no_logout_btn)
+            val noBtn = mDialogView.findViewById<Button>(R.id.no_btn)
             noBtn.setOnClickListener{
                 mAlertDialog.dismiss()
             }
 
             //확인버튼
-            val yesBtn = mDialogView.findViewById<Button>(R.id.yes_logout_btn)
+            val yesBtn = mDialogView.findViewById<Button>(R.id.yes_btn)
             yesBtn.text="로그아웃"
             yesBtn.setOnClickListener{
                 //로그아웃 하는 함수 내용

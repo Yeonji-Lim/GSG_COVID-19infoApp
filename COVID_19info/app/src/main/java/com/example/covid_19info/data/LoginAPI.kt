@@ -1,14 +1,10 @@
 package com.example.covid_19info.data
 
 
-import android.util.Log
-import com.example.covid_19info.data.model.LoginRequest
-import com.example.covid_19info.data.model.LoginToken
-import com.example.covid_19info.data.model.SignUpRst
+import com.example.covid_19info.data.model.*
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
@@ -30,6 +26,11 @@ interface LoginAPI {
     fun logout(
         @Body LoginToken: LoginToken
     ): Call<LoginToken>
+
+    @POST("verifyEmail/")
+    fun verifyEmail(
+        @Body signupEmail: SignupEmail
+    ): Call<SignupCode>
 
     companion object{
         private const val BASE_URL_ROUTE="https://ab4fd298-6573-4ed6-a0f3-987108b4679a.mock.pstmn.io"

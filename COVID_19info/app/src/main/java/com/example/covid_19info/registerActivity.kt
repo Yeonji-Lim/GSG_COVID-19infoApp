@@ -6,12 +6,13 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import android.text.Editable
-import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.example.covid_19info.databinding.ActivityRegisterBinding
 import com.example.covid_19info.ui.register.*
 
@@ -42,7 +43,7 @@ class registerActivity : AppCompatActivity() {
             val loginState = it ?: return@Observer
 
             // disable login button unless both username / password is valid
-            //login.isEnabled = loginState.isDataValid
+            register.isEnabled = loginState.isDataValid
 
             if (loginState.emailError != "") {
                 email.error = loginState.emailError
@@ -79,6 +80,10 @@ class registerActivity : AppCompatActivity() {
             )
         }
 
+        verifyEmail.setOnClickListener {
+            registerViewModel.verfiyEmail(email.text.toString())
+        }
+
         password.apply {
             afterTextChanged {
                 registerViewModel.registerDataChanged(
@@ -90,7 +95,7 @@ class registerActivity : AppCompatActivity() {
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
-                        registerViewModel.register(
+                        registerViewModel.signup(
                             email.text.toString(),
                             password.text.toString()
                         )
@@ -98,11 +103,37 @@ class registerActivity : AppCompatActivity() {
                 false
             }
 
+
                 /*login.setOnClickListener {
                 loading.visibility = View.VISIBLE
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }*/
+            register.setOnClickListener{
+                if(password.text.toString()!=passwordConfirm.text.toString()){
+                    Toast.makeText(this@registerActivity, "새 비밀번호를 다시 확인해 주세요", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    registerViewModel.signup(email.text.toString(), password.text.toString())
+
+                    val mDialogView = LayoutInflater.from(this@registerActivity).inflate(R.layout.dialog_confirm,null)
+                    val mBuilder = AlertDialog.Builder(this@registerActivity)
+                        .setView(mDialogView)
+
+                    val mAlertDialog = mBuilder.show()
+                    mDialogView.findViewById<TextView>(R.id.dialog_confirm_text).text="회원가입이 완료되었습니다"
+
+                    //확인버튼
+                    val yesBtn = mDialogView.findViewById<Button>(R.id.confirm_btn)
+                    yesBtn.text="OK"
+                    yesBtn.setOnClickListener{
+                        mAlertDialog.dismiss()
+                        super.onBackPressed()
+
+                    }
+                }
+            }
         }
+
     }
 
     private fun updateUiWithUser(model: RegisterUserView) {
