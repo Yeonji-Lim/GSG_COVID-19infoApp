@@ -41,7 +41,14 @@ INSTALLED_APPS = [
     # 토큰인증을 위한 라이브러리 추가
     'rest_framework',
     'rest_framework.authtoken',
+
+    # authemail 라이브러리 사용을 위한
+    'authemail',
+    # 생성한 계정 관리 어플리케이션 등록
+    'accounts',
 ]
+
+AUTH_USER_MODEL = 'accounts.MyUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
