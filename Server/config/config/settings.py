@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-import my_settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = my_settings.SECRET_KEY
+SECRET_KEY = 'django-insecure-3tq=3p$2*hqslut2j)*97likeh*e^twdv@o9b04oh08d!2ekad'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,49 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # rest framework 사용 위해 추가
-    'rest_framework',
-
-    # django-rest-auth 사용 위해 추가
-    'rest_framework.authtoken',
-    'rest_auth',
-
-    # django-rest-auth에서 회원가입 기능 사용을 위해 추가
-    'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'rest_auth.registration',
-
-    # 이메일 인증 기능 위해 추가
-    'authemail',
-
-    # 계정 관리 어플리케이션 추가
-    'accounts',
 ]
-
-# django-rest-auth에서 회원가입 기능 사용을 위해 추가
-SITE_ID = 1
-
-# 기본 유저 모델 변경
-AUTH_USER_MODEL = 'accounts.MyUser'
-
-# Restframework에서 사용할 인증방식과 유저 권한 설정
-REST_FRAMEWORK = {
-    # 인증방식 설정
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 기본 인증방식 토큰 인증으로 변경
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    # 유저 권한 설정
-    'DEFAULT_PERMISSION_CLASSES': [
-        # 별다른 언급 없을 시 인증받은 사용자가 이용할 수 있도록 수정
-        'rest_framework.permissions.IsAuthenticated',  # view 부분에서 다른 허용사항을 설정 가능
-    ]
-}
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -116,7 +73,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = my_settings.DATABASES
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
