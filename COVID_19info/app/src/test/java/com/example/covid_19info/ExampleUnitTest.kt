@@ -14,10 +14,12 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
 import com.example.covid_19info.data.LoginAPI
+import com.example.covid_19info.data.QuarantinesAPI
 import com.example.covid_19info.data.VaccinatedAPI
 import com.example.covid_19info.data.model.LoginToken
 import com.example.covid_19info.data.model.Quarantines
 import com.example.covid_19info.data.model.SignUpRst
+import java.text.SimpleDateFormat
 
 
 /**
@@ -62,17 +64,24 @@ class ExampleUnitTest {
 //
 //        var temp = data.getString("region")
 //        print("$temp")
-        val api = VaccinatedAPI.createNation()
-
-//        api.getVaccinatedData(page = 1).enqueue(object: Callback<VaccinatedInfo>{
-//            override fun onResponse(
-//                call: Call<VaccinatedInfo>,
-//                response: Response<VaccinatedInfo>
-//            ) {
-//                response.body()
-//            }
-//        })
-        //println(api.getQuarantineStat(page = 1).execute().body()?.body?.items?.item?.get(0))
-        println(api.getNationData().execute().body()?.body?.items.toString())
+//        val api = VaccinatedAPI.createNation()
+//
+////        api.getVaccinatedData(page = 1).enqueue(object: Callback<VaccinatedInfo>{
+////            override fun onResponse(
+////                call: Call<VaccinatedInfo>,
+////                response: Response<VaccinatedInfo>
+////            ) {
+////                response.body()
+////            }
+////        })
+//        //println(api.getQuarantineStat(page = 1).execute().body()?.body?.items?.item?.get(0))
+//        println(api.getNationData().execute().body()?.body?.items.toString())
+        val quarantine = QuarantinesAPI.create()
+        var today = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt()
+        println(today)
+        var rst = quarantine.getQuarantineStat(page = 1,
+            startCreateDt = (today-10).toString(),
+            endCreateDt = today.toString()).execute()
+        println(rst.body())
     }
 }

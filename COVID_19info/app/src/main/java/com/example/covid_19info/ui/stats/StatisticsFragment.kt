@@ -3,19 +3,25 @@ package com.example.covid_19info.ui.stats
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
 import com.example.covid_19info.R
+import com.example.covid_19info.data.QuarantinesAPI
 import com.example.covid_19info.data.VaccinatedAPI
+import com.example.covid_19info.data.model.QuarantinStat
 import com.example.covid_19info.data.model.VaccinatedNation
 import com.example.covid_19info.databinding.StatisticsFragmentBinding
 import com.github.mikephil.charting.charts.LineChart
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -96,11 +102,13 @@ class StatisticsFragment : Fragment() {
                 binding.infectedBtn.setTextColor(Color.WHITE)
                 binding.vaccinatedBtn.setBackgroundResource(R.drawable.curved_rectangle)
                 binding.vaccinatedBtn.setTextColor(Color.BLACK)
+
+                updateVaccinatedData()
             }
         }
     }
 
-    fun updateNationVaccinated(){
+    private fun updateNationVaccinated(){
         //전국 백신 데이터 업데이트
         val vacapi = VaccinatedAPI.createNation()
 
@@ -123,22 +131,73 @@ class StatisticsFragment : Fragment() {
                 )
 
                 //전일대비 증가
-                binding.statPrimaryInc.text = getString(R.string.nation_data, response.body()?.body?.items?.item?.get(0)?.firstCnt)
-                binding.statSecondaryInc.text = getString(R.string.nation_data, response.body()?.body?.items?.item?.get(0)?.secondCnt)
-                binding.statThirdInc.text = getString(R.string.nation_data, response.body()?.body?.items?.item?.get(0)?.thirdCnt)
+                binding.statPrimaryInc.text = getString(R.string.nation_data,
+                    response.body()?.body?.items?.item?.get(0)?.firstCnt
+                )
+                binding.statSecondaryInc.text = getString(R.string.nation_data,
+                    response.body()?.body?.items?.item?.get(0)?.secondCnt
+                )
+                binding.statThirdInc.text = getString(R.string.nation_data,
+                    response.body()?.body?.items?.item?.get(0)?.thirdCnt
+                )
             }override fun onFailure(call: Call<VaccinatedNation>, t: Throwable) {
                 TODO("Not yet implemented")
             }
         })
     }
+    private fun updateVaccinatedData(){
+        val quarantine = QuarantinesAPI.create()
+        var today = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt()
+        Log.d("stat", today.toString())
+        quarantine.getQuarantineStat(page = 1,
+            startCreateDt = (today-10).toString(),
+            endCreateDt = today.toString()).enqueue(object: Callback<QuarantinStat> {
+            override fun onResponse(
+                call: Call<QuarantinStat>,
+                response: Response<QuarantinStat>
+            ){
+                Log.d("stat", response.toString())
+                binding.statPrimaryFigure.text = getString(R.string.nation_data,
+                    response.body()?.body?.items?.item?.get(0)?.decideCnt
+                )
+                binding.statSecondaryFigure.text = getString(R.string.nation_data,
+                    response.body()?.body?.items?.item?.get(0)?.clearCnt
+                )
+                binding.statThirdFigure.text = getString(R.string.nation_data,
+                    response.body()?.body?.items?.item?.get(0)?.deathCnt
+                )
+
+                //전일대비 증가
+                binding.statPrimaryInc.text = getString(R.string.nation_data,
+                    response.body()?.body?.items?.item?.get(0)?.decideCnt?.minus(
+                        response.body()?.body?.items?.item?.get(1)?.decideCnt!!
+                    )
+                )
+                binding.statSecondaryInc.text = getString(R.string.nation_data,
+                    response.body()?.body?.items?.item?.get(0)?.clearCnt?.minus(
+                        response.body()?.body?.items?.item?.get(1)?.clearCnt!!
+                    )
+                )
+                binding.statThirdInc.text = getString(R.string.nation_data,
+                    response.body()?.body?.items?.item?.get(0)?.deathCnt?.minus(
+                        response.body()?.body?.items?.item?.get(1)?.deathCnt!!
+                    )
+                )
+            }
+            override fun onFailure(call: Call<QuarantinStat>, t: Throwable) {
+                //TODO("Not yet implemented")
+                Log.d("stat", t.toString())
+            }
+        })
+    }
+
+
     //뷰페이저 내용 들어가는 부분
     private fun getStaticList():ArrayList<Int>{
         return arrayListOf<Int>(R.drawable.ic_menu_camera,R.drawable.ic_menu_gallery )
     }
 
-    fun getVaccinatedData(){
 
-    }
 
     companion object {
         /**

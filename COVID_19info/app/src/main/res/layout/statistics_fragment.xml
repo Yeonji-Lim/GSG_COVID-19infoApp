@@ -66,6 +66,7 @@
         android:id="@+id/pager"
         android:layout_width="379dp"
         android:layout_height="328dp"
+        android:layout_marginBottom="64dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -246,10 +247,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2021.11.03 00:00 집계 기준"
-        app:layout_constraintBottom_toTopOf="@+id/lineChart"
-        app:layout_constraintEnd_toEndOf="@+id/lineChart"
+        app:layout_constraintBottom_toTopOf="@+id/pager"
+        app:layout_constraintEnd_toEndOf="@+id/pager"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/lineChart" />
+        app:layout_constraintStart_toStartOf="@+id/pager" />
 
     <ImageView
         android:id="@+id/imageView9"

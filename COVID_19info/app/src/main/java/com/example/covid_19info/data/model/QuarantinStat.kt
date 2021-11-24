@@ -57,7 +57,7 @@ data class  BodyQ(
 @Xml(name = "items")
 data class ItemsQ(
     @Element(name = "item")
-    val item: List<ItemQ>
+    val item: List<ItemQ>?
 )
 
 @Xml(name = "item")
