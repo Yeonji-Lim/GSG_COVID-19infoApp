@@ -18,6 +18,11 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # member_tracing 기능 사용을 위한 url 추가
+    path('member_tracing/', include('member_tracing.urls')),
+
     # authemail 사용을 위한 url 작성
     path('', include('authemail.urls')),
+
 ]
