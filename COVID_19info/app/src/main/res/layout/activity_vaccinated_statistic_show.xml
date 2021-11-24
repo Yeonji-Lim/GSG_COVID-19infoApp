@@ -102,31 +102,5 @@
         tools:layout_editor_absoluteX="40dp"
         tools:layout_editor_absoluteY="318dp" />
 
-    <ImageButton
-        android:id="@+id/profile"
-        android:layout_width="53dp"
-        android:layout_height="58dp"
-        android:scaleType="centerCrop"
-
-        app:srcCompat="@drawable/user_profile_icon"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="342dp"
-        tools:layout_editor_absoluteY="16dp" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="345dp"
-        android:layout_height="42dp"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/spacing_40"
-        android:background="@drawable/curved_rectangle"
-        app:itemTextColor="@drawable/bottom_menu_color"
-        app:itemIconTint="@drawable/bottom_menu_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:menu="@menu/bottom_navigation_menu" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
