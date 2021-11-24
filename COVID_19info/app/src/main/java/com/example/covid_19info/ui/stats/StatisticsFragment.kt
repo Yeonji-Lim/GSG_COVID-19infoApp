@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.viewpager2.widget.ViewPager2
 import com.example.covid_19info.R
 import com.example.covid_19info.data.VaccinatedAPI
 import com.example.covid_19info.data.model.VaccinatedNation
@@ -57,6 +59,10 @@ class StatisticsFragment : Fragment() {
 
         //초기 데이터 로드
         updateNationVaccinated()
+        //뷰페이저 구현부
+        binding.pager.adapter=ViewPagerAdapter(getStaticList())
+        binding.pager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
 
 
         binding.vaccinatedBtn.setOnClickListener {
@@ -113,6 +119,10 @@ class StatisticsFragment : Fragment() {
                 TODO("Not yet implemented")
             }
         })
+    }
+    //뷰페이저 내용 들어가는 부분
+    private fun getStaticList():ArrayList<Int>{
+        return arrayListOf<Int>(R.drawable.ic_menu_camera,R.drawable.ic_menu_gallery )
     }
 
     fun getVaccinatedData(){
