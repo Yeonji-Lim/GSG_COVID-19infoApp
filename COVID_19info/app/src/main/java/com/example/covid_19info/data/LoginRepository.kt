@@ -1,9 +1,11 @@
 package com.example.covid_19info.data
 
-import android.content.SharedPreferences
 import android.util.Log
 import com.example.covid_19info.PreferenceUtil
 import com.example.covid_19info.data.model.LoggedInUser
+import com.example.covid_19info.data.model.PwchangeUser
+import com.example.covid_19info.data.model.SendEmail
+import com.example.covid_19info.data.model.SignUpRst
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -51,12 +53,16 @@ class LoginRepository(val dataSource: LoginDataSource) {
         prefs.delString("userID")
     }
 
-    suspend fun signup(email: String, password: String){
-        val result = dataSource.signup(email, password)
+    suspend fun signup(email: String, password: String): SignUpRst {
+        return dataSource.signup(email, password)
     }
 
-    suspend fun verifyEmail(email: String){
-        val result = dataSource.verifyEmail(email)
+    suspend fun pwChange(pw: String, code: String): ChangeResult<PwchangeUser> {
+        return dataSource.pwChange(pw, code)
+    }
+
+    suspend fun verifyEmail(email: String): SendEmail{
+        return dataSource.verifyEmail(email)
     }
 
     private fun setLoggedInUser(loggedInUser: LoggedInUser) {

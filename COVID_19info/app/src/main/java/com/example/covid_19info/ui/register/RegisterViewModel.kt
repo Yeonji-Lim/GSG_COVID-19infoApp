@@ -23,11 +23,6 @@ class RegisterViewModel(private val loginRepository: LoginRepository) : ViewMode
         }
     }
 
-    fun verfiyEmail(email: String){
-        viewModelScope.launch {
-            loginRepository.verifyEmail(email)
-        }
-    }
 
 
     fun registerDataChanged(username: String, password: String) {

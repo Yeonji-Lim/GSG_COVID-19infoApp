@@ -27,10 +27,15 @@ interface LoginAPI {
         @Body LoginToken: LoginToken
     ): Call<LoginToken>
 
+    @POST("pwChange/")
+    fun pwChange(
+        @Body PwChange: PwChange
+    ): Call<PwChangeSuccess>
+
     @POST("verifyEmail/")
     fun verifyEmail(
-        @Body signupEmail: SignupEmail
-    ): Call<SignupCode>
+        @Body SendEmail: SendEmail
+    ): Call<SendEmail>
 
     companion object{
         private const val BASE_URL_ROUTE="https://ab4fd298-6573-4ed6-a0f3-987108b4679a.mock.pstmn.io"

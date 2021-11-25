@@ -7,18 +7,24 @@ import android.util.Patterns
 import androidx.lifecycle.viewModelScope
 import com.example.covid_19info.data.LoginRepository
 import com.example.covid_19info.data.Result
+import com.example.covid_19info.data.ChangeResult
 
 import com.example.covid_19info.R
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.supervisorScope
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
 
+    private val _pwForm = MutableLiveData<PWFormState>()
+    val pwFormState: LiveData<PWFormState> = _pwForm
+
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
+
+    private val _pwResult = MutableLiveData<PWResult>()
+    val pwResult: LiveData<PWResult> = _pwResult
 
     fun login(username: String, password: String) {
         // can be launched in a separate asynchronous job
@@ -40,6 +46,25 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
         }
     }
 
+    fun pwChange(pw: String, code: String){
+        viewModelScope.launch {
+            val result = loginRepository.pwChange(pw, code)
+
+            if(result is ChangeResult.Success){
+                _pwResult.value = PWResult(success = R.string.pw_change_success)
+            }
+            else{
+                _pwResult.value = PWResult(error = R.string.pw_change_fail)
+            }
+        }
+    }
+
+    fun verifyEmail(email: String){
+        viewModelScope.launch {
+           loginRepository.verifyEmail(email)
+        }
+    }
+
     fun loginDataChanged(username: String, password: String) {
         if (!isUserNameValid(username)) {
             _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
@@ -49,6 +74,17 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
             _loginForm.value = LoginFormState(isDataValid = true)
         }
     }
+
+    fun pwDataChanged(username: String, password: String) {
+        if (!isUserNameValid(username)) {
+            _pwForm.value = PWFormState(usernameError = R.string.invalid_username)
+        } else if (!isPasswordValid(password)) {
+            _pwForm.value = PWFormState(passwordError = R.string.invalid_password)
+        } else {
+            _pwForm.value = PWFormState(isDataValid = true)
+        }
+    }
+
 
     // A placeholder username validation check
     private fun isUserNameValid(username: String): Boolean {

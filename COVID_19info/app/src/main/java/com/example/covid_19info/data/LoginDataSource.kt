@@ -2,6 +2,7 @@ package com.example.covid_19info.data
 
 import android.util.Log
 import com.example.covid_19info.data.model.*
+import com.example.covid_19info.ui.login.PWResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -39,29 +40,42 @@ class LoginDataSource {
         }
     }
 
-    suspend fun signup(email: String, password: String){
+    suspend fun signup(email: String, password: String): SignUpRst {
         return withContext(Dispatchers.IO){
             Log.d("main", "실행전")
             try {
                 var signUpRst = loginapi.signup(SignUpRst(email, password)).execute().body()
                 //회원가입 성공
                 //Log.d("main", signUpRst?.email!!)
-                return@withContext
+                return@withContext signUpRst!!
             } catch (e: Throwable) {
-                return@withContext
+                return@withContext SignUpRst("","")
             }
         }
     }
 
-    suspend fun verifyEmail(email: String){
+    suspend fun pwChange(pw: String, code: String): ChangeResult<PwchangeUser> {
         return withContext(Dispatchers.IO){
             try {
-                var signupEmail = loginapi.verifyEmail(SignupEmail(email)).execute().body()
+                var signupEmail = loginapi.pwChange(PwChange(pw, code)).execute().body()
                 //이메일 성공
                // Log.d("main", signupEmail?.code!!)
-                return@withContext
+                return@withContext ChangeResult.Success(PwchangeUser(signupEmail?.is_success))
             } catch (e: Throwable) {
-                return@withContext
+                return@withContext ChangeResult.Error(IOException("Error logging in", e))
+            }
+        }
+    }
+
+    suspend fun verifyEmail(email: String): SendEmail{
+        return withContext(Dispatchers.IO){
+            try {
+                var email = loginapi.verifyEmail(SendEmail(email)).execute().body()
+                //이메일 성공
+                // Log.d("main", signupEmail?.code!!)
+                return@withContext email!!
+            } catch (e: Throwable) {
+                return@withContext SendEmail("")
             }
         }
     }
