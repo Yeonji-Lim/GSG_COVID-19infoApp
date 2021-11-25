@@ -204,29 +204,9 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 //            Log.d("main", "in observe $userMarkerList")
 //            return@observe
 //        })
-        var db = context?.let { MyLocationDatabase.getInstance(it) }!!.locationDao()
-        db.getLocations().observe(viewLifecycleOwner, { locations ->
+        var db = context?.let { MyLocationDatabase.getInstance(it) }!!.locationDao().getLocations()
+        db.observe(viewLifecycleOwner, { locations ->
             Log.d("main", userMarkerList.size.toString())
-            if(userMarkerList.size == 0) {
-
-                //마크생성
-
-                for (location in locations) {
-                    var mark = map?.addMarker(
-                        MarkerOptions()
-                            .title(location.date.toString())
-                            .position((LatLng(location.latitude, location.longitude)))
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-
-                    )
-                    mark?.isVisible = true
-                    mark?.let { userMarkerList.add(it) }
-
-                }
-                Log.d("main", "in observe $userMarkerList")
-                Log.d("main", userMarkerList.size.toString())
-                return@observe
-            }
         })
 
 
@@ -270,29 +250,23 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             }
             //로그인 된 경우
             else {
-                for(usermark in userMarkerList){
-                    usermark.setVisible(true);
-
+                if(changeView.isSelected) {
+                    var locations = db.value
+                    locations?.let { it1 -> showUserRoute(it1) }
+                }else{
+                    for(mark in userMarkerList){
+                        mark.remove()
+                    }
+                    userMarkerList = mutableListOf()
                 }
-                Log.d("main", "in button listner $userMarkerList")
-                mapFragment?.view?.requestLayout()
+
+                Log.d("main", "in button listner ${db.value}")
 
                 Log.d("loginButton","user markers : $userMarkerList")
+                Log.d("main", quartineMarkerList.size.toString())
                 Log.d("main",userMarkerList.size.toString())
 
             }
-            //사용자 동선 선택 x
-//            if(changeView.isSelected)
-//            {
-//                Log.d("loginButton","USERTRUE")
-//                userMarker(true)
-//            }
-//            else
-//            {
-//                Log.d("loginButton","USERFALSE")
-//                userMarker(false)
-//            }
-
         }
 
         //하단 버튼 리스너 설정을 위한 변수 설정
@@ -629,6 +603,20 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             mark?.let { quartineMarkerList.add(it) }
         }
     }
+
+    private fun showUserRoute(routes: List<MyLocationEntity>){
+        for (location in routes) {
+            var mark = map?.addMarker(
+                MarkerOptions()
+                    .title("123")
+                    .position(LatLng(location.latitude, location.longitude))
+                    .snippet("321")
+            )
+            mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+            mark?.let { userMarkerList.add(it) }
+        }
+    }
+
 
     //사용자 동선 데이터베이스 테스트
     private fun showUserRoute(){
