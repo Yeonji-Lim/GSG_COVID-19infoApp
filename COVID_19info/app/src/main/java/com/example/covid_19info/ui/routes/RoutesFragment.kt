@@ -206,27 +206,9 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 //        })
         var db = context?.let { MyLocationDatabase.getInstance(it) }!!.locationDao()
         db.getLocations().observe(viewLifecycleOwner, { locations ->
-            Log.d("main", userMarkerList.size.toString())
-            if(userMarkerList.size == 0) {
 
-                //마크생성
-
-                for (location in locations) {
-                    var mark = map?.addMarker(
-                        MarkerOptions()
-                            .title(location.date.toString())
-                            .position((LatLng(location.latitude, location.longitude)))
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-
-                    )
-                    mark?.isVisible = true
-                    mark?.let { userMarkerList.add(it) }
-
-                }
-                Log.d("main", "in observe $userMarkerList")
-                Log.d("main", userMarkerList.size.toString())
-                return@observe
-            }
+            createUserMarker(locations)
+            db.getLocations().removeObservers(viewLifecycleOwner)
         })
 
 
@@ -628,6 +610,29 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                 mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             mark?.let { quartineMarkerList.add(it) }
         }
+    }
+
+    fun createUserMarker(locations : List<MyLocationEntity>){
+        Log.d("main", userMarkerList.size.toString())
+        if(userMarkerList.size == 0) {
+            //마크생성
+            for (location in locations) {
+                var mark = map?.addMarker(
+                    MarkerOptions()
+                        .title(location.date.toString())
+                        .position((LatLng(location.latitude, location.longitude)))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+
+                )
+                mark?.isVisible = true
+                mark?.let { userMarkerList.add(it) }
+
+            }
+            Log.d("main", "in observe $userMarkerList")
+            Log.d("main", userMarkerList.size.toString())
+        }
+
+
     }
 
     //사용자 동선 데이터베이스 테스트
