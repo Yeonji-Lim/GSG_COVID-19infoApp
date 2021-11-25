@@ -222,12 +222,12 @@ class StatisticsFragment : Fragment() {
         pageadapter = PagerFragmentStateAdapter(requireActivity())
         pageadapter.addFragment(StatBarChart.newInstance("", ""))
         pageadapter.addFragment(StatLineChart.newInstance("", ""))
-        pageadapter.addFragment(StatSido.newInstance("", ""))
+        pageadapter.addFragment(StatSidoQuarantine.newInstance("", ""))
 
         //백신 뷰페이저
         pageadapter1 = PagerFragmentStateAdapter(requireActivity())
         pageadapter1.addFragment(StatLineChart.newInstance("", ""))
-        pageadapter1.addFragment(StatSido.newInstance("", ""))
+        pageadapter1.addFragment(StatSidoVaccinated.newInstance("", ""))
 
         pager = binding.pager
         pager.adapter = pageadapter1
