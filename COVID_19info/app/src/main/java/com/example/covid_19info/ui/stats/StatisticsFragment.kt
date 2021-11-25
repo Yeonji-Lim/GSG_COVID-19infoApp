@@ -46,6 +46,9 @@ class StatisticsFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     var isvaccinated = true
+    lateinit var pager: ViewPager2
+    lateinit var pageadapter: PagerFragmentStateAdapter
+    lateinit var pageadapter1: PagerFragmentStateAdapter
 
     fun Int.dpToPx(displayMetrics: DisplayMetrics): Int = (this * displayMetrics.density).toInt()
 
@@ -75,37 +78,12 @@ class StatisticsFragment : Fragment() {
         //초기 데이터 로드
         updateNationVaccinated()
 
-        //뷰페이저 구현부
-        val pageadapter = PagerFragmentStateAdapter(requireActivity())
-        pageadapter.addFragment(StatBarChart())
-        pageadapter.addFragment(StatLineChart())
-        pageadapter.addFragment(StatSido())
-
-        val pageadapter1 = PagerFragmentStateAdapter(requireActivity())
-        pageadapter1.addFragment(StatLineChart())
-        pageadapter1.addFragment(StatSido())
-
-        var pager = binding.pager
-        pager.adapter = pageadapter1
-        pager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-        pager.apply {
-            clipToPadding = false   // allow full width shown with padding
-            clipChildren = false    // allow left/right item is not clipped
-            offscreenPageLimit = 2  // make sure left/right item is rendered
-        }
-        //그림자 잘림 해결
-        (pager.getChildAt(0) as ViewGroup).clipChildren = false
-
-        // 좌/우 노출되는 크기를 크게하려면 offsetPx 증가
-        val offsetPx = 35.dpToPx(resources.displayMetrics)
-        pager.setPadding(offsetPx, 5.dpToPx(resources.displayMetrics), offsetPx, offsetPx)
-
-        // 페이지간 마진 크게하려면 pageMarginPx 증가
-        val pageMarginPx = 15.dpToPx(resources.displayMetrics)
-        val marginTransformer = MarginPageTransformer(pageMarginPx)
-        pager.setPageTransformer(marginTransformer)
+        //차트 뷰 초기화
+        setChartView()
 
 
+
+        //백신버튼 리스너
         binding.vaccinatedBtn.setOnClickListener {
             if(!isvaccinated){
                 isvaccinated = true
@@ -127,6 +105,7 @@ class StatisticsFragment : Fragment() {
                 updateNationVaccinated()
             }
         }
+        //확진자 버튼 리스너
         binding.infectedBtn.setOnClickListener {
             if(isvaccinated){
                 isvaccinated = false
@@ -232,12 +211,39 @@ class StatisticsFragment : Fragment() {
         })
     }
 
+    //아래 차트 부분 초기화
+    private fun setChartView(){
+        //확진자 뷰페이저 구현부
+        pageadapter = PagerFragmentStateAdapter(requireActivity())
+        pageadapter.addFragment(StatBarChart())
+        pageadapter.addFragment(StatLineChart())
+        pageadapter.addFragment(StatSido())
 
-    //뷰페이저 내용 들어가는 부분
-    private fun getStaticList():ArrayList<Int>{
-        return arrayListOf<Int>(R.drawable.ic_menu_camera,R.drawable.ic_menu_gallery )
+        //백신 뷰페이저
+        pageadapter1 = PagerFragmentStateAdapter(requireActivity())
+        pageadapter1.addFragment(StatLineChart())
+        pageadapter1.addFragment(StatSido())
+
+        pager = binding.pager
+        pager.adapter = pageadapter1
+        pager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        pager.apply {
+            clipToPadding = false   // allow full width shown with padding
+            clipChildren = false    // allow left/right item is not clipped
+            offscreenPageLimit = 2  // make sure left/right item is rendered
+        }
+        //그림자 잘림 해결
+        (pager.getChildAt(0) as ViewGroup).clipChildren = false
+
+        // 좌/우 노출되는 크기를 크게하려면 offsetPx 증가
+        val offsetPx = 35.dpToPx(resources.displayMetrics)
+        pager.setPadding(offsetPx, 5.dpToPx(resources.displayMetrics), offsetPx, offsetPx)
+
+        // 페이지간 마진 크게하려면 pageMarginPx 증가
+        val pageMarginPx = 15.dpToPx(resources.displayMetrics)
+        val marginTransformer = MarginPageTransformer(pageMarginPx)
+        pager.setPageTransformer(marginTransformer)
     }
-
 
 
     companion object {
