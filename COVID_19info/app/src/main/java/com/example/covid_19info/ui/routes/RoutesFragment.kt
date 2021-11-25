@@ -185,10 +185,10 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 //                .getLocations()
 //        }?.observe(this, { locations ->
 //            for(mark in userMarkerList){
+//
 //                mark.remove()
 //            }
 //            userMarkerList.clear()
-//
 //            //마크생성
 //            for (location in locations) {
 //                var mark = map?.addMarker(
@@ -206,25 +206,27 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 //        })
         var db = context?.let { MyLocationDatabase.getInstance(it) }!!.locationDao()
         db.getLocations().observe(viewLifecycleOwner, { locations ->
-            for(mark in userMarkerList){
-                mark.remove()
-            } 
-            userMarkerList.clear()
+            Log.d("main", userMarkerList.size.toString())
+            if(userMarkerList.size == 0) {
 
-            //마크생성
-            for (location in locations) {
-                var mark = map?.addMarker(
-                    MarkerOptions()
-                        .title(location.date.toString())
-                        .position((LatLng(location.latitude, location.longitude)))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                )
-                mark?.isVisible = true
-                mark?.let { userMarkerList.add(it) }
+                //마크생성
 
+                for (location in locations) {
+                    var mark = map?.addMarker(
+                        MarkerOptions()
+                            .title(location.date.toString())
+                            .position((LatLng(location.latitude, location.longitude)))
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+
+                    )
+                    mark?.isVisible = true
+                    mark?.let { userMarkerList.add(it) }
+
+                }
+                Log.d("main", "in observe $userMarkerList")
+                Log.d("main", userMarkerList.size.toString())
+                return@observe
             }
-            Log.d("main", "in observe $userMarkerList")
-            return@observe
         })
 
 
@@ -269,12 +271,14 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             //로그인 된 경우
             else {
                 for(usermark in userMarkerList){
-                    usermark.isVisible = true
+                    usermark.setVisible(true);
+
                 }
                 Log.d("main", "in button listner $userMarkerList")
                 mapFragment?.view?.requestLayout()
 
                 Log.d("loginButton","user markers : $userMarkerList")
+                Log.d("main",userMarkerList.size.toString())
 
             }
             //사용자 동선 선택 x
