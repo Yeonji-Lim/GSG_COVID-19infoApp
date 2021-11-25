@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.stats.StatisticsFragment"
+    >
+
+
+    <Button
+        android:id="@+id/infected_btn"
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:background="@drawable/curved_rectangle"
+        android:gravity="center"
+        android:text="확진자 현황"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/vaccinated_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/vaccinated_btn"
+        app:layout_constraintTop_toTopOf="@+id/vaccinated_btn"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints"
+        android:elevation="10dp"/>
+
+    <Button
+        android:id="@+id/vaccinated_btn"
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/curved_rectangle_gray"
+        android:gravity="center"
+        android:text="백신 접종 현황"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        android:elevation="10dp"/>
+
+    <TextView
+        android:id="@+id/stat_main_title"
+        android:layout_width="277dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="28dp"
+        android:text="@string/vaccinated_title_text"
+        android:textColor="#FF3C3B3B"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/vaccinated_btn"
+        app:layout_constraintTop_toBottomOf="@+id/vaccinated_btn"
+        tools:ignore="MissingConstraints" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stat_secondary_background" />
+
+    <TextView
+        android:id="@+id/stat_primary_background"
+        android:layout_width="105dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/curved_rectangle"
+        android:backgroundTint="#50BEC9"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/stat_secondary_background"
+        app:layout_constraintEnd_toStartOf="@+id/stat_secondary_background"
+        app:layout_constraintTop_toTopOf="@+id/stat_secondary_background"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints" />
+
+
+    <TextView
+        android:id="@+id/stat_primary_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/vaccinated_box1_text"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/stat_primary_background"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/stat_primary_background"
+        app:layout_constraintTop_toTopOf="@+id/stat_primary_background" />
+
+    <TextView
+        android:id="@+id/stat_primary_figure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="370,000 명"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/stat_primary_background"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/stat_primary_background"
+        app:layout_constraintTop_toBottomOf="@+id/stat_primary_title" />
+
+    <TextView
+        android:id="@+id/stat_primary_inc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="2,000"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/stat_primary_background"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="@+id/stat_primary_background"
+        app:layout_constraintTop_toBottomOf="@+id/stat_primary_figure" />
+
+    <TextView
+        android:id="@+id/stat_secondary_background"
+        android:layout_width="105dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/curved_rectangle"
+        android:backgroundTint="#50BEC9"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stat_main_title"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/stat_secondary_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/vaccinated_box2_text"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/stat_secondary_background"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/stat_secondary_background"
+        app:layout_constraintTop_toTopOf="@+id/stat_secondary_background" />
+
+    <TextView
+        android:id="@+id/stat_secondary_figure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="370,000 명"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/stat_secondary_background"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/stat_secondary_background"
+        app:layout_constraintTop_toBottomOf="@+id/stat_primary_title" />
+
+    <TextView
+        android:id="@+id/stat_secondary_inc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="2,000  "
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/stat_secondary_background"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="@+id/stat_secondary_background"
+        app:layout_constraintTop_toBottomOf="@+id/stat_secondary_figure" />
+
+    <TextView
+        android:id="@+id/stat_third_background"
+        android:layout_width="105dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="15dp"
+        android:background="@drawable/curved_rectangle"
+        android:backgroundTint="#50BEC9"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/stat_secondary_background"
+        app:layout_constraintStart_toEndOf="@+id/stat_secondary_background"
+        app:layout_constraintTop_toTopOf="@+id/stat_secondary_background"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/stat_third_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/vaccinated_box3_text"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/stat_third_background"
+        app:layout_constraintStart_toStartOf="@+id/stat_third_background"
+        app:layout_constraintTop_toTopOf="@+id/stat_third_background" />
+
+    <TextView
+        android:id="@+id/stat_third_figure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="370,000 명"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/stat_third_background"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/stat_third_background"
+        app:layout_constraintTop_toBottomOf="@+id/stat_third_title" />
+
+    <TextView
+        android:id="@+id/stat_third_inc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="2,000  "
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/stat_third_background"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="@+id/stat_third_background"
+        app:layout_constraintTop_toBottomOf="@+id/stat_third_figure" />
+
+    <TextView
+        android:id="@+id/stat_time_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2021.11.03 00:00 집계 기준"
+        app:layout_constraintBottom_toTopOf="@+id/pager"
+        app:layout_constraintEnd_toEndOf="@+id/pager"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/pager" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="20dp"
+        android:layout_height="19dp"
+        android:src="@drawable/white_up_arrow"
+        app:layout_constraintBottom_toBottomOf="@+id/stat_primary_inc"
+        app:layout_constraintEnd_toEndOf="@+id/stat_primary_background"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/stat_primary_inc"
+        app:layout_constraintTop_toTopOf="@+id/stat_primary_inc" />
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="20dp"
+        android:layout_height="19dp"
+        android:src="@drawable/white_up_arrow"
+        app:layout_constraintBottom_toBottomOf="@+id/stat_secondary_inc"
+        app:layout_constraintEnd_toEndOf="@+id/stat_secondary_background"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/stat_secondary_inc"
+        app:layout_constraintTop_toTopOf="@+id/stat_secondary_inc"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/imageView11"
+        android:layout_width="20dp"
+        android:layout_height="19dp"
+        android:src="@drawable/white_up_arrow"
+        app:layout_constraintBottom_toBottomOf="@+id/stat_third_inc"
+        app:layout_constraintEnd_toEndOf="@+id/stat_third_background"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/stat_third_inc"
+        app:layout_constraintTop_toTopOf="@+id/stat_third_inc"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

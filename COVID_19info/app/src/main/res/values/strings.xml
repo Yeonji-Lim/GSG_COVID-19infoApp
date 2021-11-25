@@ -36,7 +36,27 @@
     <string name="stop_receiving_location">동선 기록 중단</string>
     <string name="start_receiving_location">동선 기록 시작</string>
 
+    <string name="vaccinated_title_text">전국 백신 누적 접종 현황</string>
+    <string name="vaccinated_box1_text">1차 접종</string>
+    <string name="vaccinated_box2_text">2차 접종</string>
+    <string name="vaccinated_box3_text">추가 접종</string>
+    <string name="vaccinated_chart1_name">일일 확진자 현황</string>
+    <string name="vaccinated_chart2_name">누적 감염 현황</string>
+    <string name="nation_data">%1$,d 명</string>
+    <string name="nation_data_f">%1$.2f %%</string>
+
+    <string name="quarantine_title_text">전국 감염 현황</string>
+    <string name="quarantine_box1_text">확진자</string>
+    <string name="quarantine_box2_text">격리해제</string>
+    <string name="quarantine_box3_text">사망자</string>
+    <string name="quarantine_chart1_name">일일 확진자 현황</string>
+    <string name="quarantine_chart2_name">누적 감염 현황</string>
+    <string name="quarantine_chart3_name">시도별 감염 현황</string>
+
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bar_chart_text">일일 확진자 현황</string>
 </resources>

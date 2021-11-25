@@ -1,7 +1,6 @@
 package com.example.covid_19info.ui.routes
 
 import android.Manifest
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
@@ -18,9 +17,6 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.covid_19info.BuildConfig
-import com.example.covid_19info.MainActivity
-import com.example.covid_19info.R
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -35,40 +31,44 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.core.view.*
 import kotlin.math.roundToInt
-import android.view.animation.Animation
-import android.view.animation.Transformation
 import android.animation.ValueAnimator
-import android.animation.ValueAnimator.AnimatorUpdateListener
+import android.content.Intent
 import android.os.Build
 
 import android.widget.LinearLayout
 
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.findFragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import com.example.covid_19info.*
+import com.example.covid_19info.data.LocationRepository
 import com.example.covid_19info.data.QuarantinesRouteAPI
+import com.example.covid_19info.data.model.MyLocationDao
+import com.example.covid_19info.data.model.MyLocationDatabase
+import com.example.covid_19info.data.model.MyLocationEntity
 import com.example.covid_19info.data.model.Quarantines
+import com.example.covid_19info.databinding.ActivityMainBinding
 import com.google.android.gms.maps.model.*
-import com.google.android.libraries.places.api.model.RectangularBounds
-import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-
+import java.util.concurrent.Executors
 
 
 class RoutesFragment : Fragment(), OnMapReadyCallback {
+    private lateinit var binding: ActivityMainBinding
+
     // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
     lateinit var mainActivity: MainActivity
     override fun onAttach(context: Context) {
@@ -101,9 +101,12 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 
     //확진자 동선 데이터
     lateinit private var quarantinesData: Quarantines
-    private var quartineMarkerList: MutableList<Marker> = mutableListOf()
 
+    private var quartineMarkerList: MutableList<Marker> = mutableListOf()
+    private var userMarkerList: MutableList<Marker> = mutableListOf()
     lateinit var buttons :LinearLayout
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -176,14 +179,94 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         //검색 가능 지역 한국으로 고정
         autocompleteFragment.setCountry("KR")
 
-
+        //장소 가져오기
+//        context?.let { it1 ->
+//            LocationRepository.getInstance(it1, Executors.newSingleThreadExecutor())
+//                .getLocations()
+//        }?.observe(this, { locations ->
+//            for(mark in userMarkerList){
+//
+//                mark.remove()
+//            }
+//            userMarkerList.clear()
+//            //마크생성
+//            for (location in locations) {
+//                var mark = map?.addMarker(
+//                    MarkerOptions()
+//                        .title(location.date.toString())
+//                        .position((LatLng(location.latitude, location.longitude)))
+//                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+//                )
+//                mark?.isVisible = false
+//                mark?.let { userMarkerList.add(it) }
+//
+//            }
+//            Log.d("main", "in observe $userMarkerList")
+//            return@observe
+//        })
+        var db = context?.let { MyLocationDatabase.getInstance(it) }!!.locationDao().getLocations()
+        db.observe(viewLifecycleOwner, { locations ->
+            Log.d("main", userMarkerList.size.toString())
+        })
 
 
         //프래그먼트 내부 버튼 리스너 설정
         //changeView 리스너
         val changeView = view.findViewById<Button>(R.id.changeView)
         changeView.setOnClickListener {
+            Log.d("loginButton","Click")
+            Log.d("loginButton",changeView.isSelected.toString())
             changeView?.isSelected = changeView?.isSelected != true
+
+            val pref = PreferenceUtil()
+            //로그인 안된경우
+            if(pref.getString("token", "")==""){
+                Log.d("loginButton","OFF")
+                val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_yes_no,null)
+                val mBuilder = context?.let { it1 ->
+                    AlertDialog.Builder(it1)
+                        .setView(mDialogView)
+                }
+
+                val mAlertDialog = mBuilder?.show()
+                mDialogView.findViewById<TextView>(R.id.dialog_text).text="로그인이 필요한 메뉴입니다."
+
+                //취소버튼
+                val noBtn = mDialogView.findViewById<Button>(R.id.no_logout_btn)
+                noBtn.setOnClickListener{
+                    mAlertDialog?.dismiss()
+                }
+
+                //확인버튼
+                val yesBtn = mDialogView.findViewById<Button>(R.id.yes_logout_btn)
+                yesBtn.text="로그인"
+                yesBtn.setOnClickListener{
+                    //로그인 액티비티로 이동
+                    var intent = Intent(context, LoginActivity::class.java)
+                    startActivity(intent)
+
+                    mAlertDialog?.dismiss()
+                }
+            }
+            //로그인 된 경우
+            else {
+                if(changeView.isSelected) {
+                    var locations = db.value
+                    locations?.let { it1 -> showUserRoute(it1) }
+                }else{
+                    for(mark in userMarkerList){
+                        mark.remove()
+                    }
+                    userMarkerList = mutableListOf()
+                }
+
+                Log.d("main", "in button listner ${db.value}")
+
+                Log.d("loginButton","user markers : $userMarkerList")
+                Log.d("main", quartineMarkerList.size.toString())
+                Log.d("main",userMarkerList.size.toString())
+
+            }
         }
 
         //하단 버튼 리스너 설정을 위한 변수 설정
@@ -206,6 +289,9 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                 Log.d("Main", "실패 : ${t}")
             }
         })
+
+        //showUserRoute()
+
     }
 
     /**
@@ -518,6 +604,48 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    private fun showUserRoute(routes: List<MyLocationEntity>){
+        for (location in routes) {
+            var mark = map?.addMarker(
+                MarkerOptions()
+                    .title("123")
+                    .position(LatLng(location.latitude, location.longitude))
+                    .snippet("321")
+            )
+            mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+            mark?.let { userMarkerList.add(it) }
+        }
+    }
+
+
+    //사용자 동선 데이터베이스 테스트
+    private fun showUserRoute(){
+        var db = context?.let { MyLocationDatabase.getInstance(it)}
+        var loc = db?.locationDao()?.getLocations()
+
+        Log.d("tagtag",loc?.value?.get(0).toString())
+        var mark = map?.addMarker(MarkerOptions()
+            .position((LatLng(loc?.value?.get(0)?.latitude!!,loc?.value?.get(0)?.longitude!!)))
+        )
+        mark?.let { userMarkerList.add(it) }
+        userMarkerList[0].isVisible = true
+    }
+
+    fun userMarkervisible(visible : Boolean){
+        if(visible)
+        {
+            for(mark in userMarkerList) {
+                mark.isVisible = true
+            }
+        }
+        else
+        {
+            for(mark in userMarkerList) {
+                mark.isVisible = false
+            }
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
     fun setButtonsMove(): Boolean {
@@ -532,11 +660,6 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             if(btn.id==R.id.moveButtons){
                 btn.setOnTouchListener { view, motionEvent ->
                     Log.d("main", "${motionEvent.actionMasked}")
-                    when(motionEvent.actionMasked){
-                        MotionEvent.ACTION_UP->{
-                            true
-                        }
-                    }
                     return@setOnTouchListener gestureDetector.onTouchEvent(motionEvent)
                 }
             }else{
@@ -590,6 +713,8 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             mark.isVisible = diff <= constraint
         }
     }
+
+
 
     companion object {
         private val TAG = MainActivity::class.java.simpleName
