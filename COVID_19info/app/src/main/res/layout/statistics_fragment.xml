@@ -64,14 +64,14 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pager"
-        android:layout_height="0dp"
         android:layout_width="0dp"
-        android:layout_marginTop="15dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="40dp"
         android:layout_marginBottom="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stat_sub_title"/>
+        app:layout_constraintTop_toBottomOf="@+id/stat_secondary_background" />
 
     <TextView
         android:id="@+id/stat_primary_background"
@@ -228,21 +228,6 @@
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="@+id/stat_third_background"
         app:layout_constraintTop_toBottomOf="@+id/stat_third_figure" />
-
-    <TextView
-        android:id="@+id/stat_sub_title"
-        android:layout_width="220dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="25dp"
-        android:text="@string/vaccinated_chart1_name"
-        android:textColor="#3C3B3B"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/stat_main_title"
-        app:layout_constraintTop_toBottomOf="@+id/stat_secondary_background"
-        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/stat_time_txt"

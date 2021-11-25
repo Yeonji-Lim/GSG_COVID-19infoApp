@@ -25,8 +25,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import androidx.recyclerview.widget.RecyclerView
-
-
+import java.text.DateFormat
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -167,11 +166,17 @@ class StatisticsFragment : Fragment() {
     }
     private fun updateVaccinatedData(){
         val quarantine = QuarantinesAPI.create()
-        var today = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt()
-        Log.d("stat", today.toString())
+        val today = Calendar.getInstance()
+        today.time = Date()
+        val start = Calendar.getInstance()
+        start.time = Date()
+        start.add(Calendar.DATE, -3)
+        val df = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+        Log.d("stat", df.format(today.time))
+
         quarantine.getQuarantineStat(page = 1,
-            startCreateDt = (today-10).toString(),
-            endCreateDt = today.toString()).enqueue(object: Callback<QuarantinStat> {
+            startCreateDt = df.format(start.time),
+            endCreateDt = df.format(today.time)).enqueue(object: Callback<QuarantinStat> {
             override fun onResponse(
                 call: Call<QuarantinStat>,
                 response: Response<QuarantinStat>
@@ -215,14 +220,14 @@ class StatisticsFragment : Fragment() {
     private fun setChartView(){
         //확진자 뷰페이저 구현부
         pageadapter = PagerFragmentStateAdapter(requireActivity())
-        pageadapter.addFragment(StatBarChart())
-        pageadapter.addFragment(StatLineChart())
-        pageadapter.addFragment(StatSido())
+        pageadapter.addFragment(StatBarChart.newInstance("", ""))
+        pageadapter.addFragment(StatLineChart.newInstance("", ""))
+        pageadapter.addFragment(StatSido.newInstance("", ""))
 
         //백신 뷰페이저
         pageadapter1 = PagerFragmentStateAdapter(requireActivity())
-        pageadapter1.addFragment(StatLineChart())
-        pageadapter1.addFragment(StatSido())
+        pageadapter1.addFragment(StatLineChart.newInstance("", ""))
+        pageadapter1.addFragment(StatSido.newInstance("", ""))
 
         pager = binding.pager
         pager.adapter = pageadapter1
