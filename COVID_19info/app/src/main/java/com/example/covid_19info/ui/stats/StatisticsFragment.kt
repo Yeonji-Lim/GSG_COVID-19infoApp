@@ -3,11 +3,13 @@ package com.example.covid_19info.ui.stats
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.example.covid_19info.R
 import com.example.covid_19info.data.QuarantinesAPI
@@ -22,6 +24,10 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import androidx.recyclerview.widget.RecyclerView
+
+
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -40,6 +46,8 @@ class StatisticsFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     var isvaccinated = true
+
+    fun Int.dpToPx(displayMetrics: DisplayMetrics): Int = (this * displayMetrics.density).toInt()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,12 +74,36 @@ class StatisticsFragment : Fragment() {
 
         //초기 데이터 로드
         updateNationVaccinated()
+
         //뷰페이저 구현부
         val pageadapter = PagerFragmentStateAdapter(requireActivity())
-        //pageadapter.addFragment(LineChart())
-        binding.pager.adapter = pageadapter
-        binding.pager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        pageadapter.addFragment(StatBarChart())
+        pageadapter.addFragment(StatLineChart())
+        pageadapter.addFragment(StatSido())
 
+        val pageadapter1 = PagerFragmentStateAdapter(requireActivity())
+        pageadapter1.addFragment(StatLineChart())
+        pageadapter1.addFragment(StatSido())
+
+        var pager = binding.pager
+        pager.adapter = pageadapter1
+        pager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        pager.apply {
+            clipToPadding = false   // allow full width shown with padding
+            clipChildren = false    // allow left/right item is not clipped
+            offscreenPageLimit = 2  // make sure left/right item is rendered
+        }
+        //그림자 잘림 해결
+        (pager.getChildAt(0) as ViewGroup).clipChildren = false
+
+        // 좌/우 노출되는 크기를 크게하려면 offsetPx 증가
+        val offsetPx = 35.dpToPx(resources.displayMetrics)
+        pager.setPadding(offsetPx, 5.dpToPx(resources.displayMetrics), offsetPx, offsetPx)
+
+        // 페이지간 마진 크게하려면 pageMarginPx 증가
+        val pageMarginPx = 15.dpToPx(resources.displayMetrics)
+        val marginTransformer = MarginPageTransformer(pageMarginPx)
+        pager.setPageTransformer(marginTransformer)
 
 
         binding.vaccinatedBtn.setOnClickListener {
@@ -87,6 +119,11 @@ class StatisticsFragment : Fragment() {
                 binding.vaccinatedBtn.setTextColor(Color.WHITE)
                 binding.infectedBtn.setBackgroundResource(R.drawable.curved_rectangle)
                 binding.infectedBtn.setTextColor(Color.BLACK)
+
+                //차트 변경
+                pager.adapter = pageadapter1
+
+                //총합 데이터 출력
                 updateNationVaccinated()
             }
         }
@@ -103,6 +140,10 @@ class StatisticsFragment : Fragment() {
                 binding.vaccinatedBtn.setBackgroundResource(R.drawable.curved_rectangle)
                 binding.vaccinatedBtn.setTextColor(Color.BLACK)
 
+                //차트 변경
+                pager.adapter = pageadapter
+
+                //총합 데이터 출력
                 updateVaccinatedData()
             }
         }

@@ -3,6 +3,7 @@ package com.example.covid_19info.ui.stats
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import java.util.Collections.swap
 
 //class ViewPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
 //    var fragments : ArrayList<Fragment> = ArrayList()
@@ -45,5 +46,10 @@ class PagerFragmentStateAdapter(fragmentActivity: FragmentActivity) : FragmentSt
     fun removeFragment(){
         fragments.removeLast()
         notifyItemRemoved(fragments.size)
+    }
+
+
+    fun setVisibleFirst(){
+        notifyItemRangeChanged(0, fragments.size)
     }
 }
