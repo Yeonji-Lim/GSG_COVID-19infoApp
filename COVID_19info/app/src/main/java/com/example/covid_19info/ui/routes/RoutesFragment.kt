@@ -660,11 +660,6 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             if(btn.id==R.id.moveButtons){
                 btn.setOnTouchListener { view, motionEvent ->
                     Log.d("main", "${motionEvent.actionMasked}")
-                    when(motionEvent.actionMasked){
-                        MotionEvent.ACTION_UP->{
-                            true
-                        }
-                    }
                     return@setOnTouchListener gestureDetector.onTouchEvent(motionEvent)
                 }
             }else{
