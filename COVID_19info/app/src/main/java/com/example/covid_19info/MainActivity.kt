@@ -27,14 +27,19 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.example.covid_19info.BuildConfig.MAPS_API_KEY
+import com.example.covid_19info.databinding.ActivityLoginBinding
+import com.example.covid_19info.databinding.ActivityMainBinding
 import com.example.covid_19info.data.model.MyLocationDatabase
 import com.example.covid_19info.ui.routes.RoutesFragment
+import com.example.covid_19info.ui.stats.StatisticsFragment
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -54,24 +59,28 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlin.system.exitProcess
 
 /**
  * An activity that displays a map showing the place at the device's current location.
  */
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+
+    private var backPressedTime = 0L
 
     // [START maps_current_place_on_create]
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)//R.layout.activity_main)
         //preferenceutil초기화
         PreferenceUtil.context = applicationContext
 
-        setContentView(R.layout.activity_main)
-
         //로그인 창 이동 구현
-        val profileBtn = findViewById<ImageButton>(R.id.user_profile_button)
+        val profileBtn = binding.userProfileButton//findViewById<ImageButton>(R.id.user_profile_button)
         profileBtn.setOnClickListener {
             var logindata = getSharedPreferences("login", MODE_PRIVATE)
 
@@ -87,20 +96,34 @@ class MainActivity : AppCompatActivity() {
         }
 
         //bottom_navigation listener 설정
-        var bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        var bottomNav = binding.bottomNavigationView//findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
         bottomNav.setOnItemSelectedListener { item ->
-            changeFragment(
-                when(item.itemId) {
-                    R.id.page_routes -> {
-                        //버튼 상태 변경
-                        RoutesFragment()
-                    }
-                    else -> {
-                        RoutesFragment()
-                    }
+            when(item.itemId) {
+                R.id.page_routes -> {
+                    //버튼 상태 변경
+                    supportFragmentManager.popBackStack("map", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    val fragmentA = RoutesFragment()
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.main_background, fragmentA, "map")
+                        .addToBackStack("map")
+                        .commit()
+                    //RoutesFragment()
                 }
-            )
+                else -> {
+                    //버튼 상태 변경
+                    supportFragmentManager.popBackStack("stat", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    val fragmentB = StatisticsFragment()
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.main_background, fragmentB, "stat")
+                        .addToBackStack("stat")
+                        .commit()
+//                    StatisticsFragment()
+                }
+            }
+
             return@setOnItemSelectedListener true
         }
 
@@ -108,12 +131,40 @@ class MainActivity : AppCompatActivity() {
         bottomNav.selectedItemId = R.id.page_routes
     }
 
-    //프래그먼트 변경 함수
-    private fun changeFragment(fragment: Fragment) {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.main_background, fragment)
-            .commit()
+//    //프래그먼트 변경 함수
+//    private fun changeFragment(fragment: Fragment) {
+//        supportFragmentManager
+//            .beginTransaction()
+//            .replace(R.id.main_background, fragment)
+//            .commit()
+//    }
+    //bottom menu update
+    private fun updateBottomMenu(navigation: BottomNavigationView) {
+        val tag1: Fragment? = supportFragmentManager.findFragmentByTag("map")
+        val tag2: Fragment? = supportFragmentManager.findFragmentByTag("stat")
+
+        if(tag1 != null && tag1.isVisible) {navigation.menu.findItem(R.id.page_routes).isChecked = true }
+        if(tag2 != null && tag2.isVisible) {navigation.menu.findItem(R.id.page_statistics).isChecked = true }
+    }
+
+    //뒤로가기 버튼 오버라이딩딩
+   override fun onBackPressed() {
+        if(supportFragmentManager.backStackEntryCount == 1) {
+            val tempTime = System.currentTimeMillis()
+            val intervalTime = tempTime - backPressedTime
+            if (!(0 > intervalTime || Companion.FINISH_INTERVAL_TIME < intervalTime)) {
+                finishAffinity()
+                System.runFinalization()
+                finish()
+            } else {
+                backPressedTime = tempTime
+                Toast.makeText(this, "'뒤로' 버튼을 한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
+        super.onBackPressed()
+        val bnv = binding.bottomNavigationView
+        updateBottomMenu(bnv)
     }
 
     /**
@@ -125,5 +176,8 @@ class MainActivity : AppCompatActivity() {
 //        menuInflater.inflate(R.menu.current_place_menu, menu)
 //        return true
 //    }
+    companion object {
+        const val FINISH_INTERVAL_TIME = 2200
+    }
 
 }
