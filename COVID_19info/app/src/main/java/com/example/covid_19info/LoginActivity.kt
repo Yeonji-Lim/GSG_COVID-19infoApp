@@ -47,15 +47,9 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.findIdBtn?.setOnClickListener{
-            val intent = Intent(this,FindAccountActivity::class.java)
-            intent.putExtra("is_ID",true)
-            startActivity(intent)
-        }
-
         binding.findPwBtn?.setOnClickListener {
-            val intent = Intent(this,FindAccountActivity::class.java)
-            intent.putExtra("is_ID",false)
+            val intent = Intent(this,PasswordChangeActivity::class.java)
+            intent.putExtra("is_find",true)
             startActivity(intent)
         }
 

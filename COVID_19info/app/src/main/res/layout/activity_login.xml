@@ -160,72 +160,43 @@
         app:layout_constraintStart_toStartOf="@+id/password" />
 
     <TextView
-        android:id="@+id/find_id_btn"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
-        android:text="ID 찾기"
-        android:textColor="#4EBFC7"
-        android:textSize="16sp"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="@+id/find_pw_btn"
-        app:layout_constraintEnd_toStartOf="@+id/textView22"
-        app:layout_constraintTop_toTopOf="@+id/find_pw_btn" />
-
-    <TextView
         android:id="@+id/find_pw_btn"
-        android:layout_width="100dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:gravity="center"
         android:text="PW 찾기"
         android:textColor="#4EBFC7"
         android:textSize="16sp"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintBottom_toBottomOf="@+id/textView23"
+        app:layout_constraintEnd_toStartOf="@+id/textView23"
+        app:layout_constraintTop_toTopOf="@+id/textView23"
+        app:layout_constraintVertical_bias="0.5" />
 
     <TextView
         android:id="@+id/register_btn"
-        android:layout_width="100dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
+        android:gravity="center
+"
         android:text="회원가입"
         android:textColor="#4EBFC7"
         android:textSize="16sp"
-        android:gravity="center
-"
-        app:layout_constraintBottom_toBottomOf="@+id/find_pw_btn"
+        app:layout_constraintBottom_toBottomOf="@+id/textView23"
         app:layout_constraintStart_toEndOf="@+id/textView23"
-        app:layout_constraintTop_toTopOf="@+id/find_pw_btn"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/textView22"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
-        android:text="|"
-        android:textColor="#4EBFC7"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/find_pw_btn"
-        app:layout_constraintEnd_toStartOf="@+id/find_pw_btn"
-        app:layout_constraintTop_toTopOf="@+id/find_pw_btn"
+        app:layout_constraintTop_toTopOf="@+id/textView23"
         app:layout_constraintVertical_bias="0.5" />
 
     <TextView
         android:id="@+id/textView23"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
+        android:layout_marginTop="8dp"
         android:text="|"
         android:textColor="#4EBFC7"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/find_pw_btn"
-        app:layout_constraintStart_toEndOf="@+id/find_pw_btn"
-        app:layout_constraintTop_toTopOf="@+id/find_pw_btn"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

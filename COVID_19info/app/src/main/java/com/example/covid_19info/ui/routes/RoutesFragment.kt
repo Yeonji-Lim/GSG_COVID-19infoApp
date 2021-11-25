@@ -232,13 +232,13 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                 mDialogView.findViewById<TextView>(R.id.dialog_text).text="로그인이 필요한 메뉴입니다."
 
                 //취소버튼
-                val noBtn = mDialogView.findViewById<Button>(R.id.no_logout_btn)
+                val noBtn = mDialogView.findViewById<Button>(R.id.no_btn)
                 noBtn.setOnClickListener{
                     mAlertDialog?.dismiss()
                 }
 
                 //확인버튼
-                val yesBtn = mDialogView.findViewById<Button>(R.id.yes_logout_btn)
+                val yesBtn = mDialogView.findViewById<Button>(R.id.yes_btn)
                 yesBtn.text="로그인"
                 yesBtn.setOnClickListener{
                     //로그인 액티비티로 이동

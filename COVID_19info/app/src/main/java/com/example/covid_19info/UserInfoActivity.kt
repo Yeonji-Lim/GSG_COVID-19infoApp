@@ -93,7 +93,9 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
 
         //비밀번호 변경 터치 시
         binding.passwordChangeBackground.setOnClickListener{
-            startActivity(Intent(this,PasswordChangeActivity::class.java))
+            val intent = Intent(this,PasswordChangeActivity::class.java)
+            intent.putExtra("is_find",false)
+            startActivity(intent)
         }
 
         //위치정보 제공동의 터치 시

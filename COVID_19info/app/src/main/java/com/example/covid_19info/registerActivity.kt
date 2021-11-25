@@ -31,10 +31,8 @@ class registerActivity : AppCompatActivity() {
         val email = binding.email
         val password = binding.password
         val passwordConfirm = binding.passwordConfirm
-        val certificationNum = binding.certificationNum
         val register = binding.register
         val loading = binding.loading
-        val verifyEmail = binding.verifyEmail
 
         registerViewModel = ViewModelProvider(this, RegisterViewModelFactory())
             .get(RegisterViewModel::class.java)
@@ -80,9 +78,7 @@ class registerActivity : AppCompatActivity() {
             )
         }
 
-        verifyEmail.setOnClickListener {
-            registerViewModel.verfiyEmail(email.text.toString())
-        }
+
 
         password.apply {
             afterTextChanged {
