@@ -1,11 +1,26 @@
 package com.example.covid_19info.ui.stats
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.covid_19info.R
+import com.example.covid_19info.data.VaccinatedAPI
+import com.example.covid_19info.data.model.VaccinatedInfo
+import com.example.covid_19info.databinding.FragmentStatLineChartBinding
+import com.github.mikephil.charting.data.ChartData
+import com.github.mikephil.charting.data.Entry
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import kotlin.collections.ArrayList
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,7 +36,7 @@ class StatLineChart : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    private lateinit var binding: FragmentStatLineChartBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -34,8 +49,57 @@ class StatLineChart : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        binding = FragmentStatLineChartBinding.inflate(layoutInflater)
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_stat_line_chart, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        //백신 데이터 로드
+        val day = 50
+        val vaccinated = VaccinatedAPI.createsido()
+        val today = Calendar.getInstance()
+        today.time = Date()
+        today.add(Calendar.DATE, -day)
+        val df = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        vaccinated.getVaccinatedSidoData(page = 1,
+            perPage = day*18,
+            date = df.format(today.time)).enqueue(object: Callback<VaccinatedInfo> {
+            override fun onResponse(
+                call: Call<VaccinatedInfo>,
+                response: Response<VaccinatedInfo>
+            ){
+                Log.d("vac", response.toString())
+                Log.d("vac", response.body()?.perPage.toString())
+                //업데이트
+                response.body()?.let { updateInfo(it) }
+            }
+            override fun onFailure(call: Call<VaccinatedInfo>, t: Throwable) {
+                //TODO("Not yet implemented")
+                Log.d("stat", t.toString())
+            }
+        })
+    }
+
+    private fun updateInfo(vaccinatedInfo: VaccinatedInfo){
+        var vaccinated = vaccinatedInfo.data
+        val entries1 = ArrayList<Entry>()
+        val entries2 = ArrayList<Entry>()
+        for(i: Int in 0..vaccinated.size-1 step(18)){
+            entries1.add(Entry(i.toFloat(), vaccinated[i].accumulatedFirstCnt.toFloat()))
+            entries2.add(Entry(i.toFloat(), vaccinated[i].accumulatedSecondCnt.toFloat()))
+        }
+
+        var data = LineData(LineDataSet(entries1,"1차"))
+        data.addDataSet(LineDataSet(entries2, "2차"))
+
+        binding.lineChart.data = data
+
+        binding.lineChart.invalidate()
     }
 
     companion object {
