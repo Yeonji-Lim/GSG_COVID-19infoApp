@@ -25,4 +25,5 @@ urlpatterns = [
     # authemail 사용을 위한 url 작성
     path('', include('authemail.urls')),
 
+    path('accounts/', include('accounts.urls')), # 프로젝트에서 앱으로 url 연결
 ]
