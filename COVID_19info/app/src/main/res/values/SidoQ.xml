@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="spinnerItems">
+    <string-array name="spinnerItemsQuarantine">
         <item>전국</item>
         <item>서울특별시</item>
         <item>부산광역시</item>
@@ -19,5 +19,6 @@
         <item>경상북도</item>
         <item>경상남도</item>
         <item>제주특별자치도</item>
+        <item>검역소</item>
     </string-array>
 </resources>
