@@ -61,7 +61,7 @@ class LoginRepository(val dataSource: LoginDataSource) {
         return dataSource.pwChange(pw, code)
     }
 
-    suspend fun verifyEmail(email: String): SendEmail{
+    suspend fun verifyEmail(email: String): String{
         return dataSource.verifyEmail(email)
     }
 

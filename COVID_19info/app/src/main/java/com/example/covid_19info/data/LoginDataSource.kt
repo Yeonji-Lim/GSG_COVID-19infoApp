@@ -57,25 +57,25 @@ class LoginDataSource {
     suspend fun pwChange(pw: String, code: String): ChangeResult<PwchangeUser> {
         return withContext(Dispatchers.IO){
             try {
-                var signupEmail = loginapi.pwChange(PwChange(pw, code)).execute().body()
+                var signupEmail = loginapi.pwChange(pw, code).execute().body()
                 //이메일 성공
                // Log.d("main", signupEmail?.code!!)
-                return@withContext ChangeResult.Success(PwchangeUser(signupEmail?.is_success))
+                return@withContext ChangeResult.Success(PwchangeUser(""))
             } catch (e: Throwable) {
                 return@withContext ChangeResult.Error(IOException("Error logging in", e))
             }
         }
     }
 
-    suspend fun verifyEmail(email: String): SendEmail{
+    suspend fun verifyEmail(email: String): String{
         return withContext(Dispatchers.IO){
             try {
-                var email = loginapi.verifyEmail(SendEmail(email)).execute().body()
+                var email = loginapi.verifyEmail(email).execute().body()
                 //이메일 성공
                 // Log.d("main", signupEmail?.code!!)
                 return@withContext email!!
             } catch (e: Throwable) {
-                return@withContext SendEmail("")
+                return@withContext ""
             }
         }
     }
