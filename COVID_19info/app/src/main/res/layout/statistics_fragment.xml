@@ -33,8 +33,9 @@
         android:layout_width="130dp"
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/curved_rectangle_gray"
+        android:elevation="10dp"
         android:gravity="center"
         android:text="백신 접종 현황"
         android:textColor="@color/white"
@@ -44,14 +45,13 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-        android:elevation="10dp"/>
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/stat_main_title"
         android:layout_width="277dp"
         android:layout_height="43dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="20dp"
         android:text="@string/vaccinated_title_text"
         android:textColor="#FF3C3B3B"
         android:textSize="25sp"
@@ -70,8 +70,10 @@
         android:layout_marginBottom="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stat_secondary_background" />
+        app:layout_constraintTop_toBottomOf="@+id/stat_secondary_background"
+        app:layout_constraintVertical_bias="0.5" />
 
     <TextView
         android:id="@+id/stat_primary_background"
@@ -233,10 +235,11 @@
         android:id="@+id/stat_time_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="2021.11.03 00:00 집계 기준"
         app:layout_constraintBottom_toTopOf="@+id/pager"
         app:layout_constraintEnd_toEndOf="@+id/pager"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.863"
         app:layout_constraintStart_toStartOf="@+id/pager" />
 
     <ImageView

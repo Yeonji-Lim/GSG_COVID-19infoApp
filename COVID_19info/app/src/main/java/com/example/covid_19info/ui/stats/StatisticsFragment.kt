@@ -1,6 +1,5 @@
 package com.example.covid_19info.ui.stats
 
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -17,15 +16,11 @@ import com.example.covid_19info.data.VaccinatedAPI
 import com.example.covid_19info.data.model.QuarantinStat
 import com.example.covid_19info.data.model.VaccinatedNation
 import com.example.covid_19info.databinding.StatisticsFragmentBinding
-import com.github.mikephil.charting.charts.LineChart
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import androidx.recyclerview.widget.RecyclerView
-import java.text.DateFormat
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -79,8 +74,6 @@ class StatisticsFragment : Fragment() {
 
         //차트 뷰 초기화
         setChartView()
-
-
 
         //백신버튼 리스너
         binding.vaccinatedBtn.setOnClickListener {
@@ -218,6 +211,9 @@ class StatisticsFragment : Fragment() {
 
     //아래 차트 부분 초기화
     private fun setChartView(){
+
+
+
         //확진자 뷰페이저 구현부
         pageadapter = PagerFragmentStateAdapter(requireActivity())
         pageadapter.addFragment(StatBarChart.newInstance("", ""))
