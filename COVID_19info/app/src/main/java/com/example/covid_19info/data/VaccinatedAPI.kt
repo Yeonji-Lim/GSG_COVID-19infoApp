@@ -55,12 +55,13 @@ import retrofit2.http.*
 //    "totalCount": 4578
 //}
 interface VaccinatedAPI {
-
+    //date 형식:2021-11-25
     @GET("api/15077756/v1/vaccine-stat")
     fun getVaccinatedSidoData(
         @Query("page") page: Int,
         @Query("perPage") perPage: Int = 10,
-        @Query("serviceKey") serviceKey: String = AUTH_KEY
+        @Query("serviceKey") serviceKey: String = AUTH_KEY,
+        @Query("cond[baseDate::GT]") date: String
     ): Call<VaccinatedInfo>
 
     @GET("/irgd/cov19stats.do")

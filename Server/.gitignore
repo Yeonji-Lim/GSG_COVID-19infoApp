@@ -1,6 +1,6 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/venv,django,pycharm
-# Edit at https://www.toptal.com/developers/gitignore?templates=venv,django,pycharm
+# Created by https://www.toptal.com/developers/gitignore/api/django,pycharm,venv
+# Edit at https://www.toptal.com/developers/gitignore?templates=django,pycharm,venv
 
 ### Django ###
 *.log
@@ -268,7 +268,10 @@ fabric.properties
 pyvenv.cfg
 pip-selfcheck.json
 
-# End of https://www.toptal.com/developers/gitignore/api/venv,django,pycharm
+# End of https://www.toptal.com/developers/gitignore/api/django,pycharm,venv
 
-# For security
+# For Security
 my_settings.py
+secrets.json
+
+.idea/misc.xml

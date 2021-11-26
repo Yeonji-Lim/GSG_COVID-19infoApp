@@ -47,6 +47,12 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.findPwBtn?.setOnClickListener {
+            val intent = Intent(this,PasswordChangeActivity::class.java)
+            intent.putExtra("is_find",true)
+            startActivity(intent)
+        }
+
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
 
