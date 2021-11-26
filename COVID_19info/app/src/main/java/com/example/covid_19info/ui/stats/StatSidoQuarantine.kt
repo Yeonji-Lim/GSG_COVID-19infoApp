@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import com.example.covid_19info.R
 import com.example.covid_19info.data.QuarantinesAPI
 import com.example.covid_19info.data.VaccinatedAPI
+import com.example.covid_19info.data.model.ItemQS
 import com.example.covid_19info.data.model.QuarantinStatSido
 import com.example.covid_19info.data.model.VaccinatedInfo
 import com.example.covid_19info.databinding.FragmentStatSidoQuarantineBinding
@@ -84,32 +85,42 @@ class StatSidoQuarantine : Fragment() {
         })
     }
     private fun updateInfo(quarantinStatSido: QuarantinStatSido) {
-        var lists = listOf<String>("합계", "서울", "부산", "대구", "광주", "인천",
-            "대전", "울산", "세종", "경기", "강원", "충북", "충남", "전남", "전북",
-            "경북", "경남", "제주", "검역")
+
+        //초기값 설정
+        var data = quarantinStatSido.body.items.item
+        Log.d("stat", data.toString())
+        setdata(0, data)
+        
+        //리스너 설정
         var spinner = binding.quarantineSpinner
         spinner.onItemSelectedListener = object:
             AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                var data = quarantinStatSido.body.items.item
-                Log.d("stat", data.toString())
-                for(index in data.indices){
-                    if(lists[p2]==data[index].gubun){
-                        binding.accumulateQuarantine.text = getString(R.string.quarantine_sido, "누적 확진자", data[index].defCnt)
-                        binding.accumulateClear.text = getString(R.string.quarantine_sido, "누적 격리해제", data[index].isolClearCnt)
-                        binding.accumulateDeath.text = getString(R.string.quarantine_sido, "누적 사망자", data[index].deathCnt)
-                        binding.todayQuarantine.text = getString(R.string.quarantine_sido, "금일 확진자", data[index].incDec)
-                        binding.todayClear.text = getString(R.string.quarantine_sido, "현재 격리자", data[index].isolIngCnt)
-                        binding.todayDeath.text = getString(R.string.quarantine_sido, "금일 사망자", data[index].deathCnt)
-                        break
-                    }
-                }
+                setdata(p2, data)
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {
 
             }
         }
+    }
 
+    private fun setdata(p2: Int, data: List<ItemQS>){
+        var lists = listOf<String>("합계", "서울", "부산", "대구", "광주", "인천",
+            "대전", "울산", "세종", "경기", "강원", "충북", "충남", "전남", "전북",
+            "경북", "경남", "제주", "검역")
+
+        Log.d("stat", data.toString())
+        for(index in data.indices){
+            if(lists[p2]==data[index].gubun){
+                binding.accumulateQuarantine.text = getString(R.string.quarantine_sido, "누적 확진자", data[index].defCnt)
+                binding.accumulateClear.text = getString(R.string.quarantine_sido, "누적 격리해제", data[index].isolClearCnt)
+                binding.accumulateDeath.text = getString(R.string.quarantine_sido, "누적 사망자", data[index].deathCnt)
+                binding.todayQuarantine.text = getString(R.string.quarantine_sido, "금일 확진자", data[index].incDec)
+                binding.todayClear.text = getString(R.string.quarantine_sido, "현재 격리자", data[index].isolIngCnt)
+                binding.todayDeath.text = getString(R.string.quarantine_sido, "금일 사망자", data[index].deathCnt)
+                break
+            }
+        }
     }
 
     companion object {

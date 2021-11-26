@@ -12,6 +12,7 @@ import androidx.core.view.iterator
 import com.example.covid_19info.R
 import com.example.covid_19info.data.VaccinatedAPI
 import com.example.covid_19info.data.model.QuarantinStat
+import com.example.covid_19info.data.model.VaccinatedData
 import com.example.covid_19info.data.model.VaccinatedInfo
 import com.example.covid_19info.databinding.FragmentStatSidoVaccinatedBinding
 import com.google.android.gms.maps.model.Marker
@@ -83,28 +84,21 @@ class StatSidoVaccinated : Fragment() {
     }
 
     private fun updateInfo(vaccinatedInfo: VaccinatedInfo){
-        var list = listOf(52980961f, 9911088f, 3438710f, 2446144f, 1471385f,
-                                        3010476f, 1480777f, 1153901f, 360907f, 13807158f,
-                                        1560172f, 1637897f, 2185575f, 1884455f, 1835392f,
-                                        2691891f, 3407455f, 697578f)
+        
 
         var vacData = vaccinatedInfo.data
         //총 시민수
         var total = 51667688f
 
+        //초기값 설정
+        setdata(0, vacData)
+        
+        //리스너 설정
         var spinner = binding.vaccinatedSpinner
         spinner.onItemSelectedListener = object:
         AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                binding.firstVaccinated.text = getString(R.string.accumulated_vaccinated, "1차 접종",
-                    vacData[p2].accumulatedFirstCnt.div(list[p2]).times(100), vacData[p2].firstCnt)
-                binding.secondVaccinated.text = getString(R.string.accumulated_vaccinated, "2차 접종",
-                    vacData[p2].accumulatedSecondCnt.div(list[p2]).times(100), vacData[p2].secondCnt)
-                binding.thirdVaccinated.text = getString(R.string.accumulated_vaccinated, "추가 접종",
-                    vacData[p2].accumulatedThirdCnt.div(list[p2]).times(100), vacData[p2].thirdCnt)
-
-                binding.accumulateVaccinated.text = getString(R.string.accumulated_vaccinated1,
-                    vacData[p2].accumulatedSecondCnt, vacData[p2].secondCnt)
+                setdata(p2, vacData)
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {
 
@@ -113,9 +107,23 @@ class StatSidoVaccinated : Fragment() {
         for(spinnerItem in spinner){
             spinnerItem.isSelected
         }
-
-
-
+    }
+    
+    //데이터 설정
+    private fun setdata(p2: Int, vacData: List<VaccinatedData>){
+        var list = listOf(52980961f, 9911088f, 3438710f, 2446144f, 1471385f,
+            3010476f, 1480777f, 1153901f, 360907f, 13807158f,
+            1560172f, 1637897f, 2185575f, 1884455f, 1835392f,
+            2691891f, 3407455f, 697578f)
+        
+        binding.firstVaccinated.text = getString(R.string.accumulated_vaccinated, "1차 접종",
+            vacData[p2].accumulatedFirstCnt.div(list[p2]).times(100), vacData[p2].firstCnt)
+        binding.secondVaccinated.text = getString(R.string.accumulated_vaccinated, "2차 접종",
+            vacData[p2].accumulatedSecondCnt.div(list[p2]).times(100), vacData[p2].secondCnt)
+        binding.thirdVaccinated.text = getString(R.string.accumulated_vaccinated, "추가 접종",
+            vacData[p2].accumulatedThirdCnt.div(list[p2]).times(100), vacData[p2].thirdCnt)
+        binding.accumulateVaccinated.text = getString(R.string.accumulated_vaccinated1,
+            vacData[p2].accumulatedSecondCnt, vacData[p2].secondCnt)
     }
 
 
