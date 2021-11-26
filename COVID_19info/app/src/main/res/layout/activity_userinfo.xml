@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E0E0E0"
+    android:id="@+id/userinfo"
     tools:context=".UserInfoActivity">
 
 
@@ -45,7 +46,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.128"
+        app:layout_constraintVertical_bias="0.099"
         app:srcCompat="@drawable/user_profile_icon" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -96,7 +97,6 @@
         android:id="@+id/password_change_layout"
         android:layout_width="355dp"
         android:layout_height="80dp"
-        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_layout">
@@ -141,7 +141,6 @@
         android:id="@+id/gpsinfo_agreement_layout"
         android:layout_width="355dp"
         android:layout_height="80dp"
-        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_change_layout">
@@ -161,10 +160,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:onClick="printGpsAgreementDialog"
             android:text="위치정보 제공 동의"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:onClick="printGpsAgreementDialog"
             app:layout_constraintBottom_toBottomOf="@+id/gpsinfo_agreement_background"
             app:layout_constraintStart_toStartOf="@+id/gpsinfo_agreement_background"
             app:layout_constraintTop_toTopOf="@+id/gpsinfo_agreement_background"
@@ -185,13 +184,56 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/logout_layout"
+        android:id="@+id/record_layout"
         android:layout_width="355dp"
         android:layout_height="80dp"
-        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gpsinfo_agreement_layout">
+
+        <TextView
+            android:id="@+id/record_background"
+            android:layout_width="347dp"
+            android:layout_height="69dp"
+            android:background="@drawable/curved_rectangle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/record_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="동선 기록 시작"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/record_background"
+            app:layout_constraintStart_toStartOf="@+id/record_background"
+            app:layout_constraintTop_toTopOf="@+id/record_background"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="28dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="24dp"
+            android:scaleX="-1"
+            app:layout_constraintBottom_toBottomOf="@+id/record_background"
+            app:layout_constraintEnd_toEndOf="@+id/record_background"
+            app:layout_constraintTop_toTopOf="@+id/record_background"
+            app:srcCompat="@drawable/lt_arrow" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/logout_layout"
+        android:layout_width="355dp"
+        android:layout_height="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/record_layout">
 
         <TextView
             android:id="@+id/logout_background"
@@ -217,7 +259,7 @@
             app:layout_constraintVertical_bias="0.5" />
 
         <ImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/imageView8"
             android:layout_width="28dp"
             android:layout_height="32dp"
             android:layout_marginEnd="24dp"
@@ -227,6 +269,50 @@
             app:layout_constraintTop_toTopOf="@+id/logout_background"
             app:srcCompat="@drawable/lt_arrow" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/withdrawal__layout"
+        android:layout_width="355dp"
+        android:layout_height="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logout_layout">
+
+        <TextView
+            android:id="@+id/withdrawal_background"
+            android:layout_width="347dp"
+            android:layout_height="69dp"
+            android:background="@drawable/curved_rectangle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/withdrawal_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="회원 탈퇴"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/withdrawal_background"
+            app:layout_constraintStart_toStartOf="@+id/withdrawal_background"
+            app:layout_constraintTop_toTopOf="@+id/withdrawal_background"
+            app:layout_constraintVertical_bias="0.489" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="28dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="24dp"
+            android:scaleX="-1"
+            app:layout_constraintBottom_toBottomOf="@+id/withdrawal_background"
+            app:layout_constraintEnd_toEndOf="@+id/withdrawal_background"
+            app:layout_constraintTop_toTopOf="@+id/withdrawal_background"
+            app:layout_constraintVertical_bias="0.5"
+            app:srcCompat="@drawable/lt_arrow" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

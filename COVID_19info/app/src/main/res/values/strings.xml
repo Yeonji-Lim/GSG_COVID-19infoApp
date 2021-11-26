@@ -17,7 +17,52 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <string name="fine_location_permission_rationale">The fine location permission is needed for core functionality.</string>
+    <string name="fine_permission_denied_explanation">Fine location permission was denied, but is needed for core functionality.</string>
+
+    <string name="background_location_permission_rationale">The background location permission is needed for enhanced functionality.</string>
+    <string name="background_permission_denied_explanation">Background location permission was denied but needed for enhanced functionality.</string>
+
+
+    <string name="settings">Settings</string>
+    <string name="ok">OK</string>
+
+    <string name="fine_location_access_rationale_title_text">Welcome to the Background Location Sample!</string>
+
+    <string name="fine_location_access_rationale_details_text">This sample allows you to receive location updates while using the app.
+        \n\n
+        In order for this feature to work, please approve access to your location via the button below.
+    </string>
+    <string name="stop_receiving_location">동선 기록 중단</string>
+    <string name="start_receiving_location">동선 기록 시작</string>
+
+    <string name="vaccinated_title_text">전국 백신 누적 접종 현황</string>
+    <string name="vaccinated_box1_text">1차 접종</string>
+    <string name="vaccinated_box2_text">2차 접종</string>
+    <string name="vaccinated_box3_text">추가 접종</string>
+    <string name="vaccinated_chart1_name">일일 확진자 현황</string>
+    <string name="vaccinated_chart2_name">누적 감염 현황</string>
+    <string name="nation_data">%1$,d 명</string>
+    <string name="nation_data_f">%1$.2f %%</string>
+
+    <string name="accumulated_vaccinated">%1$s\n%2$.2f %%\n%3$,d ↑</string>
+    <string name="accumulated_vaccinated1">누적 접종 완료 %1$,d 명\n신규 접종 %2$,d명</string>
+    <string name="quarantine_sido">%1$s\n%2$,d 명</string>
+
+    <string name="quarantine_title_text">전국 감염 현황</string>
+    <string name="quarantine_box1_text">확진자</string>
+    <string name="quarantine_box2_text">격리해제</string>
+    <string name="quarantine_box3_text">사망자</string>
+    <string name="quarantine_chart1_name">일일 확진자 현황</string>
+    <string name="quarantine_chart2_name">누적 감염 현황</string>
+    <string name="quarantine_chart3_name">시도별 감염 현황</string>
+
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bar_chart_text">일일 확진자 현황</string>
+    <string name="accumulated_box_text">누적 접종 현황</string>
+    <string name="line_chart_text">누적 접종 현황</string>
 </resources>

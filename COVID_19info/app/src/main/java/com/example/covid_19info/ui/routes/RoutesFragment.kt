@@ -1,7 +1,6 @@
 package com.example.covid_19info.ui.routes
 
 import android.Manifest
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
@@ -18,9 +17,6 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.covid_19info.BuildConfig
-import com.example.covid_19info.MainActivity
-import com.example.covid_19info.R
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -35,28 +31,44 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.core.view.*
 import kotlin.math.roundToInt
-import android.view.animation.Animation
-import android.view.animation.Transformation
 import android.animation.ValueAnimator
-import android.animation.ValueAnimator.AnimatorUpdateListener
+import android.content.Intent
+import android.os.Build
 
 import android.widget.LinearLayout
 
 import android.view.View
-
-
-
+import androidx.annotation.RequiresApi
+import androidx.fragment.app.findFragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import com.example.covid_19info.*
+import com.example.covid_19info.data.LocationRepository
+import com.example.covid_19info.data.QuarantinesRouteAPI
+import com.example.covid_19info.data.model.MyLocationDao
+import com.example.covid_19info.data.model.MyLocationDatabase
+import com.example.covid_19info.data.model.MyLocationEntity
+import com.example.covid_19info.data.model.Quarantines
+import com.example.covid_19info.databinding.ActivityMainBinding
+import com.google.android.gms.maps.model.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+import java.util.concurrent.Executors
 
 
 class RoutesFragment : Fragment(), OnMapReadyCallback {
+    private lateinit var binding: ActivityMainBinding
+
     // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
     lateinit var mainActivity: MainActivity
     override fun onAttach(context: Context) {
@@ -76,7 +88,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 
     // A default location (Sydney, Australia) and default zoom to use when location permission is
     // not granted.
-    private val defaultLocation = LatLng(37.33, 126.59)
+    private val defaultLocation = LatLng(37.5642135, 127.0016985)
     private var locationPermissionGranted = false
 
     // The geographical location where the device is currently located. That is, the last-known
@@ -87,7 +99,14 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
     private var likelyPlaceAttributions: Array<List<*>?> = arrayOfNulls(0)
     private var likelyPlaceLatLngs: Array<LatLng?> = arrayOfNulls(0)
 
+    //확진자 동선 데이터
+    lateinit private var quarantinesData: Quarantines
+
+    private var quartineMarkerList: MutableList<Marker> = mutableListOf()
+    private var userMarkerList: MutableList<Marker> = mutableListOf()
     lateinit var buttons :LinearLayout
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -98,6 +117,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         return inflater.inflate(R.layout.content_route, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -127,7 +147,6 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         mapFragment?.getMapAsync(this)
 
 
-
         // [END maps_current_place_map_fragment]
         // [END_EXCLUDE]
 
@@ -137,13 +156,16 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                     as AutocompleteSupportFragment
 
         // Specify the types of place data to return.
-        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG))
 
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-                // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: ${place.name}, ${place.id}")
+                //Log.i(TAG, "Place: ${place.name}, ${place.id}, ${place.latLng}")
+                
+                //검색 지역으로 이동
+                map?.moveCamera(CameraUpdateFactory
+                        .newLatLngZoom(place.latLng, 15f))
             }
 
             override fun onError(status: Status) {
@@ -154,18 +176,144 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         //검색창 색 변경
         autocompleteFragment.view?.setBackgroundColor(Color.WHITE)
 
+        //검색 가능 지역 한국으로 고정
+        autocompleteFragment.setCountry("KR")
+
+        //장소 가져오기
+//        context?.let { it1 ->
+//            LocationRepository.getInstance(it1, Executors.newSingleThreadExecutor())
+//                .getLocations()
+//        }?.observe(this, { locations ->
+//            for(mark in userMarkerList){
+//                mark.remove()
+//            }
+//            userMarkerList.clear()
+//
+//            //마크생성
+//            for (location in locations) {
+//                var mark = map?.addMarker(
+//                    MarkerOptions()
+//                        .title(location.date.toString())
+//                        .position((LatLng(location.latitude, location.longitude)))
+//                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+//                )
+//                mark?.isVisible = false
+//                mark?.let { userMarkerList.add(it) }
+//
+//            }
+//            Log.d("main", "in observe $userMarkerList")
+//            return@observe
+//        })
+        var db = context?.let { MyLocationDatabase.getInstance(it) }!!.locationDao()
+        db.getLocations().observe(viewLifecycleOwner, { locations ->
+            for(mark in userMarkerList){
+                mark.remove()
+            } 
+            userMarkerList.clear()
+
+            //마크생성
+            for (location in locations) {
+                var mark = map?.addMarker(
+                    MarkerOptions()
+                        .title(location.date.toString())
+                        .position((LatLng(location.latitude, location.longitude)))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                )
+                mark?.isVisible = true
+                mark?.let { userMarkerList.add(it) }
+
+            }
+            Log.d("main", "in observe $userMarkerList")
+            return@observe
+        })
+
 
         //프래그먼트 내부 버튼 리스너 설정
         //changeView 리스너
         val changeView = view.findViewById<Button>(R.id.changeView)
         changeView.setOnClickListener {
+            Log.d("loginButton","Click")
+            Log.d("loginButton",changeView.isSelected.toString())
             changeView?.isSelected = changeView?.isSelected != true
+
+            val pref = PreferenceUtil()
+            //로그인 안된경우
+            if(pref.getString("token", "")==""){
+                Log.d("loginButton","OFF")
+                val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_yes_no,null)
+                val mBuilder = context?.let { it1 ->
+                    AlertDialog.Builder(it1)
+                        .setView(mDialogView)
+                }
+
+                val mAlertDialog = mBuilder?.show()
+                mDialogView.findViewById<TextView>(R.id.dialog_text).text="로그인이 필요한 메뉴입니다."
+
+                //취소버튼
+                val noBtn = mDialogView.findViewById<Button>(R.id.no_logout_btn)
+                noBtn.setOnClickListener{
+                    mAlertDialog?.dismiss()
+                }
+
+                //확인버튼
+                val yesBtn = mDialogView.findViewById<Button>(R.id.yes_logout_btn)
+                yesBtn.text="로그인"
+                yesBtn.setOnClickListener{
+                    //로그인 액티비티로 이동
+                    var intent = Intent(context, LoginActivity::class.java)
+                    startActivity(intent)
+
+                    mAlertDialog?.dismiss()
+                }
+            }
+            //로그인 된 경우
+            else {
+                for(usermark in userMarkerList){
+                    usermark.isVisible = true
+                }
+                Log.d("main", "in button listner $userMarkerList")
+                mapFragment?.view?.requestLayout()
+
+                Log.d("loginButton","user markers : $userMarkerList")
+
+            }
+            //사용자 동선 선택 x
+//            if(changeView.isSelected)
+//            {
+//                Log.d("loginButton","USERTRUE")
+//                userMarker(true)
+//            }
+//            else
+//            {
+//                Log.d("loginButton","USERFALSE")
+//                userMarker(false)
+//            }
+
         }
 
         //하단 버튼 리스너 설정을 위한 변수 설정
         buttons = view.findViewById<LinearLayout>(R.id.linearLayout)
         //버튼 움직임 설정
         setButtonsMove()
+
+        //네트워크 호출
+        val api = QuarantinesRouteAPI.create()
+        api.getData().enqueue(object: Callback<Quarantines> {
+
+            override fun onResponse(call: Call<Quarantines>,
+                                    response: Response<Quarantines>
+            ) {
+                response.body()?.let {quarantinesData = it}
+                response.body()?.let { showQuarantineRoute(it) }
+                Log.d("Main", "성공 : ${response.raw()}")
+            }
+            override fun onFailure(call: Call<Quarantines>, t: Throwable) {
+                Log.d("Main", "실패 : ${t}")
+            }
+        })
+
+        //showUserRoute()
+
     }
 
     /**
@@ -231,12 +379,12 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
      * @return Boolean.
      */
     // [START maps_current_place_on_options_item_selected]
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.option_get_place) {
-            showCurrentPlace()
-        }
-        return true
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        if (item.itemId == R.id.option_get_place) {
+//            showCurrentPlace()
+//        }
+//        return true
+//    }
     // [END maps_current_place_on_options_item_selected]
 
     /**
@@ -327,69 +475,69 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
      * current place on the map - provided the user has granted location permission.
      */
     // [START maps_current_place_show_current_place]
-    @SuppressLint("MissingPermission")
-    private fun showCurrentPlace() {
-        if (map == null) {
-            return
-        }
-        if (locationPermissionGranted) {
-            // Use fields to define the data types to return.
-            val placeFields = listOf(Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG)
+    // @SuppressLint("MissingPermission")
+    // private fun showCurrentPlace() {
+    //     if (map == null) {
+    //         return
+    //     }
+    //     if (locationPermissionGranted) {
+    //         // Use fields to define the data types to return.
+    //         val placeFields = listOf(Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG)
 
-            // Use the builder to create a FindCurrentPlaceRequest.
-            val request = FindCurrentPlaceRequest.newInstance(placeFields)
+    //         // Use the builder to create a FindCurrentPlaceRequest.
+    //         val request = FindCurrentPlaceRequest.newInstance(placeFields)
 
-            // Get the likely places - that is, the businesses and other points of interest that
-            // are the best match for the device's current location.
-            val placeResult = placesClient.findCurrentPlace(request)
-            placeResult.addOnCompleteListener { task ->
-                if (task.isSuccessful && task.result != null) {
-                    val likelyPlaces = task.result
+    //         // Get the likely places - that is, the businesses and other points of interest that
+    //         // are the best match for the device's current location.
+    //         val placeResult = placesClient.findCurrentPlace(request)
+    //         placeResult.addOnCompleteListener { task ->
+    //             if (task.isSuccessful && task.result != null) {
+    //                 val likelyPlaces = task.result
 
-                    // Set the count, handling cases where less than 5 entries are returned.
-                    val count = if (likelyPlaces != null && likelyPlaces.placeLikelihoods.size < M_MAX_ENTRIES) {
-                        likelyPlaces.placeLikelihoods.size
-                    } else {
-                        M_MAX_ENTRIES
-                    }
-                    var i = 0
-                    likelyPlaceNames = arrayOfNulls(count)
-                    likelyPlaceAddresses = arrayOfNulls(count)
-                    likelyPlaceAttributions = arrayOfNulls<List<*>?>(count)
-                    likelyPlaceLatLngs = arrayOfNulls(count)
-                    for (placeLikelihood in likelyPlaces?.placeLikelihoods ?: emptyList()) {
-                        // Build a list of likely places to show the user.
-                        likelyPlaceNames[i] = placeLikelihood.place.name
-                        likelyPlaceAddresses[i] = placeLikelihood.place.address
-                        likelyPlaceAttributions[i] = placeLikelihood.place.attributions
-                        likelyPlaceLatLngs[i] = placeLikelihood.place.latLng
-                        i++
-                        if (i > count - 1) {
-                            break
-                        }
-                    }
+    //                 // Set the count, handling cases where less than 5 entries are returned.
+    //                 val count = if (likelyPlaces != null && likelyPlaces.placeLikelihoods.size < M_MAX_ENTRIES) {
+    //                     likelyPlaces.placeLikelihoods.size
+    //                 } else {
+    //                     M_MAX_ENTRIES
+    //                 }
+    //                 var i = 0
+    //                 likelyPlaceNames = arrayOfNulls(count)
+    //                 likelyPlaceAddresses = arrayOfNulls(count)
+    //                 likelyPlaceAttributions = arrayOfNulls<List<*>?>(count)
+    //                 likelyPlaceLatLngs = arrayOfNulls(count)
+    //                 for (placeLikelihood in likelyPlaces?.placeLikelihoods ?: emptyList()) {
+    //                     // Build a list of likely places to show the user.
+    //                     likelyPlaceNames[i] = placeLikelihood.place.name
+    //                     likelyPlaceAddresses[i] = placeLikelihood.place.address
+    //                     likelyPlaceAttributions[i] = placeLikelihood.place.attributions
+    //                     likelyPlaceLatLngs[i] = placeLikelihood.place.latLng
+    //                     i++
+    //                     if (i > count - 1) {
+    //                         break
+    //                     }
+    //                 }
 
-                    // Show a dialog offering the user the list of likely places, and add a
-                    // marker at the selected place.
-                    openPlacesDialog()
-                } else {
-                    Log.e(TAG, "Exception: %s", task.exception)
-                }
-            }
-        } else {
-            // The user has not granted permission.
-            Log.i(TAG, "The user did not grant location permission.")
+    //                 // Show a dialog offering the user the list of likely places, and add a
+    //                 // marker at the selected place.
+    //                 openPlacesDialog()
+    //             } else {
+    //                 Log.e(TAG, "Exception: %s", task.exception)
+    //             }
+    //         }
+    //     } else {
+    //         // The user has not granted permission.
+    //         Log.i(TAG, "The user did not grant location permission.")
 
-            // Add a default marker, because the user hasn't selected a place.
-            map?.addMarker(MarkerOptions()
-                .title("123")
-                .position(defaultLocation)
-                .snippet("132"))
+    //         // Add a default marker, because the user hasn't selected a place.
+    //         map?.addMarker(MarkerOptions()
+    //             .title("123")
+    //             .position(defaultLocation)
+    //             .snippet("132"))
 
-            // Prompt the user for permission.
-            getLocationPermission()
-        }
-    }
+    //         // Prompt the user for permission.
+    //         getLocationPermission()
+    //     }
+    // }
     // [END maps_current_place_show_current_place]
 
     /**
@@ -458,6 +606,55 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
     }
     // [END maps_current_place_update_location_ui]
 
+    //확진자 마커 등록
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showQuarantineRoute(routes: Quarantines){
+        val today = LocalDate.now()
+        for(route in routes.data){
+            var visitdate = LocalDate.parse(route.visitedDate.substring(0,10), DateTimeFormatter.ISO_DATE)
+            val diff = ChronoUnit.DAYS.between(visitdate, today)
+            var pos = route.latlng.split(", ").toTypedArray()
+            var mark = map?.addMarker(MarkerOptions()
+                .title(route.place)
+                .position(LatLng(pos[0].toDouble(), pos[1].toDouble()))
+                .snippet("${route.visitedDate}\n${route.address}"))
+            if(diff in 4..5)
+                mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+            else if(diff>5)
+                mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+            mark?.let { quartineMarkerList.add(it) }
+        }
+    }
+
+    //사용자 동선 데이터베이스 테스트
+    private fun showUserRoute(){
+        var db = context?.let { MyLocationDatabase.getInstance(it)}
+        var loc = db?.locationDao()?.getLocations()
+
+        Log.d("tagtag",loc?.value?.get(0).toString())
+        var mark = map?.addMarker(MarkerOptions()
+            .position((LatLng(loc?.value?.get(0)?.latitude!!,loc?.value?.get(0)?.longitude!!)))
+        )
+        mark?.let { userMarkerList.add(it) }
+        userMarkerList[0].isVisible = true
+    }
+
+    fun userMarkervisible(visible : Boolean){
+        if(visible)
+        {
+            for(mark in userMarkerList) {
+                mark.isVisible = true
+            }
+        }
+        else
+        {
+            for(mark in userMarkerList) {
+                mark.isVisible = false
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
     fun setButtonsMove(): Boolean {
         //기본 위치
@@ -467,7 +664,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 
         for(item in buttons){
             var btn = item as Button
-
+            //버튼 움직임 리스너 등록
             if(btn.id==R.id.moveButtons){
                 btn.setOnTouchListener { view, motionEvent ->
                     Log.d("main", "${motionEvent.actionMasked}")
@@ -479,14 +676,58 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                     return@setOnTouchListener gestureDetector.onTouchEvent(motionEvent)
                 }
             }else{
+                //버튼 동작 등록
                 btn.setOnClickListener {
-                    btn?.isSelected = btn?.isSelected != true
+                    if(btn.isSelected){
+                        btn.isSelected = false
+                        markCheck(true)
+                    }
+                    else{
+                        for(i in 1..4){
+                            buttons[i].isSelected = false
+                        }
+                        btn.isSelected = true
+                        markCheck(false)
+                    }
+
+                    //btn?.isSelected = btn?.isSelected != true
                 }
             }
         }
 
         return true
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    //allvisible이 true이면 모두 표시
+    fun markCheck(allvisible: Boolean){
+        //모두 표시
+        if(allvisible){
+            for(mark in quartineMarkerList){
+                mark.isVisible = true
+            }
+            return
+        }
+        //날짜 차이 이하
+        var constraintl = arrayOf(3,5,7,14)
+        var constraint = 0
+        for(i in 1..4){
+            if(buttons[i].isSelected){
+                constraint = constraintl[i-1]
+                break
+            }
+        }
+        //날짜 계산후 이하만 출력
+        val today = LocalDate.now()
+        for(mark in quartineMarkerList){
+            val visitdate = LocalDate.parse(mark.snippet?.substring(0,10), DateTimeFormatter.ISO_DATE);
+            val diff = ChronoUnit.DAYS.between(visitdate, today)
+            //Log.d("Main", diff.toString())
+            mark.isVisible = diff <= constraint
+        }
+    }
+
+
 
     companion object {
         private val TAG = MainActivity::class.java.simpleName
@@ -503,6 +744,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         private const val M_MAX_ENTRIES = 5
     }
 }
+
 class MyGesture(val layout: LinearLayout) : GestureDetector.OnGestureListener {
     var startButtonPos = 0
     var btn = (layout[0] as Button)

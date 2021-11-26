@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/frameLayout2"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@drawable/curved_rectangle"
+android:elevation="20dp"
+tools:context=".ui.stats.StatSidoQuarantine">
+
+    <Spinner
+        android:id="@+id/quarantine_spinner"
+        android:layout_width="141dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="36dp"
+        android:entries="@array/spinnerItemsQuarantine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="32dp"
+        android:text="시도별 감염 현황"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:orientation="vertical"
+    android:layout_marginTop="30dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/quarantine_spinner">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/accumulate_quarantine"
+            android:layout_width="@dimen/quarantine_sido_width"
+            android:layout_height="@dimen/quarantine_sido_height"
+            android:layout_margin="5dp"
+            android:text = "누적 확진자"
+            android:background="@drawable/curved_rectangle"
+            android:elevation="5dp"
+            android:backgroundTint="#50BEC9"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/today_quarantine"
+            android:layout_width="@dimen/quarantine_sido_width"
+            android:layout_height="@dimen/quarantine_sido_height"
+            android:layout_margin="5dp"
+            android:text = "금일 확진자"
+            android:background="@drawable/curved_rectangle"
+            android:elevation="5dp"
+            android:backgroundTint="#50BEC9"
+            android:gravity="center" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/accumulate_clear"
+            android:layout_width="@dimen/quarantine_sido_width"
+            android:layout_height="@dimen/quarantine_sido_height"
+            android:layout_margin="5dp"
+            android:text = "누적 격리해제"
+            android:background="@drawable/curved_rectangle"
+            android:elevation="5dp"
+            android:backgroundTint="#50BEC9"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/today_clear"
+            android:layout_width="@dimen/quarantine_sido_width"
+            android:layout_height="@dimen/quarantine_sido_height"
+            android:layout_margin="5dp"
+            android:text = "금일 격리해제"
+            android:background="@drawable/curved_rectangle"
+            android:elevation="5dp"
+            android:backgroundTint="#50BEC9"
+            android:gravity="center" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/accumulate_death"
+            android:layout_width="@dimen/quarantine_sido_width"
+            android:layout_height="@dimen/quarantine_sido_height"
+            android:layout_margin="5dp"
+            android:text = "사망자"
+            android:background="@drawable/curved_rectangle"
+            android:elevation="5dp"
+            android:backgroundTint="#50BEC9"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/today_death"
+            android:layout_width="@dimen/quarantine_sido_width"
+            android:layout_height="@dimen/quarantine_sido_height"
+            android:layout_margin="5dp"
+            android:text = "금일 사망자"
+            android:background="@drawable/curved_rectangle"
+            android:elevation="5dp"
+            android:backgroundTint="#50BEC9"
+            android:gravity="center" />
+
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/vaccinated_time"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_margin="10dp"
+            android:text="누적, 신규 접종"
+            android:backgroundTint="#FFFFFF"
+            android:gravity="center" />
+    </FrameLayout>
+
+</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
