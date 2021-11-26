@@ -25,7 +25,7 @@
         app:layout_constraintStart_toEndOf="@+id/vaccinated_btn"
         app:layout_constraintTop_toTopOf="@+id/vaccinated_btn"
         app:layout_constraintVertical_bias="0.0"
-        tools:ignore="MissingConstraints"
+        tools:ignore="HardcodedText,MissingConstraints"
         android:elevation="10dp"/>
 
     <Button
@@ -45,7 +45,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="HardcodedText,MissingConstraints" />
 
     <TextView
         android:id="@+id/stat_main_title"
@@ -114,7 +114,8 @@
         app:layout_constraintEnd_toEndOf="@+id/stat_primary_background"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/stat_primary_background"
-        app:layout_constraintTop_toBottomOf="@+id/stat_primary_title" />
+        app:layout_constraintTop_toBottomOf="@+id/stat_primary_title"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/stat_primary_inc"
@@ -126,7 +127,8 @@
         app:layout_constraintEnd_toEndOf="@+id/stat_primary_background"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="@+id/stat_primary_background"
-        app:layout_constraintTop_toBottomOf="@+id/stat_primary_figure" />
+        app:layout_constraintTop_toBottomOf="@+id/stat_primary_figure"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/stat_secondary_background"
@@ -166,7 +168,8 @@
         app:layout_constraintEnd_toEndOf="@+id/stat_secondary_background"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/stat_secondary_background"
-        app:layout_constraintTop_toBottomOf="@+id/stat_primary_title" />
+        app:layout_constraintTop_toBottomOf="@+id/stat_primary_title"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/stat_secondary_inc"
@@ -178,7 +181,8 @@
         app:layout_constraintEnd_toEndOf="@+id/stat_secondary_background"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="@+id/stat_secondary_background"
-        app:layout_constraintTop_toBottomOf="@+id/stat_secondary_figure" />
+        app:layout_constraintTop_toBottomOf="@+id/stat_secondary_figure"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/stat_third_background"
@@ -217,7 +221,8 @@
         app:layout_constraintEnd_toEndOf="@+id/stat_third_background"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/stat_third_background"
-        app:layout_constraintTop_toBottomOf="@+id/stat_third_title" />
+        app:layout_constraintTop_toBottomOf="@+id/stat_third_title"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/stat_third_inc"
@@ -229,7 +234,8 @@
         app:layout_constraintEnd_toEndOf="@+id/stat_third_background"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="@+id/stat_third_background"
-        app:layout_constraintTop_toBottomOf="@+id/stat_third_figure" />
+        app:layout_constraintTop_toBottomOf="@+id/stat_third_figure"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/stat_time_txt"
@@ -240,7 +246,8 @@
         app:layout_constraintBottom_toTopOf="@+id/pager"
         app:layout_constraintEnd_toEndOf="@+id/pager"
         app:layout_constraintHorizontal_bias="0.863"
-        app:layout_constraintStart_toStartOf="@+id/pager" />
+        app:layout_constraintStart_toStartOf="@+id/pager"
+        tools:ignore="HardcodedText" />
 
     <ImageView
         android:id="@+id/imageView9"
@@ -251,7 +258,8 @@
         app:layout_constraintEnd_toEndOf="@+id/stat_primary_background"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/stat_primary_inc"
-        app:layout_constraintTop_toTopOf="@+id/stat_primary_inc" />
+        app:layout_constraintTop_toTopOf="@+id/stat_primary_inc"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/imageView10"
@@ -263,7 +271,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/stat_secondary_inc"
         app:layout_constraintTop_toTopOf="@+id/stat_secondary_inc"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/imageView11"
@@ -275,7 +284,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/stat_third_inc"
         app:layout_constraintTop_toTopOf="@+id/stat_third_inc"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="ContentDescription" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
