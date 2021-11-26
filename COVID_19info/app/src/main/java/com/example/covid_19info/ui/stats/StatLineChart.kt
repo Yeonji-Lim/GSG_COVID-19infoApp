@@ -7,7 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.covid_19info.R
+import com.example.covid_19info.data.QuarantinesAPI
 import com.example.covid_19info.data.VaccinatedAPI
+import com.example.covid_19info.data.model.QuarantinStat
+import com.example.covid_19info.data.model.QuarantinStatSido
 import com.example.covid_19info.data.model.VaccinatedInfo
 import com.example.covid_19info.databinding.FragmentStatLineChartBinding
 import com.github.mikephil.charting.data.ChartData
@@ -58,31 +61,63 @@ class StatLineChart : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        //백신 데이터 로드
-        val day = 50
-        val vaccinated = VaccinatedAPI.createsido()
-        val today = Calendar.getInstance()
-        today.time = Date()
-        today.add(Calendar.DATE, -day)
-        val df = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        if(param1=="quarantine"){
+            //확진자 데이터 로드
+            binding.lineText.text = "누적 감염 현황"
+            val quarantine = QuarantinesAPI.create()
+            val today = Calendar.getInstance()
+            today.time = Date()
+            val start = Calendar.getInstance()
+            start.time = Date()
+            start.add(Calendar.DATE, -30)
+            val df = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
 
-        vaccinated.getVaccinatedSidoData(page = 1,
-            perPage = day*18,
-            date = df.format(today.time)).enqueue(object: Callback<VaccinatedInfo> {
-            override fun onResponse(
-                call: Call<VaccinatedInfo>,
-                response: Response<VaccinatedInfo>
-            ){
-                Log.d("vac", response.toString())
-                Log.d("vac", response.body()?.perPage.toString())
-                //업데이트
-                response.body()?.let { updateInfo(it) }
-            }
-            override fun onFailure(call: Call<VaccinatedInfo>, t: Throwable) {
-                //TODO("Not yet implemented")
-                Log.d("stat", t.toString())
-            }
-        })
+            quarantine.getQuarantineStat(page = 1,
+                perPage = 19,
+                startCreateDt = df.format(start.time),
+                endCreateDt = df.format(today.time)).enqueue(object: Callback<QuarantinStat> {
+                override fun onResponse(
+                    call: Call<QuarantinStat>,
+                    response: Response<QuarantinStat>
+                ){
+                    Log.d("qua", response.toString())
+                    //업데이트
+                    response.body()?.let { updateInfo(it) }
+                }
+                override fun onFailure(call: Call<QuarantinStat>, t: Throwable) {
+                    //TODO("Not yet implemented")
+                    Log.d("stat", call.request().toString())
+                    Log.d("stat", t.toString())
+                }
+            })
+        }
+        else{
+            //백신 데이터 로드
+            val day = 50
+            val vaccinated = VaccinatedAPI.createsido()
+            val today = Calendar.getInstance()
+            today.time = Date()
+            today.add(Calendar.DATE, -day)
+            val df = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+            vaccinated.getVaccinatedSidoData(page = 1,
+                perPage = day*18,
+                date = df.format(today.time)).enqueue(object: Callback<VaccinatedInfo> {
+                override fun onResponse(
+                    call: Call<VaccinatedInfo>,
+                    response: Response<VaccinatedInfo>
+                ){
+                    Log.d("vac", response.toString())
+                    Log.d("vac", response.body()?.perPage.toString())
+                    //업데이트
+                    response.body()?.let { updateInfo(it) }
+                }
+                override fun onFailure(call: Call<VaccinatedInfo>, t: Throwable) {
+                    //TODO("Not yet implemented")
+                    Log.d("stat", t.toString())
+                }
+            })
+        }
     }
 
     private fun updateInfo(vaccinatedInfo: VaccinatedInfo){
@@ -96,6 +131,24 @@ class StatLineChart : Fragment() {
 
         var data = LineData(LineDataSet(entries1,"1차"))
         data.addDataSet(LineDataSet(entries2, "2차"))
+
+        binding.lineChart.data = data
+
+        binding.lineChart.invalidate()
+    }
+
+    private fun updateInfo(quarantinStat: QuarantinStat){
+        var quarantines = quarantinStat.body.items.item
+        val entries1 = ArrayList<Entry>()
+        val entries2 = ArrayList<Entry>()
+        val cnt = quarantines!!.size
+        for(i: Int in 0..(quarantines?.size?.minus(1)!!) step(1)){
+            entries1.add(Entry(i.toFloat(), quarantines[i].decideCnt.toFloat()))
+            entries2.add(Entry(i.toFloat(), quarantines[i].clearCnt.toFloat()))
+        }
+
+        var data = LineData(LineDataSet(entries1,"확진"))
+        data.addDataSet(LineDataSet(entries2, "격리해제"))
 
         binding.lineChart.data = data
 

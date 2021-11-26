@@ -221,7 +221,7 @@ class StatisticsFragment : Fragment() {
         //확진자 뷰페이저 구현부
         pageadapter = PagerFragmentStateAdapter(requireActivity())
         pageadapter.addFragment(StatBarChart.newInstance("", ""))
-        pageadapter.addFragment(StatLineChart.newInstance("", ""))
+        pageadapter.addFragment(StatLineChart.newInstance("quarantine", ""))
         pageadapter.addFragment(StatSidoQuarantine.newInstance("", ""))
 
         //백신 뷰페이저

@@ -11,10 +11,10 @@
 
     <Spinner
         android:id="@+id/vaccinated_spinner"
-        android:layout_width="170dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="52dp"
+        android:layout_width="161dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="16dp"
         android:entries="@array/spinnerItemsVaccinated"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -55,7 +55,7 @@ class StatSidoQuarantine : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        //백신 데이터 로드
+        //확진자 데이터 로드
         val quarantine = QuarantinesAPI.create()
         val today = Calendar.getInstance()
         today.time = Date()
@@ -84,7 +84,7 @@ class StatSidoQuarantine : Fragment() {
         })
     }
     private fun updateInfo(quarantinStatSido: QuarantinStatSido) {
-        var lists = listOf<String>("전국", "서울", "부산", "대구", "광주", "인천",
+        var lists = listOf<String>("합계", "서울", "부산", "대구", "광주", "인천",
             "대전", "울산", "세종", "경기", "강원", "충북", "충남", "전남", "전북",
             "경북", "경남", "제주", "검역")
         var spinner = binding.quarantineSpinner
