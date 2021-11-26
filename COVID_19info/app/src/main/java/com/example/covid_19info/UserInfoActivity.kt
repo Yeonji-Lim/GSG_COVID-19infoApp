@@ -21,7 +21,6 @@ import com.example.covid_19info.databinding.ActivityUserinfoBinding
 import com.example.covid_19info.ui.login.LoginViewModel
 import com.example.covid_19info.ui.login.LoginViewModelFactory
 import com.google.android.material.snackbar.Snackbar
-import org.w3c.dom.Text
 
 @RequiresApi(Build.VERSION_CODES.M)
 class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
@@ -69,6 +68,9 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        PreferenceUtil.context = applicationContext
+        var pref = PreferenceUtil()
+
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
 
@@ -87,11 +89,13 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
         }
 
         //이메일주소
-        binding.emailContent.text =sharedPreference.getString("userEmail","covidinfoapp@gmail.com")
+        binding.emailContent.text = pref.getString("userID", "")
 
         //비밀번호 변경 터치 시
         binding.passwordChangeBackground.setOnClickListener{
-            startActivity(Intent(this,PasswordChangeActivity::class.java))
+            val intent = Intent(this,PasswordChangeActivity::class.java)
+            intent.putExtra("is_find",false)
+            startActivity(intent)
         }
 
         //위치정보 제공동의 터치 시
@@ -137,13 +141,13 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
             val mAlertDialog = mBuilder.show()
             mDialogView.findViewById<TextView>(R.id.dialog_text).text="정말 탈퇴 하시겠습니까?"
             //취소버튼
-            val noBtn = mDialogView.findViewById<Button>(R.id.no_logout_btn)
+            val noBtn = mDialogView.findViewById<Button>(R.id.no_btn)
             noBtn.setOnClickListener{
                 mAlertDialog.dismiss()
             }
 
             //확인버튼
-            val yesBtn = mDialogView.findViewById<Button>(R.id.yes_logout_btn)
+            val yesBtn = mDialogView.findViewById<Button>(R.id.yes_btn)
             yesBtn.text="탈퇴"
             yesBtn.setOnClickListener{
                 //로그아웃 하는 함수 내용
@@ -190,13 +194,13 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
             mDialogView.findViewById<TextView>(R.id.dialog_text).text="정말 로그아웃 하시겠습니까?"
             
             //취소버튼
-            val noBtn = mDialogView.findViewById<Button>(R.id.no_logout_btn)
+            val noBtn = mDialogView.findViewById<Button>(R.id.no_btn)
             noBtn.setOnClickListener{
                 mAlertDialog.dismiss()
             }
 
             //확인버튼
-            val yesBtn = mDialogView.findViewById<Button>(R.id.yes_logout_btn)
+            val yesBtn = mDialogView.findViewById<Button>(R.id.yes_btn)
             yesBtn.text="로그아웃"
             yesBtn.setOnClickListener{
                 //로그아웃 하는 함수 내용

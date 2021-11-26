@@ -17,6 +17,9 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <string name="pw_change_success">변경 성공</string>
+    <string name="pw_change_fail">변경 실패</string>
+
     <string name="fine_location_permission_rationale">The fine location permission is needed for core functionality.</string>
     <string name="fine_permission_denied_explanation">Fine location permission was denied, but is needed for core functionality.</string>
 

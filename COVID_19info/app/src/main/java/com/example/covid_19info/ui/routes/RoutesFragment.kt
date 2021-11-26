@@ -185,10 +185,10 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 //                .getLocations()
 //        }?.observe(this, { locations ->
 //            for(mark in userMarkerList){
+//
 //                mark.remove()
 //            }
 //            userMarkerList.clear()
-//
 //            //마크생성
 //            for (location in locations) {
 //                var mark = map?.addMarker(
@@ -204,27 +204,9 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 //            Log.d("main", "in observe $userMarkerList")
 //            return@observe
 //        })
-        var db = context?.let { MyLocationDatabase.getInstance(it) }!!.locationDao()
-        db.getLocations().observe(viewLifecycleOwner, { locations ->
-            for(mark in userMarkerList){
-                mark.remove()
-            } 
-            userMarkerList.clear()
-
-            //마크생성
-            for (location in locations) {
-                var mark = map?.addMarker(
-                    MarkerOptions()
-                        .title(location.date.toString())
-                        .position((LatLng(location.latitude, location.longitude)))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                )
-                mark?.isVisible = true
-                mark?.let { userMarkerList.add(it) }
-
-            }
-            Log.d("main", "in observe $userMarkerList")
-            return@observe
+        var db = context?.let { MyLocationDatabase.getInstance(it) }!!.locationDao().getLocations()
+        db.observe(viewLifecycleOwner, { locations ->
+            Log.d("main", userMarkerList.size.toString())
         })
 
 
@@ -250,13 +232,13 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                 mDialogView.findViewById<TextView>(R.id.dialog_text).text="로그인이 필요한 메뉴입니다."
 
                 //취소버튼
-                val noBtn = mDialogView.findViewById<Button>(R.id.no_logout_btn)
+                val noBtn = mDialogView.findViewById<Button>(R.id.no_btn)
                 noBtn.setOnClickListener{
                     mAlertDialog?.dismiss()
                 }
 
                 //확인버튼
-                val yesBtn = mDialogView.findViewById<Button>(R.id.yes_logout_btn)
+                val yesBtn = mDialogView.findViewById<Button>(R.id.yes_btn)
                 yesBtn.text="로그인"
                 yesBtn.setOnClickListener{
                     //로그인 액티비티로 이동
@@ -268,27 +250,23 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             }
             //로그인 된 경우
             else {
-                for(usermark in userMarkerList){
-                    usermark.isVisible = true
+                if(changeView.isSelected) {
+                    var locations = db.value
+                    locations?.let { it1 -> showUserRoute(it1) }
+                }else{
+                    for(mark in userMarkerList){
+                        mark.remove()
+                    }
+                    userMarkerList = mutableListOf()
                 }
-                Log.d("main", "in button listner $userMarkerList")
-                mapFragment?.view?.requestLayout()
+
+                Log.d("main", "in button listner ${db.value}")
 
                 Log.d("loginButton","user markers : $userMarkerList")
+                Log.d("main", quartineMarkerList.size.toString())
+                Log.d("main",userMarkerList.size.toString())
 
             }
-            //사용자 동선 선택 x
-//            if(changeView.isSelected)
-//            {
-//                Log.d("loginButton","USERTRUE")
-//                userMarker(true)
-//            }
-//            else
-//            {
-//                Log.d("loginButton","USERFALSE")
-//                userMarker(false)
-//            }
-
         }
 
         //하단 버튼 리스너 설정을 위한 변수 설정
@@ -626,6 +604,20 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    private fun showUserRoute(routes: List<MyLocationEntity>){
+        for (location in routes) {
+            var mark = map?.addMarker(
+                MarkerOptions()
+                    .title("123")
+                    .position(LatLng(location.latitude, location.longitude))
+                    .snippet("321")
+            )
+            mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+            mark?.let { userMarkerList.add(it) }
+        }
+    }
+
+
     //사용자 동선 데이터베이스 테스트
     private fun showUserRoute(){
         var db = context?.let { MyLocationDatabase.getInstance(it)}
@@ -668,11 +660,6 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             if(btn.id==R.id.moveButtons){
                 btn.setOnTouchListener { view, motionEvent ->
                     Log.d("main", "${motionEvent.actionMasked}")
-                    when(motionEvent.actionMasked){
-                        MotionEvent.ACTION_UP->{
-                            true
-                        }
-                    }
                     return@setOnTouchListener gestureDetector.onTouchEvent(motionEvent)
                 }
             }else{
