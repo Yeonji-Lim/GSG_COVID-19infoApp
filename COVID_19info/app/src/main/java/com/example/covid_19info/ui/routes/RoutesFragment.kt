@@ -45,13 +45,8 @@ import android.widget.LinearLayout
 
 import android.view.View
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.findFragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import com.example.covid_19info.*
-import com.example.covid_19info.data.LocationRepository
 import com.example.covid_19info.data.QuarantinesRouteAPI
-import com.example.covid_19info.data.model.MyLocationDao
 import com.example.covid_19info.data.model.MyLocationDatabase
 import com.example.covid_19info.data.model.MyLocationEntity
 import com.example.covid_19info.data.model.Quarantines
@@ -63,7 +58,7 @@ import retrofit2.Response
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.util.concurrent.Executors
+import java.util.*
 
 
 class RoutesFragment : Fragment(), OnMapReadyCallback {
@@ -105,6 +100,8 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
     private var quartineMarkerList: MutableList<Marker> = mutableListOf()
     private var userMarkerList: MutableList<Marker> = mutableListOf()
     lateinit var buttons :LinearLayout
+    lateinit var UserButton: Button
+    private var userDateList: MutableList<LocalDate> = mutableListOf()
 
 
 
@@ -253,26 +250,26 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                 if(changeView.isSelected) {
                     var locations = db.value
                     locations?.let { it1 -> showUserRoute(it1) }
+
                 }else{
                     for(mark in userMarkerList){
                         mark.remove()
                     }
                     userMarkerList = mutableListOf()
                 }
-
+                Log.d("tagtag",map.toString())
                 Log.d("main", "in button listner ${db.value}")
-
                 Log.d("loginButton","user markers : $userMarkerList")
                 Log.d("main", quartineMarkerList.size.toString())
                 Log.d("main",userMarkerList.size.toString())
-
             }
         }
 
         //하단 버튼 리스너 설정을 위한 변수 설정
         buttons = view.findViewById<LinearLayout>(R.id.linearLayout)
+        UserButton = view.findViewById<Button>(R.id.UserDateTest)
         //버튼 움직임 설정
-        setButtonsMove()
+        //setButtonsMove()
 
         //네트워크 호출
         val api = QuarantinesRouteAPI.create()
@@ -614,8 +611,23 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             )
             mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
             mark?.let { userMarkerList.add(it) }
+            var temp = LocalDate.of(LocalDate.now().year,location.date.month,location.date.day)
+            var btemp = false
+            for(Date in userDateList)
+            {
+                if(temp.equals(Date))
+                {
+                    btemp = true
+                }
+            }
+            if(btemp == false)
+            {
+                userDateList.add(temp)
+            }
         }
+        Log.d("datelist",userDateList.toString())
     }
+
 
 
     //사용자 동선 데이터베이스 테스트
@@ -642,6 +654,23 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         {
             for(mark in userMarkerList) {
                 mark.isVisible = false
+            }
+        }
+    }
+
+    fun userButtonEvent(){
+        Log.d("userDate", "함수인")
+        UserButton.setOnClickListener{
+            if(UserButton.isSelected){
+                Log.d("userDate", "클릭")
+                UserButton.isSelected = false
+                for(mark in userMarkerList)
+                {
+                    mark.isVisible = true
+                }
+            }
+            else
+            {
             }
         }
     }
