@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from authemail.models import SignupCode, EmailChangeCode, PasswordResetCode
-from models import send_multi_format_email
+from accounts.models import send_multi_format_email
 from authemail.serializers import SignupSerializer, LoginSerializer
 from authemail.serializers import PasswordResetSerializer
 from authemail.serializers import PasswordResetVerifiedSerializer
@@ -98,9 +98,10 @@ class SignupVerify(APIView):
 class Login(APIView):
     permission_classes = (AllowAny,)
     serializer_class = LoginSerializer
-    print("???")
+
 
     def post(self, request, format=None):
+        print(request.get_host())
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():

@@ -23,7 +23,7 @@ urlpatterns = [
     path('member_tracing/', include('member_tracing.urls')),
 
     # authemail 사용을 위한 url 작성
-    path('', include('authemail.urls')),
+    #path('', include('authemail.urls')),
 
-    path('accounts/', include('accounts.urls')), # 프로젝트에서 앱으로 url 연결
+    path('', include('accounts.urls')), # 프로젝트에서 앱으로 url 연결
 ]
