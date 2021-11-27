@@ -30,7 +30,7 @@ def member_tracing_list(request):
             data = [data]
         for item in data:
             dateString = item['date']
-            datetimeFormat = '%b %d, %Y %I:%M:%S %p'
+            datetimeFormat = '%a %b %d %H:%M:%S %Z%z %Y'
             item['date'] = datetime.datetime.strptime(dateString, datetimeFormat)
             item['date'] = item['date'].strftime("%Y-%m-%d %H:%M:%S")
         serializer = MemberTracingSerializer(data=data, many=True)
@@ -58,7 +58,7 @@ def member_tracing_detail(request, pk):
     elif request.method == 'PUT':
         data = JSONParser().parse(request)
         dateString = data['date']
-        datetimeFormat = '%b %d, %Y %I:%M:%S %p'
+        datetimeFormat = '%a %b %d %H:%M:%S %Z%z %Y'
         data['date'] = datetime.datetime.strptime(dateString, datetimeFormat)
         data['date'] = data['date'].strftime("%Y-%m-%d %H:%M:%S")
         serializer = MemberTracingSerializer(memberTracing, data=data)
