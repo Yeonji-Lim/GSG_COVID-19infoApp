@@ -1,0 +1,2 @@
+테스트 용2 :
+    http://127.0.0.1:8000/signupverify.html/?code={{ code }}
