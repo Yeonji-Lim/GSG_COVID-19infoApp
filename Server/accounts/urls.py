@@ -23,4 +23,5 @@ urlpatterns = [
          name='authemail-password-change'),
 
     path('users/me/', views.UserMe.as_view(), name='authemail-me'),
+    path('user_delete/', views.DeleteAccount.as_view(), name='authemail-me'),
 ]
