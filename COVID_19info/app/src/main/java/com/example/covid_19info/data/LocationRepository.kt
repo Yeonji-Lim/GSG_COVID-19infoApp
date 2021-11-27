@@ -16,10 +16,16 @@
 package com.example.covid_19info.data
 
 import android.content.Context
+import android.util.Log
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
+import com.example.covid_19info.PreferenceUtil
 import com.example.covid_19info.data.model.MyLocationDatabase
 import com.example.covid_19info.data.model.MyLocationEntity
+import com.example.covid_19info.data.model.ServerUserLocation
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.UUID
 import java.util.concurrent.ExecutorService
 
@@ -49,6 +55,8 @@ class LocationRepository private constructor(
      */
     fun getLocation(id: UUID): LiveData<MyLocationEntity> = locationDao.getLocation(id)
 
+    fun delLocations(): Unit = locationDao.deleteAllLoc()
+
     // Not being used now but could in future versions.
     /**
      * Updates location in database.
@@ -74,6 +82,15 @@ class LocationRepository private constructor(
     fun addLocations(myLocationEntities: List<MyLocationEntity>) {
         executor.execute {
             locationDao.addLocations(myLocationEntities)
+
+            var login = LoginAPI.create()
+            var pref = PreferenceUtil()
+            for(location in myLocationEntities){
+                login.putuserRoute("Token "+pref.getString("token", ""),
+                    ServerUserLocation(location.id.toString(),location.latitude,
+                        location.longitude, location.date.toString())
+                ).execute()
+            }
         }
     }
 
