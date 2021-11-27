@@ -29,7 +29,7 @@ class LoginDataSource {
                 //로그인 성공
                 Log.d("main", loginRst?.token!!)
 //                2021-11-27T13:15:32+09:00
-                var transform = SimpleDateFormat("yyyy-MM-ddTHH:mm:ss", java.util.Locale.getDefault())
+                var transform = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.getDefault())
                 
                 //서버 데이터 가져오기
                 var locs = loginapi.getuserRoute("Token "+loginRst?.token!!).execute()
@@ -71,9 +71,10 @@ class LoginDataSource {
             try {
                 var signUpRst = loginapi.signup(SignUpRst(email, password)).execute().body()
                 //회원가입 성공
-                //Log.d("main", signUpRst?.email!!)
+                Log.d("main", signUpRst.toString())
                 return@withContext signUpRst!!
             } catch (e: Throwable) {
+                Log.d("main", e.toString())
                 return@withContext SignUpRst("","")
             }
         }
