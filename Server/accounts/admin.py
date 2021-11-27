@@ -3,8 +3,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
-from authemail.forms import EmailUserCreationForm, EmailUserChangeForm
-from authemail.models import SignupCode, PasswordResetCode, EmailChangeCode
+from accounts.forms import EmailUserCreationForm, EmailUserChangeForm
+from accounts.models import SignupCode, PasswordResetCode, EmailChangeCode
 
 
 class SignupCodeAdmin(admin.ModelAdmin):
