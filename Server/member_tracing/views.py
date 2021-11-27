@@ -1,31 +1,32 @@
 from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import permission_classes
+from requests import Response
 from rest_framework.parsers import JSONParser
-from rest_framework.permissions import IsAuthenticated
 
 from member_tracing.models import MemberTracing
 from member_tracing.serializers import MemberTracingSerializer
 import datetime
 
+from rest_framework.decorators import api_view
+from rest_framework.authtoken.models import Token, TokenProxy
 
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
 
 # 모든 사용자 동선 조회 or 새로운 동선 저장
 @api_view(['GET', 'POST'])
-# @permission_classes([IsAuthenticated])
 def member_tracing_list(request):
 
     # 모든 사용자 동선 조회
     if request.method == 'GET':
-        memberTracing = MemberTracing.objects.all()
+        token = Token.objects.get(pk=str(request.META['HTTP_AUTHORIZATION'])[6:])
+        user_id = token.user.id
+        memberTracing = MemberTracing.objects.filter(owner=user_id)
         serializer = MemberTracingSerializer(memberTracing, many=True)
         return JsonResponse(serializer.data, safe=False)
 
     # 새로운 동선 저장
     elif request.method == 'POST':
         data = JSONParser().parse(request)
+        token = Token.objects.get(pk=str(request.META['HTTP_AUTHORIZATION'])[6:])
+        user_id = token.user.id
         if isinstance(data, dict):
             data = [data]
         for item in data:
@@ -33,6 +34,7 @@ def member_tracing_list(request):
             datetimeFormat = '%a %b %d %H:%M:%S %Z%z %Y'
             item['date'] = datetime.datetime.strptime(dateString, datetimeFormat)
             item['date'] = item['date'].strftime("%Y-%m-%d %H:%M:%S")
+            item['owner'] = user_id
         serializer = MemberTracingSerializer(data=data, many=True)
         if serializer.is_valid():
             serializer.save()

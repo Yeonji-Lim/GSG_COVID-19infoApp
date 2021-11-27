@@ -12,6 +12,7 @@ class MemberTracingSerializer(serializers.ModelSerializer):
 
         # 모델 설정
         model = MemberTracing
+        owner = serializers.ReadOnlyField(source='owner.key')
 
         # 필드 설정
-        fields = ('date', 'id', 'latitude', 'longitude')
+        fields = ('owner', 'date', 'id', 'latitude', 'longitude')
