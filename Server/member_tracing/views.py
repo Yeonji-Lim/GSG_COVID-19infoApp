@@ -1,5 +1,4 @@
 from django.http import HttpResponse, JsonResponse
-from requests import Response
 from rest_framework.parsers import JSONParser
 
 from member_tracing.models import MemberTracing
@@ -7,8 +6,7 @@ from member_tracing.serializers import MemberTracingSerializer
 import datetime
 
 from rest_framework.decorators import api_view
-from rest_framework.authtoken.models import Token, TokenProxy
-
+from rest_framework.authtoken.models import Token
 
 # 모든 사용자 동선 조회 or 새로운 동선 저장
 @api_view(['GET', 'POST'])

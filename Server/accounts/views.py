@@ -100,7 +100,6 @@ class Login(APIView):
     serializer_class = LoginSerializer
 
     def post(self, request, format=None):
-        print(request.get_host())
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
