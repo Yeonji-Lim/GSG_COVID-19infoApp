@@ -1,4 +1,5 @@
 from django.db import models
+from config import settings
 
 class MemberTracing(models.Model):
     """
@@ -10,7 +11,7 @@ class MemberTracing(models.Model):
     "longitude": 126.8735283
     }
     """
-
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='member_tracing', on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=False)
     id = models.CharField(max_length=100, primary_key=True, unique=True)
     latitude = models.FloatField(null=True, default='0')
