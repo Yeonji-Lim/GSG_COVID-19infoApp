@@ -31,7 +31,7 @@ class LoginRepository(val dataSource: LoginDataSource) {
 
     suspend fun logout() {
         val result = dataSource.logout(prefs.getString("token",""))
-
+        println("logout!!!!"+prefs.getString("token",""))
         Log.d("main", "logout end")
         setLoggedOutUser()
 //        user = null
@@ -68,6 +68,7 @@ class LoginRepository(val dataSource: LoginDataSource) {
     private fun setLoggedInUser(loggedInUser: LoggedInUser) {
         prefs.setString("userID", loggedInUser.userId)
         loggedInUser.tok?.let { prefs.setString("token", it) }
+        println("login!!!!"+prefs.getString("token",""))
         //this.user = loggedInUser
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore

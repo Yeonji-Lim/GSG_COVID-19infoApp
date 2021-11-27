@@ -27,14 +27,13 @@ class LoginDataSource {
     }
 
     suspend fun logout(tok: String): LoginToken {
-        return withContext(Dispatchers.Main){
-            // TODO: revoke authentication
+        return withContext(Dispatchers.IO){
             try{
-                var rst = loginapi.logout(LoginToken(tok)).execute().body()
-
+                var rst = loginapi.logout("Token "+tok).execute().body()
+                Log.d("main", rst.toString())
                 return@withContext rst!!
             }catch (e: Throwable){
-
+                Log.d("main", e.toString())
                 return@withContext LoginToken("")
             }
         }

@@ -4,10 +4,7 @@ package com.example.covid_19info.data
 import com.example.covid_19info.data.model.*
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 
 
 interface LoginAPI {
@@ -24,9 +21,10 @@ interface LoginAPI {
         @Body LoginRequest: LoginRequest
     ): Call<LoginToken>
 
-    @POST("logout/")
+    @Headers("Content-Type: application/json")
+    @GET("logout/")
     fun logout(
-        @Body LoginToken: LoginToken
+        @Header("Authorization") Authorization: String
     ): Call<LoginToken>
 
     @POST("password/reset/")
