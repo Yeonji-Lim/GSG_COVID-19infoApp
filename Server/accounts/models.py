@@ -164,12 +164,13 @@ class AbstractBaseCode(models.Model):
     class Meta:
         abstract = True
 
-    def send_email(self, prefix):
+    def send_email(self, prefix, request):
         ctxt = {
             'email': self.user.email,
             'first_name': self.user.first_name,
             'last_name': self.user.last_name,
-            'code': self.code
+            'code': self.code,
+            'host': request.get_host()
         }
         send_multi_format_email(prefix, ctxt, target_email=self.user.email)
 
@@ -182,17 +183,17 @@ class SignupCode(AbstractBaseCode):
 
     objects = SignupCodeManager()
 
-    def send_signup_email(self):
+    def send_signup_email(self, request):
         prefix = 'signup_email'
-        self.send_email(prefix)
+        self.send_email(prefix, request)
 
 
 class PasswordResetCode(AbstractBaseCode):
     objects = PasswordResetCodeManager()
 
-    def send_password_reset_email(self):
+    def send_password_reset_email(self, request):
         prefix = 'password_reset_email'
-        self.send_email(prefix)
+        self.send_email(prefix, request)
 
 
 class EmailChangeCode(AbstractBaseCode):
@@ -200,9 +201,9 @@ class EmailChangeCode(AbstractBaseCode):
 
     objects = EmailChangeCodeManager()
 
-    def send_email_change_emails(self):
+    def send_email_change_emails(self, request):
         prefix = 'email_change_notify_previous_email'
-        self.send_email(prefix)
+        self.send_email(prefix, request)
 
         prefix = 'email_change_confirm_new_email'
         ctxt = {
