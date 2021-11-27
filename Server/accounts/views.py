@@ -10,14 +10,14 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from authemail.models import SignupCode, EmailChangeCode, PasswordResetCode
+from accounts.models import SignupCode, EmailChangeCode, PasswordResetCode
 from accounts.models import send_multi_format_email
-from authemail.serializers import SignupSerializer, LoginSerializer
-from authemail.serializers import PasswordResetSerializer
-from authemail.serializers import PasswordResetVerifiedSerializer
-from authemail.serializers import EmailChangeSerializer
-from authemail.serializers import PasswordChangeSerializer
-from authemail.serializers import UserSerializer
+from accounts.serializers import SignupSerializer, LoginSerializer
+from accounts.serializers import PasswordResetSerializer
+from accounts.serializers import PasswordResetVerifiedSerializer
+from accounts.serializers import EmailChangeSerializer
+from accounts.serializers import PasswordChangeSerializer
+from accounts.serializers import UserSerializer
 
 
 class Signup(APIView):

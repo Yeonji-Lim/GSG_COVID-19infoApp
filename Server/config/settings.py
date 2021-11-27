@@ -43,8 +43,6 @@ INSTALLED_APPS = [
     # member_tracing 앱 추가
     'member_tracing',
 
-    # authemail 라이브러리 사용을 위한
-    'authemail',
     # 생성한 계정 관리 어플리케이션 등록
     'accounts',
 ]
