@@ -1,6 +1,8 @@
 package com.example.covid_19info.ui.stats
 
 import android.os.Bundle
+import android.text.Html
+import android.text.Html.FROM_HTML_MODE_LEGACY
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -112,12 +114,30 @@ class StatSidoQuarantine : Fragment() {
         Log.d("stat", data.toString())
         for(index in data.indices){
             if(lists[p2]==data[index].gubun){
-                binding.accumulateQuarantine.text = getString(R.string.quarantine_sido, "누적 확진자", data[index].defCnt)
-                binding.accumulateClear.text = getString(R.string.quarantine_sido, "누적 격리해제", data[index].isolClearCnt)
-                binding.accumulateDeath.text = getString(R.string.quarantine_sido, "누적 사망자", data[index].deathCnt)
-                binding.todayQuarantine.text = getString(R.string.quarantine_sido, "금일 확진자", data[index].incDec)
-                binding.todayClear.text = getString(R.string.quarantine_sido, "현재 격리자", data[index].isolIngCnt)
-                binding.todayDeath.text = getString(R.string.quarantine_sido, "금일 사망자", data[index].deathCnt)
+
+                var quarantine_text =  getString(R.string.quarantine_sido, "누적 확진자", data[index].defCnt)
+                var styletex = Html.fromHtml(quarantine_text,FROM_HTML_MODE_LEGACY)
+                binding.accumulateQuarantine.text = styletex
+
+                quarantine_text = getString(R.string.quarantine_sido, "누적 격리해제", data[index].isolClearCnt)
+                styletex = Html.fromHtml(quarantine_text,FROM_HTML_MODE_LEGACY)
+                binding.accumulateClear.text = styletex
+
+                quarantine_text =  getString(R.string.quarantine_sido, "누적 사망자", data[index].deathCnt)
+                styletex = Html.fromHtml(quarantine_text,FROM_HTML_MODE_LEGACY)
+                binding.accumulateDeath.text = styletex
+
+                quarantine_text = getString(R.string.quarantine_sido_cur, "금일 확진자", data[index].incDec)
+                styletex = Html.fromHtml(quarantine_text,FROM_HTML_MODE_LEGACY)
+                binding.todayQuarantine.text = styletex
+
+                quarantine_text = getString(R.string.quarantine_sido_cur, "현재 격리자", data[index].isolIngCnt)
+                styletex = Html.fromHtml(quarantine_text,FROM_HTML_MODE_LEGACY)
+                binding.todayClear.text  = styletex
+
+                quarantine_text = getString(R.string.quarantine_sido_cur, "금일 사망자", data[index].deathCnt)
+                styletex = Html.fromHtml(quarantine_text,FROM_HTML_MODE_LEGACY)
+                binding.todayDeath.text  = styletex
                 break
             }
         }

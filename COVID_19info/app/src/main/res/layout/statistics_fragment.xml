@@ -236,7 +236,7 @@
         android:text="2021.11.03 00:00 집계 기준"
         app:layout_constraintBottom_toTopOf="@+id/pager"
         app:layout_constraintEnd_toEndOf="@+id/pager"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.099"
         app:layout_constraintStart_toStartOf="@+id/pager" />
 
     <ImageView
