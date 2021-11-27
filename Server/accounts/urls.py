@@ -19,11 +19,6 @@ urlpatterns = [
     path('password/reset/verified/', views.PasswordResetVerified.as_view(),
          name='authemail-password-reset-verified'),
 
-    path('email/change/', views.EmailChange.as_view(),
-         name='authemail-email-change'),
-    path('email/change/verify/', views.EmailChangeVerify.as_view(),
-         name='authemail-email-change-verify'),
-
     path('password/change/', views.PasswordChange.as_view(),
          name='authemail-password-change'),
 
