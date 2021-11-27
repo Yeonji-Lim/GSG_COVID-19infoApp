@@ -6,7 +6,7 @@ import java.util.*
 
 data class ServerUserLocation(
     @SerializedName("id") val id: String,
-    @SerializedName("latitude") val latitude: Float,
-    @SerializedName("longitude") val longtitude: Float,
+    @SerializedName("latitude") val latitude: Double,
+    @SerializedName("longitude") val longtitude: Double,
     @SerializedName("date") val date: String
 )

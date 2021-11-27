@@ -24,27 +24,35 @@ interface LoginAPI {
     @Headers("Content-Type: application/json")
     @GET("logout/")
     fun logout(
+        //"Token "+
         @Header("Authorization") Authorization: String
     ): Call<LoginToken>
 
+    @Headers("Content-Type: application/json")
     @POST("password/reset/")
     fun verifyEmail(
-        @Body email: String
-    ): Call<String>
+        @Body sendEmail: SendEmail
+    ): Call<SendEmail>
 
     //password reset verify
+    @Headers("Content-Type: application/json")
     @POST("password/reset/verified/")
     fun pwChange(
-        @Body code: String,
-        @Body password: String
+        @Body pwchange: PwChange
     ): Call<Boolean>
 
 //    @POST("")
 
-    @Headers("Authorization: Token a9aecd63efdd57d11330f2a343c80f5978970935")
     @GET("member_tracing/")
     fun getuserRoute(
+        @Header("Authorization") Authorization: String
     ): Call<List<ServerUserLocation>>
+
+    @POST("member_tracing/")
+    fun putuserRoute(
+        @Header("Authorization") Authorization: String,
+        @Body userLocation: ServerUserLocation
+    ): Call<Void>
 
     companion object{
         private const val BASE_URL_ROUTE="http://172.30.1.42:8000"
