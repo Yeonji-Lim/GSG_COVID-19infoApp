@@ -197,7 +197,8 @@ class PasswordResetVerify(APIView):
                 password_reset_code.delete()
                 raise PasswordResetCode.DoesNotExist()
 
-            content = {'success': _('Email address verified.')}
+            content = {'success': _('Email address verified.'),
+                       'code':password_reset_code}
             return Response(content, status=status.HTTP_200_OK)
         except PasswordResetCode.DoesNotExist:
             content = {'detail': _('Unable to verify user.')}
