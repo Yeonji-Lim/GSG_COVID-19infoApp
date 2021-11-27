@@ -55,7 +55,9 @@ import com.google.android.gms.maps.model.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
@@ -603,6 +605,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
 
     private fun showUserRoute(routes: List<MyLocationEntity>){
         for (location in routes) {
+            Log.d("datelist",location.date.toString())
             var mark = map?.addMarker(
                 MarkerOptions()
                     .title("123")
@@ -611,7 +614,10 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             )
             mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
             mark?.let { userMarkerList.add(it) }
-            var temp = LocalDate.of(LocalDate.now().year,location.date.month,location.date.day)
+            var temp = location.date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate()
+            //var temp = LocalDate.of(LocalDate.now().year,location.date.month,location.date.day)
             var btemp = false
             for(Date in userDateList)
             {
