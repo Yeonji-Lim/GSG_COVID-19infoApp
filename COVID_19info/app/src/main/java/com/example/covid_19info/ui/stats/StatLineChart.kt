@@ -141,10 +141,11 @@ class StatLineChart : Fragment() {
         var quarantines = quarantinStat.body.items.item
         val entries1 = ArrayList<Entry>()
         val entries2 = ArrayList<Entry>()
-        val cnt = quarantines!!.size
-        for(i: Int in 0..(quarantines?.size?.minus(1)!!) step(1)){
-            entries1.add(Entry(i.toFloat(), quarantines[i].decideCnt.toFloat()))
-            entries2.add(Entry(i.toFloat(), quarantines[i].clearCnt.toFloat()))
+        val cnt = quarantines!!.size-1
+        //println("크기 테스트"+quarantines?.size?.minus(1)!!)
+        for(i: Int in 0..cnt step(1)){
+            entries1.add(Entry(i.toFloat(), quarantines[cnt-i].decideCnt.toFloat()))
+            entries2.add(Entry(i.toFloat(), quarantines[cnt-i].clearCnt.toFloat()))
         }
 
         var data = LineData(LineDataSet(entries1,"확진"))

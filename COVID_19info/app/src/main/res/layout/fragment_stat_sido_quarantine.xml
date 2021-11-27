@@ -26,6 +26,9 @@ tools:context=".ui.stats.StatSidoQuarantine">
         android:layout_marginStart="28dp"
         android:layout_marginTop="32dp"
         android:text="시도별 감염 현황"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,11 +64,11 @@ tools:context=".ui.stats.StatSidoQuarantine">
             android:layout_width="@dimen/quarantine_sido_width"
             android:layout_height="@dimen/quarantine_sido_height"
             android:layout_margin="5dp"
-            android:text = "금일 확진자"
             android:background="@drawable/curved_rectangle"
+            android:backgroundTint="#368289"
             android:elevation="5dp"
-            android:backgroundTint="#50BEC9"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="금일 확진자" />
 
     </LinearLayout>
     <LinearLayout
@@ -90,11 +93,11 @@ tools:context=".ui.stats.StatSidoQuarantine">
             android:layout_width="@dimen/quarantine_sido_width"
             android:layout_height="@dimen/quarantine_sido_height"
             android:layout_margin="5dp"
-            android:text = "금일 격리해제"
             android:background="@drawable/curved_rectangle"
+            android:backgroundTint="#368289"
             android:elevation="5dp"
-            android:backgroundTint="#50BEC9"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="금일 격리해제" />
 
     </LinearLayout>
     <LinearLayout
@@ -119,11 +122,11 @@ tools:context=".ui.stats.StatSidoQuarantine">
             android:layout_width="@dimen/quarantine_sido_width"
             android:layout_height="@dimen/quarantine_sido_height"
             android:layout_margin="5dp"
-            android:text = "금일 사망자"
             android:background="@drawable/curved_rectangle"
+            android:backgroundTint="#368289"
             android:elevation="5dp"
-            android:backgroundTint="#50BEC9"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="금일 사망자" />
 
     </LinearLayout>
     <FrameLayout

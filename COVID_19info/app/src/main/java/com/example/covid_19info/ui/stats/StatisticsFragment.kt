@@ -136,6 +136,7 @@ class StatisticsFragment : Fragment() {
                 call: Call<VaccinatedNation>,
                 response: Response<VaccinatedNation>
             ){
+                binding.statTimeTxt.text =  response.body()?.body?.dataTime + "집계 기준"
                 //총 시민수
                 var total = 51667688f
                 //전체 접종 현황
