@@ -80,6 +80,17 @@ class LoginDataSource {
         }
     }
 
+    suspend fun withdrawal(tok: String){
+        return withContext(Dispatchers.IO){
+            try{
+                loginapi.withdrawal("Token "+tok).execute()
+            } catch (e: Throwable) {
+                Log.d("main", e.toString())
+                return@withContext
+            }
+        }
+    }
+
     suspend fun pwChange(pw: String, code: String): ChangeResult<PwchangeUser> {
         return withContext(Dispatchers.IO){
             Log.d("main", "변경전")

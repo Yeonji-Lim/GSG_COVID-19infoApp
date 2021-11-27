@@ -54,6 +54,11 @@ interface LoginAPI {
         @Body userLocation: ServerUserLocation
     ): Call<Void>
 
+    @DELETE("user_delete/")
+    fun withdrawal(
+        @Header("Authorization") Authorization: String
+    ): Call<Void>
+
     companion object{
         private const val BASE_URL_ROUTE="http://10.80.25.157:8000"
         fun create(): LoginAPI{

@@ -46,6 +46,12 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
         }
     }
 
+    fun withdrawal(){
+        viewModelScope.launch {
+            loginRepository.withdrawal()
+        }
+    }
+
     fun pwChange(pw: String, code: String){
         viewModelScope.launch {
             val result = loginRepository.pwChange(pw, code)

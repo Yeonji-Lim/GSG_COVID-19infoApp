@@ -37,6 +37,11 @@ class LoginRepository(val dataSource: LoginDataSource) {
 //        user = null
     }
 
+    suspend fun withdrawal(){
+        val result = dataSource.withdrawal(prefs.getString("token",""))
+        setLoggedOutUser()
+    }
+
     suspend fun login(username: String, password: String): Result<LoggedInUser> {
         // handle login
         val result = dataSource.login(username, password)
