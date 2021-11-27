@@ -99,9 +99,7 @@ class Login(APIView):
     permission_classes = (AllowAny,)
     serializer_class = LoginSerializer
 
-
     def post(self, request, format=None):
-        print(request.get_host())
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
@@ -348,3 +346,12 @@ class UserMe(APIView):
 
     def get(self, request, format=None):
         return Response(self.serializer_class(request.user).data)
+
+
+class DeleteAccount(APIView):
+
+    def delete(self, request, *args, **kwargs):
+        user = self.request.user
+        user.delete()
+
+        return Response({"result": "user delete"})
