@@ -21,6 +21,7 @@ class LoginDataSource {
                 Log.d("main", loginRst?.token!!)
                 return@withContext Result.Success(LoggedInUser(username, username, loginRst?.token))
             } catch (e: Throwable) {
+                Log.d("main", e.toString())
                 return@withContext Result.Error(IOException("Error logging in", e))
             }
         }
@@ -57,7 +58,8 @@ class LoginDataSource {
     suspend fun pwChange(pw: String, code: String): ChangeResult<PwchangeUser> {
         return withContext(Dispatchers.IO){
             try {
-                var signupEmail = loginapi.pwChange(pw, code).execute().body()
+                var signupEmail = loginapi.pwChange(code, pw).execute()
+                Log.d("test1234", signupEmail.toString())
                 //이메일 성공
                // Log.d("main", signupEmail?.code!!)
                 return@withContext ChangeResult.Success(PwchangeUser(""))

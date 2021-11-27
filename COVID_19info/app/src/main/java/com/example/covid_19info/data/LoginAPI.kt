@@ -35,7 +35,7 @@ interface LoginAPI {
     ): Call<String>
 
     //password reset verify
-    @POST("password/reset/verify/")
+    @POST("password/reset/verified/")
     fun pwChange(
         @Body code: String,
         @Body password: String
