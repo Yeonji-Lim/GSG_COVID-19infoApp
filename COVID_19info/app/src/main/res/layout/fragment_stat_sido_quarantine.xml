@@ -129,20 +129,6 @@ tools:context=".ui.stats.StatSidoQuarantine">
             android:text="금일 사망자" />
 
     </LinearLayout>
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/vaccinated_time"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_margin="10dp"
-            android:text="누적, 신규 접종"
-            android:backgroundTint="#FFFFFF"
-            android:gravity="center" />
-    </FrameLayout>
-
 </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
