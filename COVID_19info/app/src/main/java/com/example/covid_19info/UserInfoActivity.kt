@@ -151,11 +151,13 @@ class UserInfoActivity : AppCompatActivity(), LifecycleOwner {
             yesBtn.text="탈퇴"
             yesBtn.setOnClickListener{
                 //로그아웃 하는 함수 내용
-                loginViewModel.logout()
+                loginViewModel.withdrawal()
+
+
 
                 mAlertDialog.dismiss()
 
-                Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "회원탈퇴 되었습니다.", Toast.LENGTH_SHORT).show()
                 super.onBackPressed()
 
             }

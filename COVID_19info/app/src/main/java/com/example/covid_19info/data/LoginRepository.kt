@@ -31,10 +31,15 @@ class LoginRepository(val dataSource: LoginDataSource) {
 
     suspend fun logout() {
         val result = dataSource.logout(prefs.getString("token",""))
-
+        println("logout!!!!"+prefs.getString("token",""))
         Log.d("main", "logout end")
         setLoggedOutUser()
 //        user = null
+    }
+
+    suspend fun withdrawal(){
+        val result = dataSource.withdrawal(prefs.getString("token",""))
+        setLoggedOutUser()
     }
 
     suspend fun login(username: String, password: String): Result<LoggedInUser> {
@@ -61,13 +66,14 @@ class LoginRepository(val dataSource: LoginDataSource) {
         return dataSource.pwChange(pw, code)
     }
 
-    suspend fun verifyEmail(email: String): SendEmail{
+    suspend fun verifyEmail(email: String): String{
         return dataSource.verifyEmail(email)
     }
 
     private fun setLoggedInUser(loggedInUser: LoggedInUser) {
         prefs.setString("userID", loggedInUser.userId)
         loggedInUser.tok?.let { prefs.setString("token", it) }
+        println("login!!!!"+prefs.getString("token",""))
         //this.user = loggedInUser
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore

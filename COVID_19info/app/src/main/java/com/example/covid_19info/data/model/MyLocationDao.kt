@@ -34,6 +34,9 @@ interface MyLocationDao {
     @Query("SELECT * FROM my_location_table WHERE id=(:id)")
     fun getLocation(id: UUID): LiveData<MyLocationEntity>
 
+    @Query("DELETE FROM my_location_table")
+    fun deleteAllLoc()
+
     @Update
     fun updateLocation(myLocationEntity: MyLocationEntity)
 

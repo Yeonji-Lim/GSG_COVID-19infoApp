@@ -1,6 +1,7 @@
 package com.example.covid_19info.ui.stats
 
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -115,15 +116,26 @@ class StatSidoVaccinated : Fragment() {
             3010476f, 1480777f, 1153901f, 360907f, 13807158f,
             1560172f, 1637897f, 2185575f, 1884455f, 1835392f,
             2691891f, 3407455f, 697578f)
-        
-        binding.firstVaccinated.text = getString(R.string.accumulated_vaccinated, "1차 접종",
+
+        var vaccinated_text =  getString(R.string.accumulated_vaccinated, "1차 접종",
             vacData[p2].accumulatedFirstCnt.div(list[p2]).times(100), vacData[p2].firstCnt)
-        binding.secondVaccinated.text = getString(R.string.accumulated_vaccinated, "2차 접종",
+        var styletex = Html.fromHtml(vaccinated_text, Html.FROM_HTML_MODE_LEGACY)
+        binding.firstVaccinated.text = styletex
+
+        vaccinated_text = getString(R.string.accumulated_vaccinated, "2차 접종",
             vacData[p2].accumulatedSecondCnt.div(list[p2]).times(100), vacData[p2].secondCnt)
-        binding.thirdVaccinated.text = getString(R.string.accumulated_vaccinated, "추가 접종",
-            vacData[p2].accumulatedThirdCnt.div(list[p2]).times(100), vacData[p2].thirdCnt)
-        binding.accumulateVaccinated.text = getString(R.string.accumulated_vaccinated1,
+        styletex = Html.fromHtml(vaccinated_text, Html.FROM_HTML_MODE_LEGACY)
+        binding.secondVaccinated.text = styletex
+
+        vaccinated_text = getString(R.string.accumulated_vaccinated, "추가 접종",
+        vacData[p2].accumulatedThirdCnt.div(list[p2]).times(100), vacData[p2].thirdCnt)
+        styletex = Html.fromHtml(vaccinated_text, Html.FROM_HTML_MODE_LEGACY)
+        binding.thirdVaccinated.text = styletex
+
+        vaccinated_text = getString(R.string.accumulated_vaccinated1,
             vacData[p2].accumulatedSecondCnt, vacData[p2].secondCnt)
+        styletex = Html.fromHtml(vaccinated_text, Html.FROM_HTML_MODE_LEGACY)
+        binding.accumulateVaccinated.text = styletex
     }
 
 
