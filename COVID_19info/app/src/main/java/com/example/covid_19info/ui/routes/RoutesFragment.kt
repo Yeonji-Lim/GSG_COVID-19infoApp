@@ -38,13 +38,18 @@ import android.view.ViewGroup
 import androidx.core.view.*
 import kotlin.math.roundToInt
 import android.animation.ValueAnimator
+import android.app.WallpaperColors.fromDrawable
 import android.content.Intent
+import android.content.res.Resources.getSystem
+import android.graphics.ColorFilter
+import android.graphics.drawable.Drawable
 import android.os.Build
 
 import android.widget.LinearLayout
 
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.getColor
 import androidx.lifecycle.LiveData
 import com.example.covid_19info.*
 import com.example.covid_19info.data.QuarantinesRouteAPI
@@ -65,6 +70,15 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+
+import android.graphics.Bitmap
+import android.graphics.Canvas
+
+import com.google.android.gms.maps.model.BitmapDescriptor
+
+
+
 
 
 class RoutesFragment : Fragment(), OnMapReadyCallback {
@@ -684,22 +698,41 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showQuarantineRoute(routes: Quarantines){
         val today = LocalDate.now()
-        for(route in routes.data){
-            var visitdate = LocalDate.parse(route.visitedDate.substring(0,10), DateTimeFormatter.ISO_DATE)
+        var circle = this.context?.let { ContextCompat.getDrawable(it, R.drawable.circle) } as Drawable
+        for(route in routes.data) {
+            var visitdate =
+                LocalDate.parse(route.visitedDate.substring(0, 10), DateTimeFormatter.ISO_DATE)
             val diff = ChronoUnit.DAYS.between(visitdate, today)
             var pos = route.latlng.split(", ").toTypedArray()
-            var mark = map?.addMarker(MarkerOptions()
-                .title(route.place)
-                .position(LatLng(pos[0].toDouble(), pos[1].toDouble()))
-                .snippet("${route.visitedDate}\n${route.address}"))
-            if(diff in 4..5)
-                mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-            else if(diff>5)
-                mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+            var mark = map?.addMarker(
+                MarkerOptions()
+                    .title(route.place)
+                    .position(LatLng(pos[0].toDouble(), pos[1].toDouble()))
+                    .snippet("${route.visitedDate}\n${route.address}")
+                    .icon(getMarkerIconFromDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.circle_red_a)!!))
+            )
+            if (diff in 4..5) {
+                mark?.setIcon(getMarkerIconFromDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.circle_orange_a)!!))
+            } else if (diff > 5){
+                mark?.setIcon(getMarkerIconFromDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.circle_green_a)!!))
+            }
             mark?.let { quartineMarkerList.add(it) }
         }
     }
-
+    val Int.dp: Int get() = (this / getSystem().displayMetrics.density).toInt()
+    val Int.px: Int get() = (this * getSystem().displayMetrics.density).toInt()
+    private fun getMarkerIconFromDrawable(drawable: Drawable): BitmapDescriptor? {
+        val canvas = Canvas()
+        val bitmap = Bitmap.createBitmap(
+            30.px,
+            30.px,
+            Bitmap.Config.ARGB_8888
+        )
+        canvas.setBitmap(bitmap)
+        drawable.setBounds(0, 0, 30.px, 30.px)
+        drawable.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
     fun setButtonsMove(): Boolean {

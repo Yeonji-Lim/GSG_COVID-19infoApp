@@ -11,6 +11,9 @@
     <color name="marker_red">#ff3333</color>
     <color name="marker_orange">#ff9933</color>
     <color name="marker_green">#99ff33</color>
+    <color name="marker_red_a">#99FF3333</color>
+    <color name="marker_orange_a">#99FF9933</color>
+    <color name="marker_green_a">#9999FF33</color>
     <color name="light_blue_400">#FF29B6F6</color>
     <color name="light_blue_600">#FF039BE5</color>
     <color name="gray_400">#FFBDBDBD</color>
