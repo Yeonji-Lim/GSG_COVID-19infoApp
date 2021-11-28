@@ -20,6 +20,7 @@ import com.example.covid_19info.data.model.LoginToken
 import com.example.covid_19info.data.model.Quarantines
 import com.example.covid_19info.data.model.SignUpRst
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 
 
 /**
@@ -30,58 +31,13 @@ import java.text.SimpleDateFormat
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        //var i = routeAPI.data.keys();
+        var cdf =  SimpleDateFormat("yyyy-MM-dd")
 
-//        // while(i.hasNext())
-//         {
-//            // var a = i.next().toString();
-//             //print(a);
-//         }
+        var ML = Date()
+        var MT = Date()
+        var a = LocalDate.now()
 
-//        var url = URL("https://coroname.me/getdata")
-//        //var url = URL("")
-//        var conn = url.openConnection() as HttpURLConnection
-//        conn.requestMethod = "GET"
-//        conn.setRequestProperty("Content-type", "application/json")
-//        var rd: BufferedReader
-//        rd = if(conn.responseCode in 200..300) {
-//            BufferedReader(InputStreamReader(conn.inputStream))
-//        } else {
-//            BufferedReader(InputStreamReader(conn.errorStream))
-//        }
-//
-//        var sb = StringBuilder()
-//        var line = rd.readLine()
-//        while (line != null) {
-//            sb.append(line)
-//            line = rd.readLine()
-//        }
-//        rd.close()
-//        conn.disconnect()
-//
-//        var data = JSONObject(sb.toString().trimIndent()).getJSONObject("data")
-//
-//
-//        var temp = data.getString("region")
-//        print("$temp")
-//        val api = VaccinatedAPI.createNation()
-//
-////        api.getVaccinatedData(page = 1).enqueue(object: Callback<VaccinatedInfo>{
-////            override fun onResponse(
-////                call: Call<VaccinatedInfo>,
-////                response: Response<VaccinatedInfo>
-////            ) {
-////                response.body()
-////            }
-////        })
-//        //println(api.getQuarantineStat(page = 1).execute().body()?.body?.items?.item?.get(0))
-//        println(api.getNationData().execute().body()?.body?.items.toString())
-        val quarantine = QuarantinesAPI.create()
-        var today = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date()).toInt()
-        println(today)
-        var rst = quarantine.getQuarantineStat(page = 1,
-            startCreateDt = (today-10).toString(),
-            endCreateDt = today.toString()).execute()
-        println(rst.body())
+
+
     }
 }

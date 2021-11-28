@@ -45,34 +45,37 @@ import android.widget.LinearLayout
 
 import android.view.View
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.findFragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.LiveData
 import com.example.covid_19info.*
-import com.example.covid_19info.data.LocationRepository
 import com.example.covid_19info.data.QuarantinesRouteAPI
-import com.example.covid_19info.data.model.MyLocationDao
 import com.example.covid_19info.data.model.MyLocationDatabase
 import com.example.covid_19info.data.model.MyLocationEntity
 import com.example.covid_19info.data.model.Quarantines
 import com.example.covid_19info.databinding.ActivityMainBinding
+import com.example.covid_19info.databinding.ContentRouteBinding
 import com.google.android.gms.maps.model.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
+import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.util.concurrent.Executors
+import java.util.*
 
 
 class RoutesFragment : Fragment(), OnMapReadyCallback {
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ContentRouteBinding
 
     // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
     lateinit var mainActivity: MainActivity
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        //userlocdb초기화
+        userlocdb = context.let { MyLocationDatabase.getInstance(it) }.locationDao().getLocations()
         // 2. Context를 액티비티로 형변환해서 할당
         mainActivity = context as MainActivity
     }
@@ -98,13 +101,16 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
     private var likelyPlaceAddresses: Array<String?> = arrayOfNulls(0)
     private var likelyPlaceAttributions: Array<List<*>?> = arrayOfNulls(0)
     private var likelyPlaceLatLngs: Array<LatLng?> = arrayOfNulls(0)
-
+    lateinit var userlocdb: LiveData<List<MyLocationEntity>>
+    var userline : Polyline? = null
     //확진자 동선 데이터
     lateinit private var quarantinesData: Quarantines
 
     private var quartineMarkerList: MutableList<Marker> = mutableListOf()
     private var userMarkerList: MutableList<Marker> = mutableListOf()
     lateinit var buttons :LinearLayout
+    lateinit var UserButton: Button
+    private var userDateList: MutableList<LocalDate> = mutableListOf()
 
 
 
@@ -113,8 +119,9 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        binding = ContentRouteBinding.inflate(layoutInflater)
         // Retrieve the content view that renders the map.
-        return inflater.inflate(R.layout.content_route, container, false)
+        return binding.root
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -162,10 +169,10 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
                 //Log.i(TAG, "Place: ${place.name}, ${place.id}, ${place.latLng}")
-                
+
                 //검색 지역으로 이동
                 map?.moveCamera(CameraUpdateFactory
-                        .newLatLngZoom(place.latLng, 15f))
+                    .newLatLngZoom(place.latLng, 15f))
             }
 
             override fun onError(status: Status) {
@@ -179,35 +186,8 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         //검색 가능 지역 한국으로 고정
         autocompleteFragment.setCountry("KR")
 
-        //장소 가져오기
-//        context?.let { it1 ->
-//            LocationRepository.getInstance(it1, Executors.newSingleThreadExecutor())
-//                .getLocations()
-//        }?.observe(this, { locations ->
-//            for(mark in userMarkerList){
-//
-//                mark.remove()
-//            }
-//            userMarkerList.clear()
-//            //마크생성
-//            for (location in locations) {
-//                var mark = map?.addMarker(
-//                    MarkerOptions()
-//                        .title(location.date.toString())
-//                        .position((LatLng(location.latitude, location.longitude)))
-//                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-//                )
-//                mark?.isVisible = false
-//                mark?.let { userMarkerList.add(it) }
-//
-//            }
-//            Log.d("main", "in observe $userMarkerList")
-//            return@observe
-//        })
-        var db = context?.let { MyLocationDatabase.getInstance(it) }!!.locationDao().getLocations()
-        db.observe(viewLifecycleOwner, { locations ->
-            Log.d("main", userMarkerList.size.toString())
-        })
+        //유저 경로 설정
+        setUserRoute()
 
 
         //프래그먼트 내부 버튼 리스너 설정
@@ -244,28 +224,17 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                     //로그인 액티비티로 이동
                     var intent = Intent(context, LoginActivity::class.java)
                     startActivity(intent)
-
                     mAlertDialog?.dismiss()
                 }
             }
             //로그인 된 경우
             else {
-                if(changeView.isSelected) {
-                    var locations = db.value
-                    locations?.let { it1 -> showUserRoute(it1) }
-                }else{
-                    for(mark in userMarkerList){
-                        mark.remove()
-                    }
-                    userMarkerList = mutableListOf()
-                }
-
-                Log.d("main", "in button listner ${db.value}")
-
+                setUserMarkerState()
+                Log.d("tagtag",map.toString())
+                Log.d("main", "in button listner ${userlocdb.value}")
                 Log.d("loginButton","user markers : $userMarkerList")
                 Log.d("main", quartineMarkerList.size.toString())
                 Log.d("main",userMarkerList.size.toString())
-
             }
         }
 
@@ -291,6 +260,130 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         })
 
         //showUserRoute()
+
+    }
+
+    private fun setUserRoute(){
+        //spinner초기설정
+        val spinner = binding.userRouteSpinner
+        var spinnerAdapter = context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_item, mutableListOf("목록없음")) }
+        spinnerAdapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = spinnerAdapter
+        spinnerAdapter?.notifyDataSetChanged()
+
+        //userlocation업데이트 시 실행
+        userlocdb.observe(viewLifecycleOwner, { locations ->
+            makeUserMarker(locations)
+            setUserMarkerState()
+            Log.d("main", userMarkerList.size.toString())
+
+            //location observer설정
+            //location 업데이트시 spinner업데이트
+            if(locations.isEmpty()){
+                spinnerAdapter = this.context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_item, listOf("목록없음")) }
+                spinner.adapter = spinnerAdapter
+                spinnerAdapter?.notifyDataSetChanged()
+            }else{
+                var lastdate = locations[0].date.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
+                var spnlist = arrayListOf(lastdate.toString())
+                //날짜 비교하면서 다르면 넣기
+                for(i in 1 until locations.size){
+                    var temp = locations[i].date.toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate()
+                    if(!lastdate.isEqual(temp)){
+                        lastdate = temp
+                        spnlist.add(lastdate.toString())
+                    }
+                    Log.d("main", temp.toString())
+                }
+                //어댑터 교체
+                spinnerAdapter = this.context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_item, spnlist) }
+                spinner.adapter = spinnerAdapter
+                spinnerAdapter?.notifyDataSetChanged()
+            }
+        })
+
+        //스피너 선택시 동작 설정
+        spinner.onItemSelectedListener = object:
+            AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                try {
+                    Log.d("main", (p1 as TextView).text.toString())
+                    Log.d("main", binding.changeView.isSelected.toString())
+                    setUserMarkerState()
+                }catch (e: Exception){
+                    Log.e("routefragment", e.toString())
+                }
+            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+        }
+    }
+
+    //현재 버튼들의 상태로 유저 마커의 상태 결정
+    private fun setUserMarkerState(){
+        userline?.remove()
+        Log.d("main", "userline" + userline.toString())
+
+        var points = mutableListOf<LatLng>()
+        var polylineopt = PolylineOptions().width(5F).color(Color.RED)
+
+        if(binding.changeView.isSelected){
+            Log.d("main", userMarkerList.toString())
+            var simpleformatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+            //선택된 날짜와 같을때만 리스트 출력
+            for(mark in userMarkerList) {
+                var temp = LocalDateTime.parse(mark.title, simpleformatter)
+                    .toLocalDate()
+                if(temp.toString() == binding.userRouteSpinner.selectedItem){
+                    mark.isVisible = true
+                    points.add(mark.position)
+                }else{
+                    mark.isVisible = false
+                }
+            }
+            //라인에 점 추가
+            polylineopt.addAll(points)
+
+            //0 이상일때만 그리기
+            if(points.size!=0) userline = map?.addPolyline(polylineopt)
+        }else{
+            for(mark in userMarkerList) {
+                mark.isVisible = false
+            }
+            userline?.remove()
+        }
+    }
+
+    //유저 마커 업데이트
+    private fun makeUserMarker(locations: List<MyLocationEntity>){
+        userline?.remove()
+        for(mark in userMarkerList){
+            mark.remove()
+        }
+        userMarkerList.clear()
+        //마크생성
+        for (location in locations) {
+            var date = location.date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime()
+
+            var mark = map?.addMarker(
+                MarkerOptions()
+                    .title(date.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                    .position((LatLng(location.latitude, location.longitude)))
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+            )
+            mark?.isVisible = false
+            mark?.let { userMarkerList.add(it) }
+        }
+    }
+
+    private fun showUserRoute(localdate: LocalDate){
 
     }
 
@@ -601,48 +694,6 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             else if(diff>5)
                 mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             mark?.let { quartineMarkerList.add(it) }
-        }
-    }
-
-    private fun showUserRoute(routes: List<MyLocationEntity>){
-        for (location in routes) {
-            var mark = map?.addMarker(
-                MarkerOptions()
-                    .title("123")
-                    .position(LatLng(location.latitude, location.longitude))
-                    .snippet("321")
-            )
-            mark?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-            mark?.let { userMarkerList.add(it) }
-        }
-    }
-
-
-    //사용자 동선 데이터베이스 테스트
-    private fun showUserRoute(){
-        var db = context?.let { MyLocationDatabase.getInstance(it)}
-        var loc = db?.locationDao()?.getLocations()
-
-        Log.d("tagtag",loc?.value?.get(0).toString())
-        var mark = map?.addMarker(MarkerOptions()
-            .position((LatLng(loc?.value?.get(0)?.latitude!!,loc?.value?.get(0)?.longitude!!)))
-        )
-        mark?.let { userMarkerList.add(it) }
-        userMarkerList[0].isVisible = true
-    }
-
-    fun userMarkervisible(visible : Boolean){
-        if(visible)
-        {
-            for(mark in userMarkerList) {
-                mark.isVisible = true
-            }
-        }
-        else
-        {
-            for(mark in userMarkerList) {
-                mark.isVisible = false
-            }
         }
     }
 

@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true">
 
+    <!--    30~330 dp-->
+
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -19,7 +21,6 @@
         app:layout_constraintVertical_bias="0.0"
         tools:context=".MainActivity" />
 
-<!--    30~330 dp-->
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="376dp"
@@ -206,5 +207,27 @@
             tools:context=".MainActivity" />
 
     </FrameLayout>
+
+    <TextView
+        android:layout_width="130dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/curved_rectangle"
+        android:text="사용자 동선 날짜 선택"
+        app:layout_constraintBottom_toTopOf="@+id/user_route_spinner"
+        app:layout_constraintEnd_toEndOf="@+id/map" />
+
+    <Spinner
+        android:id="@+id/user_route_spinner"
+        android:layout_width="158dp"
+        android:layout_height="31dp"
+        android:layout_marginBottom="150dp"
+        android:padding="0dp"
+        android:entries="@array/user_date"
+        android:background="@drawable/curved_rectangle"
+        android:elevation="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
