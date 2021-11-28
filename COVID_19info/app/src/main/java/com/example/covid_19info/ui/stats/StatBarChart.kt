@@ -1,18 +1,31 @@
 package com.example.covid_19info.ui.stats
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.viewpager2.widget.ViewPager2
 import com.example.covid_19info.R
 import com.example.covid_19info.data.QuarantinesAPI
 import com.example.covid_19info.data.model.QuarantinStat
 import com.example.covid_19info.databinding.FragmentStatBarChartBinding
+import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.Description
+import com.github.mikephil.charting.components.MarkerView
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.ChartTouchListener
+import com.github.mikephil.charting.listener.OnChartGestureListener
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.ColorTemplate
 import retrofit2.Call
 import retrofit2.Callback
@@ -56,7 +69,6 @@ class StatBarChart : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         //확진자 데이터 로드
         val quarantine = QuarantinesAPI.create()
         val today = Calendar.getInstance()
@@ -74,6 +86,7 @@ class StatBarChart : Fragment() {
                 call: Call<QuarantinStat>,
                 response: Response<QuarantinStat>
             ){
+                chartSetting()
                 Log.d("stat", response.toString())
                 //차트 업데이트
                 response.body()?.let { updateCahrt(it) }
@@ -89,22 +102,66 @@ class StatBarChart : Fragment() {
 
     //바 차트 업데이트
     private fun updateCahrt(stat: QuarantinStat){
+
         //엔트리 생성
         var entries: ArrayList<BarEntry> = ArrayList()
         var cnt = stat.body.items.item!!.size
         for(i: Int in (cnt-2) downTo 0 ){
             val num = stat.body.items.item[i].decideCnt-
                     stat.body.items.item[i+1].decideCnt
-            entries.add(BarEntry(cnt - i.toFloat(), num.toFloat()))
+            entries.add(BarEntry(cnt - i -1.toFloat(), num.toFloat()))
         }
 
         var barDataSet = BarDataSet(entries, "")
-        barDataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
+        barDataSet.color = Color.rgb(88,190,201)
 
         val data = BarData(barDataSet)
         binding.barChart.data = data
 
+
+//        binding.barChart.axisLeft.setDrawGridLines(false)
+//        binding.barChart.axisRight.setDrawGridLines(false)
+
         binding.barChart.invalidate()
+
+    }
+    private fun chartSetting(){
+        binding.barChart.run{
+            //zoom 잠금
+            setScaleEnabled(false)
+
+            //마커 뷰 설정
+            var markerview = StatMarkerView(context, R.layout.stat_marker_view)
+            marker = markerview
+
+            //격자구조 삭제
+            setDrawGridBackground(false)
+
+            //x축 설정
+            xAxis.run{
+                position = XAxis.XAxisPosition.BOTTOM
+
+                setDrawAxisLine(true)
+                setDrawGridLines(false)
+
+                valueFormatter = MyXAxisFormatter()
+            }
+
+            //우하단 description label삭제
+            description.isEnabled = false
+            //범례 삭제
+            legend.isEnabled = false
+            
+            setDrawValueAboveBar(true)
+
+
+        }
+    }
+    inner class MyXAxisFormatter : ValueFormatter(){
+        private val days = arrayOf("6일전","5일전","4일전","3일전","2일전","1일전","0일전")
+        override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+            return days.getOrNull(value.toInt()-1) ?: value.toString()
+        }
     }
 
     companion object {

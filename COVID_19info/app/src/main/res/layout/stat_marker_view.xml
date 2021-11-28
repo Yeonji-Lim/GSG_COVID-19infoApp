@@ -1,0 +1,42 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    >
+<!--    <TextView-->
+<!--    android:id="@+id/tvContent"-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:layout_centerHorizontal="true"-->
+<!--    android:text=""-->
+<!--    android:textSize="12dp"-->
+<!--    android:textColor="@android:color/black"-->
+<!--    android:ellipsize="end"-->
+<!--    android:singleLine="true"-->
+<!--    android:textAppearance="?android:attr/textAppearanceSmall" />-->
+    <TextView
+        android:id="@+id/marker_text"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        />
+<!--    <com.example.covid_19info.ui.stats.StatMarkerView-->
+<!--        style="@style/Widget.Theme.COVID_19info.MyView"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="300dp"-->
+<!--        android:paddingLeft="20dp"-->
+<!--        android:paddingBottom="40dp"-->
+<!--        app:exampleDimension="24sp"-->
+<!--        app:exampleDrawable="@android:drawable/ic_menu_add"-->
+<!--        app:exampleString="Hello, StatMarkerView" />-->
+</androidx.constraintlayout.widget.ConstraintLayout>
