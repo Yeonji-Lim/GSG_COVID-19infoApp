@@ -274,6 +274,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         //userlocation업데이트 시 실행
         userlocdb.observe(viewLifecycleOwner, { locations ->
             makeUserMarker(locations)
+            setUserMarkerState()
             Log.d("main", userMarkerList.size.toString())
 
             //location observer설정
