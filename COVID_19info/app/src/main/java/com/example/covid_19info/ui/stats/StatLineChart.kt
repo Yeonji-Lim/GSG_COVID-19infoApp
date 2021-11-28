@@ -13,6 +13,7 @@ import com.example.covid_19info.data.model.QuarantinStat
 import com.example.covid_19info.data.model.QuarantinStatSido
 import com.example.covid_19info.data.model.VaccinatedInfo
 import com.example.covid_19info.databinding.FragmentStatLineChartBinding
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.ChartData
 import com.github.mikephil.charting.data.Entry
 import retrofit2.Call
@@ -60,6 +61,8 @@ class StatLineChart : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //라인차트 세팅
+        setLinechartSettint()
 
         if(param1=="quarantine"){
             //확진자 데이터 로드
@@ -113,10 +116,41 @@ class StatLineChart : Fragment() {
                     response.body()?.let { updateInfo(it) }
                 }
                 override fun onFailure(call: Call<VaccinatedInfo>, t: Throwable) {
-                    //TODO("Not yet implemented")
                     Log.d("stat", t.toString())
                 }
             })
+        }
+    }
+
+    private fun setLinechartSettint(){
+        binding.lineChart.run {
+            //zoom 잠금
+            setScaleEnabled(false)
+
+            //마커 뷰 설정
+            var markerview = StatMarkerView(context, R.layout.stat_marker_view)
+            marker = markerview
+
+            //격자구조 삭제
+            setDrawGridBackground(false)
+
+            //x축 설정
+            xAxis.run{
+                position = XAxis.XAxisPosition.BOTTOM
+
+                setDrawAxisLine(true)
+                setDrawGridLines(false)
+
+//                valueFormatter = MyXAxisFormatter()
+            }
+
+            //우하단 description label삭제
+            description.isEnabled = false
+            //범례 삭제
+            legend.isEnabled = false
+            //원 삭제
+
+//            setDrawValueAboveBar(true)
         }
     }
 
@@ -132,8 +166,13 @@ class StatLineChart : Fragment() {
         var data = LineData(LineDataSet(entries1,"1차"))
         data.addDataSet(LineDataSet(entries2, "2차"))
 
-        binding.lineChart.data = data
+        //원 삭제
+        for(d in data.dataSets){
+            (d as LineDataSet).setDrawCircles(false)
+            d.setDrawValues(false)
+        }
 
+        binding.lineChart.data = data
         binding.lineChart.invalidate()
     }
 
@@ -150,6 +189,12 @@ class StatLineChart : Fragment() {
 
         var data = LineData(LineDataSet(entries1,"확진"))
         data.addDataSet(LineDataSet(entries2, "격리해제"))
+
+        //원 삭제
+        for(d in data.dataSets){
+            (d as LineDataSet).setDrawCircles(false)
+            d.setDrawValues(false)
+        }
 
         binding.lineChart.data = data
 
