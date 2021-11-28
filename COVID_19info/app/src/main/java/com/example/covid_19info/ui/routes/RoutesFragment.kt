@@ -189,7 +189,8 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
         //유저 경로 설정
         setUserRoute()
 
-
+        binding.userRouteText.isVisible = false
+        binding.userRouteSpinner.isVisible = false
         //프래그먼트 내부 버튼 리스너 설정
         //changeView 리스너
         val changeView = view.findViewById<Button>(R.id.changeView)
@@ -197,6 +198,8 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             Log.d("loginButton","Click")
             Log.d("loginButton",changeView.isSelected.toString())
             changeView?.isSelected = changeView?.isSelected != true
+            binding.userRouteText.isVisible = changeView.isSelected
+            binding.userRouteSpinner.isVisible = changeView.isSelected
 
             val pref = PreferenceUtil()
             //로그인 안된경우
