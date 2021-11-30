@@ -243,6 +243,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                     startActivity(intent)
                     mAlertDialog?.dismiss()
                 }
+                changeView.isSelected = false
             }
             //로그인 된 경우
             else {
