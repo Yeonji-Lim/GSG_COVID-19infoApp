@@ -121,9 +121,14 @@ class PasswordChangeActivity() : AppCompatActivity(){
                     Toast.makeText(this@PasswordChangeActivity, "새 비밀번호를 다시 확인해 주세요", Toast.LENGTH_SHORT).show()
                 else{
                     loginViewModel.pwChange(newPW.text.toString(), certificationNum.text.toString())
-                    Toast.makeText(this@PasswordChangeActivity, "변경 완료", Toast.LENGTH_SHORT).show()
-                    loginViewModel.logout()
-                    super.onBackPressed()
+                    if(loginViewModel.pwResult.value?.success==R.string.pw_change_success){
+                        Toast.makeText(this@PasswordChangeActivity, "변경 완료", Toast.LENGTH_SHORT).show()
+                        loginViewModel.logout()
+                        super.onBackPressed()
+                    }
+                    else{
+                        Toast.makeText(this@PasswordChangeActivity, "인증번호가 틀렸습니다", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }

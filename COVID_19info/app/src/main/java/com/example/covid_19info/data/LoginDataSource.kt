@@ -96,13 +96,22 @@ class LoginDataSource {
             Log.d("main", "변경전")
             try {
                 var signupEmail = loginapi.pwChange(PwChange(password = pw, code = code)).execute()
-                Log.d("main", signupEmail.toString())
-                //이메일 성공
-               // Log.d("main", signupEmail?.code!!)
-                return@withContext ChangeResult.Success(PwchangeUser(""))
+
+                if(signupEmail.code()==200) {
+                    Log.d("PW", signupEmail.code().toString())
+                    return@withContext ChangeResult.Success(PwchangeUser(""))
+                }
+                else {
+                    Log.d("PW", signupEmail.code().toString())
+                    return@withContext ChangeResult.Error(IOException("Error PW change"))
+                }
+//                Log.d("main", signupEmail.toString())
+//                //이메일 성공
+//               // Log.d("main", signupEmail?.code!!)
+//                return@withContext ChangeResult.Success(PwchangeUser(""))
             } catch (e: Throwable) {
-                Log.d("main", e.toString())
-                return@withContext ChangeResult.Error(IOException("Error logging in", e))
+                Log.d("PW Change:", e.toString())
+                return@withContext ChangeResult.Error(IOException("Error PW change", e))
             }
         }
     }
