@@ -243,6 +243,7 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                     startActivity(intent)
                     mAlertDialog?.dismiss()
                 }
+                changeView.isSelected = false
             }
             //로그인 된 경우
             else {
@@ -306,11 +307,11 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
                     .toLocalDate()
                 var spnlist = arrayListOf(lastdate.toString())
                 //날짜 비교하면서 다르면 넣기
-                for(i in 1 until locations.size){
+                for(i in 1 until locations.size) {
                     var temp = locations[i].date.toInstant()
                         .atZone(ZoneId.systemDefault())
                         .toLocalDate()
-                    if(!lastdate.isEqual(temp)){
+                    if (!lastdate.isEqual(temp)) {
                         lastdate = temp
                         spnlist.add(lastdate.toString())
                     }
@@ -365,7 +366,8 @@ class RoutesFragment : Fragment(), OnMapReadyCallback {
             }
             //라인에 점 추가
             polylineopt.addAll(points)
-
+            map?.moveCamera(CameraUpdateFactory
+                .newLatLngZoom(LatLng(points[0].latitude, points[0].longitude), 15f))
             //0 이상일때만 그리기
             if(points.size!=0) userline = map?.addPolyline(polylineopt)
         }else{
