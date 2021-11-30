@@ -122,6 +122,7 @@ class PasswordChangeActivity() : AppCompatActivity(){
                 else{
                     loginViewModel.pwChange(newPW.text.toString(), certificationNum.text.toString())
                     Toast.makeText(this@PasswordChangeActivity, "변경 완료", Toast.LENGTH_SHORT).show()
+                    loginViewModel.logout()
                     super.onBackPressed()
                 }
             }
