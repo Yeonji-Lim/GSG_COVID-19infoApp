@@ -96,13 +96,13 @@ class LoginDataSource {
             Log.d("main", "변경전")
             try {
                 var signupEmail = loginapi.pwChange(PwChange(password = pw, code = code)).execute()
-
+                Log.d("PW", signupEmail.code().toString())
                 if(signupEmail.code()==200) {
-                    Log.d("PW", signupEmail.code().toString())
-                    return@withContext ChangeResult.Success(PwchangeUser(""))
+                    Log.d("PWsucc", signupEmail.code().toString())
+                    return@withContext ChangeResult.Success(PwchangeUser(true))
                 }
                 else {
-                    Log.d("PW", signupEmail.code().toString())
+                    Log.d("PWfail", signupEmail.code().toString())
                     return@withContext ChangeResult.Error(IOException("Error PW change"))
                 }
 //                Log.d("main", signupEmail.toString())

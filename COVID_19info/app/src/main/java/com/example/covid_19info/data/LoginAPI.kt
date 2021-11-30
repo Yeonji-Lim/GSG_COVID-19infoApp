@@ -39,7 +39,7 @@ interface LoginAPI {
     @POST("password/reset/verified/")
     fun pwChange(
         @Body pwchange: PwChange
-    ): Call<Boolean>
+    ): Call<PwChangeSuccess>
 
 //    @POST("")
 

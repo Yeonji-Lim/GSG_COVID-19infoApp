@@ -1,7 +1,9 @@
 package com.example.covid_19info
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -97,6 +99,19 @@ class PasswordChangeActivity() : AppCompatActivity(){
 
         }
 
+        loginViewModel.pwResult.observe(this, Observer {
+            val pwResult = it?: return@Observer
+
+            if(pwResult.success!=null){
+                loginViewModel.logout()
+                startActivity(Intent(this,MainActivity::class.java))
+            }
+
+            if(pwResult.error!=null){
+                Log.d("PWsucc", pwResult.error.toString())
+            }
+        })
+
         newPW.apply {
             afterTextChanged {
                 loginViewModel.pwDataChanged(
@@ -121,14 +136,6 @@ class PasswordChangeActivity() : AppCompatActivity(){
                     Toast.makeText(this@PasswordChangeActivity, "새 비밀번호를 다시 확인해 주세요", Toast.LENGTH_SHORT).show()
                 else{
                     loginViewModel.pwChange(newPW.text.toString(), certificationNum.text.toString())
-                    if(loginViewModel.pwResult.value?.success==R.string.pw_change_success){
-                        Toast.makeText(this@PasswordChangeActivity, "변경 완료", Toast.LENGTH_SHORT).show()
-                        loginViewModel.logout()
-                        super.onBackPressed()
-                    }
-                    else{
-                        Toast.makeText(this@PasswordChangeActivity, "인증번호가 틀렸습니다", Toast.LENGTH_SHORT).show()
-                    }
                 }
             }
         }
