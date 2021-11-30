@@ -5,28 +5,18 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.viewpager2.widget.ViewPager2
 import com.example.covid_19info.R
 import com.example.covid_19info.data.QuarantinesAPI
 import com.example.covid_19info.data.model.QuarantinStat
 import com.example.covid_19info.databinding.FragmentStatBarChartBinding
 import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.Description
-import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.github.mikephil.charting.highlight.Highlight
-import com.github.mikephil.charting.listener.ChartTouchListener
-import com.github.mikephil.charting.listener.OnChartGestureListener
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.github.mikephil.charting.utils.ColorTemplate
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -131,7 +121,7 @@ class StatBarChart : Fragment() {
             setScaleEnabled(false)
 
             //마커 뷰 설정
-            var markerview = StatMarkerView(context, R.layout.stat_marker_view)
+            var markerview = StatBarMarkerView(context, R.layout.stat_marker_view)
             marker = markerview
 
             //격자구조 삭제
@@ -146,6 +136,16 @@ class StatBarChart : Fragment() {
 
                 valueFormatter = MyXAxisFormatter()
             }
+            //y축
+            axisLeft.run{
+                setDrawGridLines(false)
+            }
+
+            axisRight.run{
+                setDrawGridLines(false)
+            }
+
+
 
             //우하단 description label삭제
             description.isEnabled = false

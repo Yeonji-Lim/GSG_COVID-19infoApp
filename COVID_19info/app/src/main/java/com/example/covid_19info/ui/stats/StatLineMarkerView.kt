@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.os.Parcel
 import android.os.Parcelable
+import android.provider.Settings.Global.getString
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.Log
@@ -20,11 +21,10 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.MPPointF
 import com.tickaroo.tikxml.annotation.TextContent
 import org.w3c.dom.Text
+import java.time.LocalDate
 
-/**
- * TODO: document your custom view class.
- */
-class StatMarkerView : MarkerView, IMarker {
+
+class StatLineMarkerView : MarkerView, IMarker {
 
     lateinit private var tvContent: TextView
 
@@ -45,7 +45,12 @@ class StatMarkerView : MarkerView, IMarker {
 
     // entry를 content의 텍스트에 지정
     override fun refreshContent(e: Entry?, highlight: Highlight?) {
-        tvContent.text = e?.y?.toInt().toString()+"명"
+        Log.d("XYMarkerView", "refreshContent: " + e.toString());
+
+        tvContent.text = context.getString(R.string.stat_bar_marker_text,
+            LocalDate.now().minusDays(49-e?.x?.toInt()?.toLong()!!).toString(),
+            e.y.toInt()
+        )
         super.refreshContent(e, highlight)
     }
 

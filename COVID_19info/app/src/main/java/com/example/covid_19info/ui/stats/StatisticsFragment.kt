@@ -26,6 +26,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import androidx.recyclerview.widget.RecyclerView
 import java.text.DateFormat
+import java.time.LocalDate
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -136,7 +137,7 @@ class StatisticsFragment : Fragment() {
                 call: Call<VaccinatedNation>,
                 response: Response<VaccinatedNation>
             ){
-                binding.statTimeTxt.text =  response.body()?.body?.dataTime + "집계 기준"
+                binding.statTimeTxt.text =  LocalDate.now().minusDays(1).toString()+" 24:00:00"//response.body()?.body?.dataTime + "집계 기준"
                 //총 시민수
                 var total = 51667688f
                 //전체 접종 현황

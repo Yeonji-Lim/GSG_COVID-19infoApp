@@ -11,6 +11,7 @@ import com.example.covid_19info.data.QuarantinesAPI
 import com.example.covid_19info.data.VaccinatedAPI
 import com.example.covid_19info.data.model.QuarantinStat
 import com.example.covid_19info.data.model.QuarantinStatSido
+import com.example.covid_19info.data.model.VaccinatedData
 import com.example.covid_19info.data.model.VaccinatedInfo
 import com.example.covid_19info.databinding.FragmentStatLineChartBinding
 import com.github.mikephil.charting.components.XAxis
@@ -72,7 +73,7 @@ class StatLineChart : Fragment() {
             today.time = Date()
             val start = Calendar.getInstance()
             start.time = Date()
-            start.add(Calendar.DATE, -30)
+            start.add(Calendar.DATE, -50)
             val df = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
 
             quarantine.getQuarantineStat(page = 1,
@@ -110,10 +111,17 @@ class StatLineChart : Fragment() {
                     call: Call<VaccinatedInfo>,
                     response: Response<VaccinatedInfo>
                 ){
+                    var natvac = mutableListOf<VaccinatedData>()
+                    for(data in response?.body()?.data!!){
+                        if(data.sido=="전국"){
+                            natvac.add(data)
+                        }
+                    }
+                    updateInfo(natvac)
                     Log.d("vac", response.toString())
                     Log.d("vac", response.body()?.perPage.toString())
                     //업데이트
-                    response.body()?.let { updateInfo(it) }
+//                    response.body()?.let { updateInfo(it) }
                 }
                 override fun onFailure(call: Call<VaccinatedInfo>, t: Throwable) {
                     Log.d("stat", t.toString())
@@ -128,7 +136,7 @@ class StatLineChart : Fragment() {
             setScaleEnabled(false)
 
             //마커 뷰 설정
-            var markerview = StatMarkerView(context, R.layout.stat_marker_view)
+            var markerview = StatLineMarkerView(context, R.layout.stat_marker_view)
             marker = markerview
 
             //격자구조 삭제
@@ -140,31 +148,39 @@ class StatLineChart : Fragment() {
 
                 setDrawAxisLine(true)
                 setDrawGridLines(false)
-
+                setDrawLabels(false)
 //                valueFormatter = MyXAxisFormatter()
             }
+            //y축
+            axisLeft.run{
+                setDrawGridLines(false)
+            }
 
+            axisRight.run{
+                setDrawGridLines(false)
+            }
             //우하단 description label삭제
             description.isEnabled = false
             //범례 삭제
-            legend.isEnabled = false
+//            legend.isEnabled = false
             //원 삭제
 
 //            setDrawValueAboveBar(true)
         }
     }
 
-    private fun updateInfo(vaccinatedInfo: VaccinatedInfo){
-        var vaccinated = vaccinatedInfo.data
+    private fun updateInfo(vaccinatedInfo: List<VaccinatedData>){
         val entries1 = ArrayList<Entry>()
         val entries2 = ArrayList<Entry>()
-        for(i: Int in 0..vaccinated.size-1 step(18)){
-            entries1.add(Entry(i.toFloat(), vaccinated[i].accumulatedFirstCnt.toFloat()))
-            entries2.add(Entry(i.toFloat(), vaccinated[i].accumulatedSecondCnt.toFloat()))
+        for(i: Int in vaccinatedInfo.indices){
+            entries1.add(Entry(i.toFloat(), vaccinatedInfo[i].accumulatedFirstCnt.toFloat()))
+            entries2.add(Entry(i.toFloat(), vaccinatedInfo[i].accumulatedSecondCnt.toFloat()))
         }
 
         var data = LineData(LineDataSet(entries1,"1차"))
-        data.addDataSet(LineDataSet(entries2, "2차"))
+        var line2 = LineDataSet(entries2, "2차")
+        line2.color = R.color.marker_red
+        data.addDataSet(line2)
 
         //원 삭제
         for(d in data.dataSets){
@@ -188,7 +204,9 @@ class StatLineChart : Fragment() {
         }
 
         var data = LineData(LineDataSet(entries1,"확진"))
-        data.addDataSet(LineDataSet(entries2, "격리해제"))
+        var line2 = LineDataSet(entries2, "격리해제")
+        line2.color = R.color.marker_red
+        data.addDataSet(line2)
 
         //원 삭제
         for(d in data.dataSets){

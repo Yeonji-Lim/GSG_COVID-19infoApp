@@ -60,7 +60,9 @@
     <string name="quarantine_sido_cur">
         &lt;b>&lt;font color=\"#FFFFFF\">%1$s&lt;br>%2$,d 명&lt;/font>&lt;/b>
     </string>
-
+    <string name="stat_bar_marker_text">
+        %1$s\n%2$,d명
+    </string>
     <string name="quarantine_title_text">전국 감염 현황</string>
     <string name="quarantine_box1_text">확진자</string>
     <string name="quarantine_box2_text">격리해제</string>
