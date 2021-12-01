@@ -28,6 +28,7 @@ def member_tracing_list(request):
         if isinstance(data, dict):
             data = [data]
         for item in data:
+
             dateString = item['date']
             datetimeFormat = '%a %b %d %H:%M:%S %Z%z %Y'
             item['date'] = datetime.datetime.strptime(dateString, datetimeFormat)
