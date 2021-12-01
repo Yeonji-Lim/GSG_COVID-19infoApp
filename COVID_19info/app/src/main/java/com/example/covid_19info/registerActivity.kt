@@ -116,7 +116,7 @@ class registerActivity : AppCompatActivity() {
                         .setView(mDialogView)
 
                     val mAlertDialog = mBuilder.show()
-                    mDialogView.findViewById<TextView>(R.id.dialog_confirm_text).text="회원가입이 완료되었습니다"
+                    mDialogView.findViewById<TextView>(R.id.dialog_confirm_text).text="인증 메일이 발송되었습니다."
 
                     //확인버튼
                     val yesBtn = mDialogView.findViewById<Button>(R.id.confirm_btn)
