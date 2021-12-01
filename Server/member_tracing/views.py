@@ -41,7 +41,7 @@ def member_tracing_list(request):
         return JsonResponse(serializer.errors, status=400, safe=False)
 
 # 사용자 동선을 검색, 업데이트, 삭제
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PUT'])
 def member_tracing_detail(request, pk):
 
     # 해당 사용자 동선을 받아옴
@@ -67,8 +67,3 @@ def member_tracing_detail(request, pk):
             serializer.save()
             return JsonResponse(serializer.data)
         return JsonResponse(serializer.errors, status=400)
-
-    # 삭제 (사용 안할 수 있음)
-    elif request.method == 'DELETE':
-        memberTracing.delete()
-        return HttpResponse(status=204)
