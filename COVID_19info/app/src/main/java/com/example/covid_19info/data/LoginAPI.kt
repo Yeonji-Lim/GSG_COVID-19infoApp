@@ -60,7 +60,7 @@ interface LoginAPI {
     ): Call<Void>
 
     companion object{
-        private const val BASE_URL_ROUTE="http://172.30.1.37:8000"
+        private const val BASE_URL_ROUTE="http://192.168.1.172:8000"
         fun create(): LoginAPI{
             return Retrofit.Builder()
                 .baseUrl(BASE_URL_ROUTE)

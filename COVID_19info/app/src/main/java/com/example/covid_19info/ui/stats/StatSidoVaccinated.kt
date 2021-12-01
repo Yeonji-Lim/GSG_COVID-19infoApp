@@ -113,7 +113,7 @@ class StatSidoVaccinated : Fragment() {
     //데이터 설정
     private fun setdata(p2: Int, vacData: List<VaccinatedData>){
         var list = listOf(52980961f, 9911088f, 3438710f, 2446144f, 1471385f,
-            3010476f, 1480777f, 1153901f, 360907f, 13807158f,
+            3010476f, 1480777f, 1153901f, 1100000f, 13807158f,
             1560172f, 1637897f, 2185575f, 1884455f, 1835392f,
             2691891f, 3407455f, 697578f)
 
