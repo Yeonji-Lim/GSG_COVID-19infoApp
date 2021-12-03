@@ -64,11 +64,11 @@ class StatSidoQuarantine : Fragment() {
         today.time = Date()
         val start = Calendar.getInstance()
         start.time = Date()
-        start.add(Calendar.DATE, -1)
+        start.add(Calendar.DATE, -2)
         val df = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
 
         quarantine.getQuarantineStatSido(page = 1,
-            perPage = 19,
+            perPage = 38,
             startCreateDt = df.format(start.time),
             endCreateDt = df.format(today.time)).enqueue(object: Callback<QuarantinStatSido> {
             override fun onResponse(
@@ -112,7 +112,7 @@ class StatSidoQuarantine : Fragment() {
             "경북", "경남", "제주", "검역")
 
         Log.d("stat", data.toString())
-        for(index in data.indices){
+        for(index in 0..18){
             if(lists[p2]==data[index].gubun){
 
                 var quarantine_text =  getString(R.string.quarantine_sido, "누적 확진자", data[index].defCnt)
@@ -134,10 +134,13 @@ class StatSidoQuarantine : Fragment() {
                 quarantine_text = getString(R.string.quarantine_sido_cur, "현재 격리자", data[index].isolIngCnt)
                 styletex = Html.fromHtml(quarantine_text,FROM_HTML_MODE_LEGACY)
                 binding.todayClear.text  = styletex
-
-                quarantine_text = getString(R.string.quarantine_sido_cur, "금일 사망자", data[index].deathCnt)
-                styletex = Html.fromHtml(quarantine_text,FROM_HTML_MODE_LEGACY)
-                binding.todayDeath.text  = styletex
+                for(index1 in 19..37){
+                    if(lists[p2]==data[index1].gubun) {
+                        quarantine_text = getString(R.string.quarantine_sido_cur, "금일 사망자", data[index].deathCnt-data[index1].deathCnt)
+                        styletex = Html.fromHtml(quarantine_text,FROM_HTML_MODE_LEGACY)
+                        binding.todayDeath.text  = styletex
+                    }
+                }
                 break
             }
         }

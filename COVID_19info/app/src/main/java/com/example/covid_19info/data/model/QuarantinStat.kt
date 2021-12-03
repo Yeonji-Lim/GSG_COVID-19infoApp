@@ -62,7 +62,7 @@ data class ItemsQ(
 
 @Xml(name = "item")
 data class ItemQ(
-    @PropertyElement(name = "accDefRate") var accDefRate: String,
+    @PropertyElement(name = "accDefRate") var accDefRate: String?,
     @PropertyElement(name = "accExamCnt") var accExamCnt: Int,
     @PropertyElement(name = "accExamCompCnt") var accExamCompCnt: Int,
     @PropertyElement(name = "careCnt") var careCnt: Int,
